@@ -65,3 +65,11 @@ Route::get('/admin/datatransaksi', [TransaksiController::class, 'index'])->name(
 Route::get('/admin/datatransaksi/edit', [TransaksiController::class, 'edit'])->name('admin/datatransaksi/edit');
 Route::get('/admin/datapesan', [PesanController::class, 'index'])->name('admin/datapesan');
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
