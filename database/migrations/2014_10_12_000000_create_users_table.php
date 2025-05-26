@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('kode_pos')->nullable();
             $table->string('foto_profil')->nullable();
             $table->string('jenis_kelamin')->nullable();
-            $table->string('status')->default('ACTIVE');
+            $table->string('status')->default('ACTIVE')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
