@@ -19,11 +19,21 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'username',
         'nohp',
         'email',
         'password',
-        'role'
+        'role',
+        'alamat',
+        'provinsi',
+        'kota',
+        'kecamatan',
+        'kelurahan',
+        'RT',
+        'RW',
+        'kode_pos',
+        'foto_profil',
+        'jenis_kelamin',
+        'status',
     ];
 
     /**
@@ -43,7 +53,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-     'password' => 'hashed',
+        'password' => 'hashed',
     ];
 
     public function datapembeli()
