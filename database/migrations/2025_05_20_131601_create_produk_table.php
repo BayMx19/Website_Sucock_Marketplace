@@ -13,17 +13,15 @@ return new class extends Migration
     {
         Schema::create('produk', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('penjual_id')->unsigned();
+            $table->foreign('penjual_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('nama_produk');
             $table->string('harga');
             $table->integer('stok');
-            $table->text('deskripsi');
+            $table->longtext('deskripsi');
             $table->string('gambar');
+            $table->string('status')->default('ACTIVE');
             $table->timestamps();
-        });
-         Schema::table('produk', function (Blueprint $table){
-            $table->foreign('user_id')->references('id')->on('users')
-            ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

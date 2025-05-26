@@ -15,12 +15,13 @@ class produk extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
+        'penjual_id',
         'nama_produk',
         'harga',
         'stok',
         'deskripsi',
         'gambar',
+        'status',
     ];
     public function user()
     {

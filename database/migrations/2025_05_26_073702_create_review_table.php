@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pesanan', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->bigInteger('user_id')->unsigned();
-             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+        Schema::create('review', function (Blueprint $table) {
+            $table->id();
             $table->bigInteger('produk_id')->unsigned();
             $table->foreign('produk_id')->references('id')->on('produk')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('total_harga');
-            $table->date('tanggal_pesanan');
-            $table->string('status_pesanan');
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('bintang');
+            $table->text('review_text')->nullable();
             $table->timestamps();
         });
-
     }
 
     /**
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pesanan');
+        Schema::dropIfExists('review');
     }
 };
