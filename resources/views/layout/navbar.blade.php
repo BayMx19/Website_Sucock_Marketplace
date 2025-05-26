@@ -17,7 +17,7 @@
             <!-- Menu Kanan -->
     <ul class="nav d-flex align-items-center">
         <li class="nav-item">
-          <a href="{{ route('daftar') }}" class="btn-daftar me-2">Daftar</a>
+          <a href="{{ route('register') }}" class="btn-daftar me-2">Daftar</a>
         </li>
         <li class="nav-item">
           <a href="{{ route('login') }}" class="btn_3 me-3">Login</a>

@@ -17,6 +17,7 @@
                                 <h1 class="text-bold">Login</h1>
                             </div>
                             <form class="row contact_form" action="{{ route('login')}}" method="POST">
+                                @csrf
                                 <div class="col-md-12 form-group p_star mt-5">
                                     <input type="text" class="form-control @eror('email')" id="email" name="email"
                                         placeholder="Masukkan Email Anda">

@@ -14,7 +14,7 @@
             <h1 class="redressed-regular"> Sucock </h1>
             <p class="font-white">Dukung produk lokal dan temukan shuttlecock terbaik dari Sumengko di sini!</p>
             <div class="d-flex">
-              <a href="{{ route('daftar') }}" class="btn-get-started">Daftar Sekarang!</a>
+              <a href="{{ route('register') }}" class="btn-get-started">Daftar Sekarang!</a>
             </div>
           </div>
 

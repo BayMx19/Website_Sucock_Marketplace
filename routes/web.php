@@ -29,10 +29,12 @@ Route::get('/', function () {
     return view('home');
 });
 
+Auth::routes();
+
 Route::middleware(['guest'])->group(function () {
-    Route::get('/login', [SesiController::class, 'login'])->name('login');
-    Route::get('/daftar', [SesiController::class, 'daftar'])->name('daftar');
-    Route::get('/daftar/penjual', [SesiController::class, 'daftarpenjual'])->name('daftarpenjual');
+    // Route::get('/login', [SesiController::class, 'login'])->name('login');
+    // Route::get('/daftar', [SesiController::class, 'daftar'])->name('daftar');
+    // Route::get('/daftar/penjual', [SesiController::class, 'daftarpenjual'])->name('daftarpenjual');
     Route::get('/profil/edit', [ProfilController::class, 'edit'])->name('profil/edit');
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
     Route::get('/produk/detail', [ProdukController::class, 'show'])->name('produk/detail');
@@ -65,11 +67,9 @@ Route::get('/admin/datatransaksi', [TransaksiController::class, 'index'])->name(
 Route::get('/admin/datatransaksi/edit', [TransaksiController::class, 'edit'])->name('admin/datatransaksi/edit');
 Route::get('/admin/datapesan', [PesanController::class, 'index'])->name('admin/datapesan');
 
+Route::get('/daftarpenjual', function () {
+    return view('daftar');
+})->name('daftarpenjual');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
