@@ -58,14 +58,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function datapembeli()
-    {
-        return $this->belongsTo(datapembeli::class);
-    }
-    public function datapenjual()
-    {
-        return $this->belongsTo(datapenjual::class);
-    }
     public function produk()
     {
         return $this->hasMany(produk::class);

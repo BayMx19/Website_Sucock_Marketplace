@@ -17,7 +17,8 @@ class UserController extends Controller
     {
         $users = User::all();
 
-        return view('admin.data_users.index', compact('users'));    }
+        return view('admin.data_users.index', compact('users'));
+    }
 
     /**
      * Show the form for creating a new resource.

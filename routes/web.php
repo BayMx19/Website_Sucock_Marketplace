@@ -88,6 +88,10 @@ Route::delete('/admin/data_users/{id}', [UserController::class, 'destroy'])->nam
 
 
 // Route Data Toko
+Route::get('/admin/data_toko/', [TokoController::class, 'index'])->name('admin.data_toko.index');
+Route::get('/admin/data_toko/{id}/detail', [TokoController::class, 'detail'])->name('admin.data_toko.detail');
+Route::delete('/admin/data_toko/{id}', [TokoController::class, 'destroy'])->name('admin.data_toko.destroy');
+
 
 // Route Data Produk
 

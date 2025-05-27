@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Toko;
 use Illuminate\Http\Request;
 
 class TokoController extends Controller
@@ -11,7 +12,9 @@ class TokoController extends Controller
      */
     public function index()
     {
-        return view('admin_datatoko');
+        $toko = Toko::where('role', 'Penjual')->get();
+        // dd($toko);
+        return view('admin.data_toko.index', compact('toko'));
     }
     /**
      * Show the form for creating a new resource.
@@ -31,9 +34,12 @@ class TokoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function detail($id)
     {
-        //
+        $toko = Toko::findOrFail($id);
+        // dd($toko);
+         return view('admin.data_toko.detail', compact('toko'));
+
     }
 
     /**
@@ -56,8 +62,11 @@ class TokoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $toko = Toko::findOrFail($id);
+        $toko->delete();
+
+        return redirect('/admin/data_toko/')->with('success', 'Data berhasil dihapus!');
     }
 }
