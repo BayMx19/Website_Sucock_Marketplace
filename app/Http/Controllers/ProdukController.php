@@ -17,11 +17,11 @@ class ProdukController extends Controller
 
     public function dataproduk()
     {
-        return view('admin_dataproduk');
+        return view('admin/data_produk.index');
     }
     public function dataprodukedit()
     {
-        return view('admin_dataprodukedit');
+        return view('admin.data_produk.detail');
     }
     public function dataproduktambah()
     {

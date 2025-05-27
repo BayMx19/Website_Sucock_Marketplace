@@ -12,6 +12,7 @@ use App\Http\Controllers\TokoController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\ProfilController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,7 +69,7 @@ Route::get('/admin/datatransaksi/edit', [TransaksiController::class, 'edit'])->n
 Route::get('/admin/datapesan', [PesanController::class, 'index'])->name('admin/datapesan');
 
 Route::get('/daftarpenjual', function () {
-    return view('daftar');
+    return view('auth.daftar');
 })->name('daftarpenjual');
 
 
