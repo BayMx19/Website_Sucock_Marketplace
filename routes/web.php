@@ -75,7 +75,7 @@ Route::get('/daftarpenjual', function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Route Admin
+// --- Route Admin ---
 
 // Route Data Users
 Route::get('/admin/data_users/', [UserController::class, 'index'])->name('admin.data_users.index');
@@ -105,12 +105,12 @@ Route::get('/admin/data_produk/{id}/detail', [produkController::class, 'dataprod
 
 
 
-// END Route Admin
+// --- END Route Admin ---
 
-// Route Penjual
+// --- Route Penjual ---
 
-// END Route Penjual
+// --- END Route Penjual ---
 
 
-// Route Pembeli
-// END Route Pembeli
+// --- Route Pembeli ---
+// --- END Route Pembeli ---
