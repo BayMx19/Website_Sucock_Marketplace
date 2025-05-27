@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('status')->default('ACTIVE');
             $table->timestamps();
         });
-    }
+        }
 
     /**
      * Reverse the migrations.
