@@ -94,6 +94,8 @@ Route::delete('/admin/data_toko/{id}', [TokoController::class, 'destroy'])->name
 
 
 // Route Data Produk
+Route::get('/admin/data_produk/', [produkController::class, 'dataproduk'])->name('admin.data_produk.index');
+Route::get('/admin/data_produk/{id}/detail', [produkController::class, 'dataprodukdetail'])->name('admin.data_produk.detail');
 
 // Route Data Pesanan
 
@@ -106,6 +108,7 @@ Route::delete('/admin/data_toko/{id}', [TokoController::class, 'destroy'])->name
 // END Route Admin
 
 // Route Penjual
+
 // END Route Penjual
 
 

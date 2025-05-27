@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Produk;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
@@ -17,14 +18,14 @@ class ProdukController extends Controller
 
     public function dataproduk()
     {
-        return view('admin/data_produk.index');
+        $produk = Produk::with('user')->get();
+        // dd($produk);
+        return view('admin.data_produk.index', compact('produk'));
     }
-    public function dataprodukedit()
+    public function dataprodukdetail($id)
     {
-        return view('admin.data_produk.detail');
-    }
-    public function dataproduktambah()
-    {
-        return view('admin_dataproduktambah');
+        $produk = Produk::with('user')->findOrFail($id);
+        // dd($produk);
+        return view('admin.data_produk.detail', compact('produk'));
     }
 }
