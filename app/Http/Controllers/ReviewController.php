@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -11,7 +12,20 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        return view('admin_datareview');
+        $review = DB::select("
+            SELECT
+                pembeli.name AS nama_pembeli,
+                penjual.name AS nama_penjual,
+                produk.nama_produk,
+                review.review_text,
+                review.bintang
+            FROM review
+            JOIN users AS pembeli ON review.user_id = pembeli.id
+            JOIN produk ON review.produk_id = produk.id
+            JOIN users AS penjual ON penjual.id = produk.penjual_id
+        
+        ");
+        return view('admin.data_review.index', compact('review'));
     }
 
     /**

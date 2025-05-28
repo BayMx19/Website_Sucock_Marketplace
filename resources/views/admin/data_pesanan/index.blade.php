@@ -4,36 +4,77 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="product-status-wrap" style="margin-top: 75px;">
             <div class="row">
-                <h4 style="margin-left: 15px;">Data Transaksi</h4>
-<div class="breadcomb-report">
-                    <a href=""><button data-toggle="tooltip" title="Download Report" class="btn" style="color: white;">
-                        <i class="fa-solid fa-download" style="color: #ffffff;"></i> Unduh Pdf</button></a>
+                <div class="col-sm-12 table_inside">
+                    <h4 style="margin-left: 15px;">Data Transaksi</h4>
+                    <div class="breadcomb-report">
+                        <a href=""><button data-toggle="tooltip" title="Download Report" class="btn btn-add" style="color: white;">
+                            <i class="fa-solid fa-download" style="color: #ffffff;"></i> Unduh Pdf</button></a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Pembeli</th>
+                                <th>Kode Transaksi</th>
+                                <th>Waktu Transaksi</th>
+                                <th>Produk</th>
+                                <th>Nama Toko</th>
+                                <th>Status Pesanan</th>
+                                <th>Pengaturan</th>
+                            </tr>
+                        </thead>
+                        @foreach($pesanan as $p)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $p->nama_pembeli }}</td>
+                            <td>{{ $p->id }}</td>
+                            <td>{{ $p->tanggal_pesanan }}</td>
+                            <td>{{ $p->nama_produk }}</td>
+                            <td>{{ $p->nama_penjual }}</td>
+                            <td>{{ $p->status_pesanan }}</td>
+                            <td>
+                                <button data-toggle='modal' data-target="#exampleModalLong" class='pd-setting-ed'>
+                                    <i class='fa fa-light fa-eye'style="color: #ffffff;"></i>
+                                </button>
+                                <a href='/admin/datatransaksi/edit'><button data-toggle='tooltip' title='Edit Status' class='pt-setting'><i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i></button>
+                                </a>
+                                <a href='#' onclick="javascript: if(confirm('Apakah produk dengan nama JP Gold mau dihapus?')==true){window.location.href=''; } ">
+                                    <button data-toggle='tooltip' title='Hapus' class='ds-setting'>
+                                        <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                        <!-- <tr>
+                            <td>1</td>
+                            <td>Kurnia Sari</td>
+                            <td>TR20230524182407</td>
+                            <td>2023-05-24 23:24:07</td>
+                            <td>JP Gold</td>
+                            <td><button class='dt-setting'>Belum diBayar</button></td>
+                            <td><button class='pt-setting'>Sedang Dikemas</button></td>
+                            <td>
+                                <button data-toggle='modal' data-target="#exampleModalLong" class='pd-setting-ed'>
+                                    <i class='fa fa-light fa-eye'style="color: #ffffff;"></i>
+                                </button>
+                                <a href='/admin/datatransaksi/edit'><button data-toggle='tooltip' title='Edit Status' class='pt-setting'><i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i></button>
+                                </a>
+                                <a href='#' onclick="javascript: if(confirm('Apakah produk dengan nama JP Gold mau dihapus?')==true){window.location.href=''; } ">
+                                    <button data-toggle='tooltip' title='Hapus' class='ds-setting'>
+                                        <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+                                    </button>
+                                </a>
+                            </td>
+                        </tr> -->
+                    </table>
                 </div>
-                <table>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Pembeli</th>
-                        <th>Kode Transaksi</th>
-                        <th>Waktu Transaksi</th>
-                        <th>Produk</th>
-                        <th>Status Pembayaran</th>
-                        <th>Status Pesanan</th>
-                        <th>Pengaturan</th>
-                    </tr>
-                    <tr>
-                        <tr><td>1</td><td>Kurnia Sari</td><td>TR20230524182407</td><td>2023-05-24 23:24:07</td><td>JP Gold</td><td><button class='dt-setting'>Belum diBayar</button></td><td>
-                            <button class='pt-setting'>Sedang Dikemas</button></td><td>
-                            <button data-toggle='modal' data-target="#exampleModalLong" class='pd-setting-ed'>
-                                <i class='fa fa-light fa-eye'style="color: #ffffff;"></i></button>
-                                            <a href='/admin/datatransaksi/edit'><button data-toggle='tooltip' title='Edit Status' class='pt-setting'>
-                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i></button></a>
-                                            <a href='#' onclick="javascript: if(confirm('Apakah produk dengan nama JP Gold mau dihapus?')==true)
-                                        {window.location.href=''; } ">
-                                        <button data-toggle='tooltip' title='Hapus' class='ds-setting'>
-                                        <i class="fa-solid fa-trash" style="color: #ffffff;"></i></button></a>
-                                      </td></tr>                                    </tr>
-                </table>
-                <!-- Modal -->
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- Modal -->
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

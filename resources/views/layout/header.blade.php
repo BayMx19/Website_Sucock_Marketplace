@@ -25,7 +25,15 @@
                                     <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn" style="margin-left: -120px ; background-color:#000000;">
                                         <li><a href="/admin/profil"><i class="fa-solid fa-user" style="color: #f6f6f6;"></i> Profil</a>
                                         </li>
-                                        <li><a href=""><i class="fa-solid fa-power-off" style="color: #ffffff;"></i> Log Out</a>
+                                        <li>
+                                            <a href="#" id="logout-link" style="display: flex; align-items: center; gap: 8px; color: #ffffff;">
+                                                <i class="fa-solid fa-power-off"></i> 
+                                                <span>Keluar</span>
+                                            </a>
+
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                @csrf
+                                            </form>
                                         </li>
                                     </ul>
                                 </li>
@@ -37,3 +45,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('logout-link').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Konfirmasi Logout',
+            text: 'Apakah Anda yakin ingin keluar dari akun?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#24CAA1',
+            confirmButtonText: 'Ya, Keluar',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('logout-form').submit();
+            }
+        });
+    });
+</script>

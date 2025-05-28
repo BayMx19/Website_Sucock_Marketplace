@@ -16,12 +16,14 @@
 
             <!-- Menu Kanan -->
     <ul class="nav d-flex align-items-center">
+      @guest
         <li class="nav-item">
           <a href="{{ route('register') }}" class="btn-daftar me-2">Daftar</a>
         </li>
         <li class="nav-item">
           <a href="{{ route('login') }}" class="btn_3 me-3">Login</a>
         </li>
+      @endguest
         <li class="nav-item">
           <a href="#" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i></a>
         </li>

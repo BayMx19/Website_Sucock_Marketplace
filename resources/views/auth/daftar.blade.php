@@ -30,7 +30,11 @@
                                     <input type="password" class="form-control" id="password" name="password"
                                         placeholder="Password" required>
                                 </div>
-                                <input type="hidden" name="role" value="penjual">
+                                <div class="col-md-12 form-group p_star mt-3">
+                                    <input type="password" class="form-control" id="password_confirmation"
+                                        name="password_confirmation" placeholder="Konfirmasi Password" required>
+                                </div>
+                                <input type="hidden" name="role" value="Penjual">
                                 <div class="col-md-12 form-group">
                                     <button type="submit" value="submit" class="btn_3">
                                         Daftar

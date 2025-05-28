@@ -77,40 +77,54 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // --- Route Admin ---
 
-// Route Data Users
-Route::get('/admin/data_users/', [UserController::class, 'index'])->name('admin.data_users.index');
-Route::get('/admin/data_users/create', [UserController::class, 'create'])->name('admin.data_users.create');
-Route::post('/admin/data_users/store', [UserController::class, 'store'])->name('admin.data_users.store');
-Route::get('/admin/data_users/{id}/detail', [UserController::class, 'detail'])->name('admin.data_users.detail');
-Route::get('/admin/data_users/{id}/edit', [UserController::class, 'edit'])->name('admin.data_users.edit');
-Route::put('/admin/data_users/{id}', [UserController::class, 'update'])->name('admin.data_users.update');
-Route::delete('/admin/data_users/{id}', [UserController::class, 'destroy'])->name('admin.data_users.destroy');
+Route::middleware(['auth', 'role:Admin'])->group(function () {
 
+   // Route Data Users
+    Route::get('/admin/data_users/', [UserController::class, 'index'])->name('admin.data_users.index');
+    Route::get('/admin/data_users/create', [UserController::class, 'create'])->name('admin.data_users.create');
+    Route::post('/admin/data_users/store', [UserController::class, 'store'])->name('admin.data_users.store');
+    Route::get('/admin/data_users/{id}/detail', [UserController::class, 'detail'])->name('admin.data_users.detail');
+    Route::get('/admin/data_users/{id}/edit', [UserController::class, 'edit'])->name('admin.data_users.edit');
+    Route::put('/admin/data_users/{id}', [UserController::class, 'update'])->name('admin.data_users.update');
+    Route::delete('/admin/data_users/{id}', [UserController::class, 'destroy'])->name('admin.data_users.destroy');
 
-// Route Data Toko
-Route::get('/admin/data_toko/', [TokoController::class, 'index'])->name('admin.data_toko.index');
-Route::get('/admin/data_toko/{id}/detail', [TokoController::class, 'detail'])->name('admin.data_toko.detail');
-Route::delete('/admin/data_toko/{id}', [TokoController::class, 'destroy'])->name('admin.data_toko.destroy');
+    // Route Data Toko
+    Route::get('/admin/data_toko/', [TokoController::class, 'index'])->name('admin.data_toko.index');
+    Route::get('/admin/data_toko/{id}/detail', [TokoController::class, 'detail'])->name('admin.data_toko.detail');
+    Route::delete('/admin/data_toko/{id}', [TokoController::class, 'destroy'])->name('admin.data_toko.destroy');
 
+    // Route Data Produk
+    Route::get('/admin/data_produk/', [produkController::class, 'dataproduk'])->name('admin.data_produk.index');
+    Route::get('/admin/data_produk/{id}/detail', [produkController::class, 'dataprodukdetail'])->name('admin.data_produk.detail');
 
-// Route Data Produk
-Route::get('/admin/data_produk/', [produkController::class, 'dataproduk'])->name('admin.data_produk.index');
-Route::get('/admin/data_produk/{id}/detail', [produkController::class, 'dataprodukdetail'])->name('admin.data_produk.detail');
+    // Route Data Pesanan
+    Route::get('/admin/data_pesanan/', [TransaksiController::class, 'index'])->name('admin.data_pesanan.index');
 
-// Route Data Pesanan
+    // Route Data Review
+    Route::get('/admin/data_review/', [ReviewController::class, 'index'])->name('admin.data_review.index');
 
-// Route Data Review
-
-// Route Profile
-
+    // Route Profile
+    
+});
 
 
 // --- END Route Admin ---
 
+
 // --- Route Penjual ---
+
+Route::middleware(['auth', 'role:Penjual'])->group(function () {
+    
+});
 
 // --- END Route Penjual ---
 
 
 // --- Route Pembeli ---
+
+// Pembeli
+Route::middleware(['auth', 'role:Pembeli'])->group(function () {
+    
+});
+
 // --- END Route Pembeli ---

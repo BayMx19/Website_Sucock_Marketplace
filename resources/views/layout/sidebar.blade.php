@@ -19,11 +19,11 @@
             <li>
                 <a class="has-arrow" href="#" aria-expanded="false"><i class="fa-solid fa-folder-open" style="color: #ffffff;"></i> <span class="mini-click-non">Data</span></a>
                 <ul class="submenu-angle" aria-expanded="false">
-                    <li><a title="Data Users" href="/admin/datauser"><span class="mini-sub-pro">Data Users</span></a></li>
-                    <li><a title="Data Review" href="/admin/datareview"><span class="mini-sub-pro">Data Review</span></a></li>
-                    <li><a title="Data Toko" href="/admin/datatoko"><span class="mini-sub-pro">Data Toko</span></a></li>
-                    <li><a title="Data Produk" href="/admin/dataproduk"><span class="mini-sub-pro">Data Produk</span></a></li>
-                    <li><a title="Data Pesanan" href="/admin/datatransaksi"><span class="mini-sub-pro">Data Transaksi</span></a></li>
+                    <li><a title="Data Users" href="{{ route('admin.data_users.index') }}"><span class="mini-sub-pro">Data Users</span></a></li>
+                    <li><a title="Data Review" href="{{ route('admin.data_review.index') }}"><span class="mini-sub-pro">Data Review</span></a></li>
+                    <li><a title="Data Toko" href="{{ route('admin.data_toko.index') }}"><span class="mini-sub-pro">Data Toko</span></a></li>
+                    <li><a title="Data Produk" href="{{ route('admin.data_produk.index') }}"><span class="mini-sub-pro">Data Produk</span></a></li>
+                    <li><a title="Data Pesanan" href="{{ route('admin.data_pesanan.index') }}"><span class="mini-sub-pro">Data Transaksi</span></a></li>
                 </ul>
             </li>
             <li style="color: #ffffff;">
