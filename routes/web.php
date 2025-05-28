@@ -78,7 +78,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // --- Route Admin ---
 
 Route::middleware(['auth', 'role:Admin'])->group(function () {
-
+    Route::get('/admin/home', function(){
+        return view('admin.home');
+    });
    // Route Data Users
     Route::get('/admin/data_users/', [UserController::class, 'index'])->name('admin.data_users.index');
     Route::get('/admin/data_users/create', [UserController::class, 'create'])->name('admin.data_users.create');
@@ -104,7 +106,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/admin/data_review/', [ReviewController::class, 'index'])->name('admin.data_review.index');
 
     // Route Profile
-    
+
 });
 
 
@@ -114,7 +116,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 // --- Route Penjual ---
 
 Route::middleware(['auth', 'role:Penjual'])->group(function () {
-    
+
 });
 
 // --- END Route Penjual ---
@@ -124,7 +126,7 @@ Route::middleware(['auth', 'role:Penjual'])->group(function () {
 
 // Pembeli
 Route::middleware(['auth', 'role:Pembeli'])->group(function () {
-    
+
 });
 
 // --- END Route Pembeli ---
