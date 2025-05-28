@@ -2,45 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfilController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function indexpembeli()
     {
         return view('pembeli_profil');
     }
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
+    public function editpembeli($id)
     //(string $id)
     {
         return view('pembeli_editdata');
@@ -49,17 +27,59 @@ class ProfilController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updatepembeli(Request $request, $id)
     {
         //
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Display a listing of the resource.
      */
-    public function destroy(string $id)
+    public function indexpenjual()
+    {
+        return view('penjual_profil');
+    }
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function editpenjual($id)
+    //(string $id)
+    {
+        return view('penjual_editdata');
+    }
+    /*
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updatepenjual(Request $request, $id)
     {
         //
     }
-    
+        /**
+     * Display a listing of the resource.
+     */
+    public function indexadmin()
+    {
+        $profilAdmin = Auth::user();
+        return view('/admin/profile/index', compact('profilAdmin'));
+    }
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function editadmin($id)
+    //(string $id)
+    {
+        return view('admin_editdata');
+    }
+    /*
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updateadmin(Request $request, $id)
+    {
+        //
+    }
+
+
+
 }

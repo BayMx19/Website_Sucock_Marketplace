@@ -56,7 +56,7 @@
     @yield('content')
     <footer id="footer" class="footer dark-background">
         <div class="container copyright text-center mt-4">
-            <p><span>Copyright © 2025 Sucock(SumengkoShuttlecock), All rights reserved</span></p>
+            <p><span>Copyright ©2025 Sucock (SumengkoShuttlecock), All rights reserved.</span></p>
             <div class="credits">
                 <!-- All the links in the footer should remain intact. -->
                 <!-- You can delete the links only if you've purchased the pro version. -->

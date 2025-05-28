@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -9,8 +8,8 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicons -->
-  <link href="{{ asset('assets') }}/img/logo WEB.jpg" rel="icon">
-  <link href="{{ asset('assets') }}/img/logo WEB.jpg" rel="apple-touch-icon">
+    <link href="{{ asset('assets') }}/img/logo WEB.jpg" rel="icon">
+    <link href="{{ asset('assets') }}/img/logo WEB.jpg" rel="apple-touch-icon">
     <!-- Google Fonts
 		============================================ -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
@@ -19,7 +18,9 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/css/bootstrap.min.css">
     <!-- Bootstrap CSS
 		============================================ -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- nalika Icon CSS
 		============================================ -->
@@ -66,7 +67,7 @@
     <script src="{{ asset('assets') }}/js/vendor/modernizr-2.8.3.min.js"></script>
     <!-- forms CSS
 		============================================ -->
-        <link rel="stylesheet" href="{{ asset('assets') }}/css/form/all-type-forms.css">
+    <link rel="stylesheet" href="{{ asset('assets') }}/css/form/all-type-forms.css">
 </head>
 
 <body>
@@ -74,49 +75,50 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div class="left-sidebar-pro">
-            <nav id="sidebar" class="">
-                @include('layout.sidebar')
-            </nav>
-        </div>
-        <!-- Start Welcome area -->
-        <div class="all-content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="logo-pro">
-                            <a href="index.php"><img class="main-logo" src="img/logo/logo.png" alt="" style="width: 100px;" /></a>
-                        </div>
+    <div class="left-sidebar-pro">
+        <nav id="sidebar" class="">
+            @include('layout.sidebar')
+        </nav>
+    </div>
+    <!-- Start Welcome area -->
+    <div class="all-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="logo-pro">
+                        <a href="index.php"><img class="main-logo" src="img/logo/logo.png" alt=""
+                                style="width: 100px;" /></a>
                     </div>
                 </div>
             </div>
-            <div class="header-advance-area">
-                <div class="header-top-area">
-                    @include('layout.header')
-                </div>
-                <!-- Mobile Menu start -->
-                {{-- <div class="mobile-menu-area">
+        </div>
+        <div class="header-advance-area">
+            <div class="header-top-area">
+                @include('layout.header')
+            </div>
+            <!-- Mobile Menu start -->
+            {{-- <div class="mobile-menu-area">
                     @include('layout.mobilemenu')
                 </div> --}}
-                <!-- Mobile Menu end -->
+            <!-- Mobile Menu end -->
+        </div>
+        <div class="breadcome-area">
+            <div class="container-fluid">
+                @yield('contentadmin')
             </div>
-            <div class="breadcome-area">
-                <div class="container-fluid">
-                    @yield('contentadmin')
-                </div>
-            </div>
-            <div class="footer-copyright-area">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="footer-copy-right">
-                                <p>copyright @2025 Sucock(SumengkoShuttlecock), All rights reserved</p>
-                            </div>
+        </div>
+        <div class="footer-copyright-area">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer-copy-right">
+                            <p>Copyright ©2025 Sucock (SumengkoShuttlecock), All rights reserved.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
     <!-- jquery
 		============================================ -->

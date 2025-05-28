@@ -18,20 +18,25 @@
                         <div class="header-right-info">
                             <ul class="nav navbar-nav mai-top-nav header-right-menu">
                                 <li class="nav-item">
-                                    <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+                                    <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                        class="nav-link dropdown-toggle">
                                         <i class="fa-solid fa-user"></i>
                                         <i class="fa-solid fa-caret-down"></i>
                                     </a>
-                                    <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn" style="margin-left: -120px ; background-color:#000000;">
-                                        <li><a href="/admin/profil"><i class="fa-solid fa-user" style="color: #f6f6f6;"></i> Profil</a>
+                                    <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn"
+                                        style="margin-left: -120px ; background-color:#000000;">
+                                        <li><a href="/admin/profile"><i class="fa-solid fa-user"
+                                                    style="color: #f6f6f6;"></i> Profile</a>
                                         </li>
                                         <li>
-                                            <a href="#" id="logout-link" style="display: flex; align-items: center; gap: 8px; color: #ffffff;">
-                                                <i class="fa-solid fa-power-off"></i> 
+                                            <a href="#" id="logout-link"
+                                                style="display: flex; align-items: center; gap: 8px; color: #ffffff;">
+                                                <i class="fa-solid fa-power-off"></i>
                                                 <span>Keluar</span>
                                             </a>
 
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                style="display: none;">
                                                 @csrf
                                             </form>
                                         </li>
@@ -47,22 +52,22 @@
 </div>
 
 <script>
-    document.getElementById('logout-link').addEventListener('click', function (e) {
-        e.preventDefault();
+document.getElementById('logout-link').addEventListener('click', function(e) {
+    e.preventDefault();
 
-        Swal.fire({
-            title: 'Konfirmasi Logout',
-            text: 'Apakah Anda yakin ingin keluar dari akun?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#24CAA1',
-            confirmButtonText: 'Ya, Keluar',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('logout-form').submit();
-            }
-        });
+    Swal.fire({
+        title: 'Konfirmasi Logout',
+        text: 'Apakah Anda yakin ingin keluar dari akun?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#24CAA1',
+        confirmButtonText: 'Ya, Keluar',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('logout-form').submit();
+        }
     });
+});
 </script>

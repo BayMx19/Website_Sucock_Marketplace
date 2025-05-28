@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\pesanan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,7 @@ class TransaksiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function indexadmin()
     {
         $pesanan = DB::select("
             SELECT
@@ -33,11 +34,28 @@ class TransaksiController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the specified resource.
      */
-    public function create()
+    public function detailadmin($id)
     {
-        //
+        $pesanan = DB::table('pesanan')
+        ->select(
+            'pesanan.id',
+            'pesanan.kode_pesanan',
+            'pesanan.tanggal_pesanan',
+            'pesanan.total_harga',
+            'pesanan.status_pesanan',
+            'pembeli.name as nama_pembeli',
+            'produk.nama_produk',
+            'penjual.name as nama_penjual'
+        )
+        ->join('users as pembeli', 'pesanan.user_id', '=', 'pembeli.id')
+        ->join('produk', 'pesanan.produk_id', '=', 'produk.id')
+        ->join('users as penjual', 'produk.penjual_id', '=', 'penjual.id')
+        ->where('pesanan.id', $id)
+        ->first();
+        // dd($pesanan);
+         return view('admin.data_pesanan.detail', compact('pesanan'));
     }
 
     /**
@@ -48,13 +66,6 @@ class TransaksiController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

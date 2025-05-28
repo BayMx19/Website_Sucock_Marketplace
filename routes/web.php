@@ -100,13 +100,15 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/admin/data_produk/{id}/detail', [produkController::class, 'dataprodukdetail'])->name('admin.data_produk.detail');
 
     // Route Data Pesanan
-    Route::get('/admin/data_pesanan/', [TransaksiController::class, 'index'])->name('admin.data_pesanan.index');
+    Route::get('/admin/data_pesanan/', [TransaksiController::class, 'indexadmin'])->name('admin.data_pesanan.index');
+    Route::get('/admin/data_pesanan/{id}/detail', [TransaksiController::class, 'detailadmin'])->name('admin.data_pesanan.detail');
 
     // Route Data Review
-    Route::get('/admin/data_review/', [ReviewController::class, 'index'])->name('admin.data_review.index');
-
+    Route::get('/admin/data_review/', [ReviewController::class, 'indexadmin'])->name('admin.data_review.index');
+    Route::get('/admin/data_review/{id}/detail', [ReviewController::class, 'detailadmin'])->name('admin.data_review.detail');
+    Route::delete('/admin/data_review/{id}', [ReviewController::class, 'destroyadmin'])->name('admin.data_review.destroy');
     // Route Profile
-
+    Route::get('/admin/profile/', [ProfilController::class, 'indexadmin'])->name('admin.profile.index');
 });
 
 

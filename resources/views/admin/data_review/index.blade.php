@@ -8,7 +8,8 @@
                     <h4 style="margin-left: 15px;">Data Review</h4>
                     <div class="breadcomb-report">
                         <a href="laporan/laporandatareview.php">
-                            <button data-toggle="tooltip" title="Download Report" class="btn btn-add" style="color: white;">
+                            <button data-toggle="tooltip" title="Download Report" class="btn btn-add"
+                                style="color: white;">
                                 <i class="fa-solid fa-download" style="color: #ffffff;"></i> Unduh Pdf
                             </button>
                         </a>
@@ -34,7 +35,15 @@
                             <td>{{ $r->nama_produk }}</td>
                             <td>{{ $r->review_text }}</td>
                             <td><i class="fa fa-star" style="color: #24CAA1;"> {{ $r->bintang }}</i></td>
-                            <td><a href='#' onclick="javascript: if(confirm('Apakah review dariKurniasari untuk produk JP Gold mau dihapus?')==true){window.location.href=''; } "><button data-toggle='tooltip' title='Hapus' class='ds-setting'><i class="fa-solid fa-trash" style="color: #ffffff;"></i></button></a>
+                            <td> <a href="{{ route('admin.data_review.detail', $r->id) }}"
+                                    class="btn btn-primary btn-sm me-2">Detail</a>
+                                <form action="{{ route('admin.data_review.destroy', $r->id) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Yakin ingin menghapus?');">Hapus</button>
+                                </form>
                             </td>
                         </tr>
 

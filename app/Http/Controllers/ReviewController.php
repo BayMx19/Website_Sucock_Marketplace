@@ -10,24 +10,49 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function indexadmin()
     {
         $review = DB::select("
             SELECT
+                review.id,
                 pembeli.name AS nama_pembeli,
                 penjual.name AS nama_penjual,
                 produk.nama_produk,
                 review.review_text,
                 review.bintang
             FROM review
-            JOIN users AS pembeli ON review.user_id = pembeli.id
-            JOIN produk ON review.produk_id = produk.id
-            JOIN users AS penjual ON penjual.id = produk.penjual_id
-        
+            JOIN pesanan ON review.pesanan_id = pesanan.id
+            JOIN users AS pembeli ON pesanan.user_id = pembeli.id
+            JOIN produk ON pesanan.produk_id = produk.id
+            JOIN users AS penjual ON produk.penjual_id = penjual.id
         ");
+        // dd($review);
         return view('admin.data_review.index', compact('review'));
     }
 
+    /**
+     * Display the specified resource.
+     */
+    public function detailadmin($id)
+    {
+        $review = DB::selectOne("
+        SELECT
+            review.id,
+            pembeli.name AS nama_pembeli,
+            penjual.name AS nama_penjual,
+            pesanan.kode_pesanan,
+            produk.nama_produk,
+            review.review_text,
+            review.bintang
+        FROM review
+        JOIN pesanan ON review.pesanan_id = pesanan.id
+        JOIN users AS pembeli ON pesanan.user_id = pembeli.id
+        JOIN produk ON pesanan.produk_id = produk.id
+        JOIN users AS penjual ON produk.penjual_id = penjual.id
+        WHERE pesanan.id = ?", [$id]);
+        // dd($review);
+        return view('admin.data_review.detail', compact('review'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -44,13 +69,6 @@ class ReviewController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

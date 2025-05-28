@@ -34,9 +34,9 @@
                             <td>{{ $p->nama_penjual }}</td>
                             <td>{{ $p->status_pesanan }}</td>
                             <td>
-                                <a href="{{ route('admin.data_users.detail', $p->id) }}"
+                                <a href="{{ route('admin.data_pesanan.detail', $p->id) }}"
                                     class="btn btn-primary btn-sm me-2">Detail</a>
-                                <a href="{{ route('admin.data_users.edit', $p->id) }}"
+                                <!-- <a href="{{ route('admin.data_users.edit', $p->id) }}"
                                     class="btn btn-warning btn-sm me-2">Edit</a>
 
                                 <form action="{{ route('admin.data_users.destroy', $p->id) }}" method="POST"
@@ -45,7 +45,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm"
                                         onclick="return confirm('Yakin ingin menghapus?');">Hapus</button>
-                                </form>
+                                </form> -->
                             </td>
                         </tr>
                         @endforeach
