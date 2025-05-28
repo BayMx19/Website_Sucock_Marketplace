@@ -13,18 +13,20 @@ class TransaksiController extends Controller
     public function index()
     {
         $pesanan = DB::select("
-            SELECT 
-                pesanan.id, 
-                pesanan.tanggal_pesanan, 
-                pesanan.status_pesanan, 
-                pembeli.name AS nama_pembeli, 
-                produk.nama_produk, 
+            SELECT
+                pesanan.id,
+                pesanan.kode_pesanan,
+                pesanan.tanggal_pesanan,
+                pesanan.status_pesanan,
+                pembeli.name AS nama_pembeli,
+                produk.nama_produk,
                 penjual.name AS nama_penjual
             FROM pesanan
             JOIN users AS pembeli ON pesanan.user_id = pembeli.id
             JOIN produk ON pesanan.produk_id = produk.id
             JOIN users AS penjual ON penjual.id = produk.penjual_id
         ");
+        // dd($pesanan);
 
 
         return view('admin.data_pesanan.index', compact('pesanan'));

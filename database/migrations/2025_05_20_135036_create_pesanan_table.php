@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('pesanan', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->bigInteger('user_id')->unsigned();
-             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('kode_pesanan');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->bigInteger('produk_id')->unsigned();
             $table->foreign('produk_id')->references('id')->on('produk')->onDelete('cascade')->onUpdate('cascade');
             $table->string('total_harga');

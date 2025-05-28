@@ -20,6 +20,7 @@ class pesanan extends Model
         'total_harga',
         'tanggal_pemesanan',
         'status_pemesanan',
+        'kode_pesanan'
     ];
     public function user()
     {
