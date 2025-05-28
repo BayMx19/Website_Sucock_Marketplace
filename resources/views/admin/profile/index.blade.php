@@ -65,11 +65,11 @@
                                                     </h4>
 
                                                 </div>
-                                                <div class="single-pro-cn"
+                                                <!-- <div class="single-pro-cn"
                                                     style="margin-top: 30px; margin-bottom: 30px;">
                                                     <a href="/admin/profile/{id}/edit"><button data-toggle="tooltip"
                                                             title="Edit" class="btn_1">Edit Data</button></a>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
