@@ -20,7 +20,7 @@
                             <tr>
                         </thead>
 
-                        @foreach($toko as $toko)
+                        @forelse($toko as $toko)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $toko->name }}</td>
@@ -49,7 +49,11 @@
                                 </form>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="2">Data tidak ditemukan.</td>
+                        </tr>
+                        @endforelse
                     </table>
                 </div>
             </div>

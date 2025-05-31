@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SesiController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\CheckoutController;
@@ -78,9 +79,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // --- Route Admin ---
 
 Route::middleware(['auth', 'role:Admin'])->group(function () {
-    Route::get('/admin/home', function(){
-        return view('admin.home');
-    });
+    Route::get('/admin/home/', [DashboardController::class, 'dashboardadmin'])->name('admin.home');
+
    // Route Data Users
     Route::get('/admin/data_users/', [UserController::class, 'index'])->name('admin.data_users.index');
     Route::get('/admin/data_users/create', [UserController::class, 'create'])->name('admin.data_users.create');

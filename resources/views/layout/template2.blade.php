@@ -68,6 +68,10 @@
     <!-- forms CSS
 		============================================ -->
     <link rel="stylesheet" href="{{ asset('assets') }}/css/form/all-type-forms.css">
+
+    <!-- Chart.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
 </head>
 
 <body>
@@ -102,8 +106,8 @@
                 </div> --}}
             <!-- Mobile Menu end -->
         </div>
-        <div class="breadcome-area">
-            <div class="container-fluid">
+        <div class="breadcome-area" style="margin-top: 50px;">
+            <div class="container-fluid pt-15">
                 @yield('contentadmin')
             </div>
         </div>

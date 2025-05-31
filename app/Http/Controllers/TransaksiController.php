@@ -11,9 +11,11 @@ class TransaksiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexadmin()
+    public function indexadmin(Request $request)
     {
-        $pesanan = DB::select("
+        $search = $request->query('searchorders');
+
+        $query = "
             SELECT
                 pesanan.id,
                 pesanan.kode_pesanan,
@@ -26,11 +28,25 @@ class TransaksiController extends Controller
             JOIN users AS pembeli ON pesanan.user_id = pembeli.id
             JOIN produk ON pesanan.produk_id = produk.id
             JOIN users AS penjual ON penjual.id = produk.penjual_id
-        ");
-        // dd($pesanan);
+        ";
 
+        $bindings = [];
 
-        return view('admin.data_pesanan.index', compact('pesanan'));
+        if (!empty($search)) {
+            $query .= "
+            WHERE 
+                pembeli.name LIKE ? OR
+                pesanan.kode_pesanan LIKE ? OR
+                produk.nama_produk LIKE ? OR
+                pesanan.tanggal_pesanan LIKE ? OR
+                penjual.name LIKE ?
+            ";
+            $bindings = array_fill(0, 5, "%$search%");
+        }
+
+        $pesanan = DB::select($query, $bindings);
+
+        return view('admin.data_pesanan.index', compact('pesanan', 'search'));
     }
 
     /**

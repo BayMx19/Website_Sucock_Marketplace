@@ -3,13 +3,15 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="header-top-wraper">
                 <div class="row">
-
                     <div class="col-lg-6 col-md-7 col-sm-6 col-xs-12">
                         <div class="header-top-menu tabl-d-n hd-search-rp">
                             <div class="breadcome-heading">
-                                <form role="search" class="">
-                                    <input type="text" placeholder="Search..." class="form-control">
-                                    <a href=""><i class="fa fa-search"></i></a>
+                                <form role="search" method="GET" action="" style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="text" placeholder="Search..." class="form-control" name="searchorders" value="{{ request('searchorders') }}" style="max-width: 180px;">
+                                    <button type="submit" class="btn btn-md" style="background-color: transparent; border: none;">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                    <!-- <a href=""><i class="fa fa-search"></i></a> -->
                                 </form>
                             </div>
                         </div>
@@ -25,8 +27,8 @@
                                     </a>
                                     <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn"
                                         style="margin-left: -120px ; background-color:#000000;">
-                                        <li><a href="/admin/profile"><i class="fa-solid fa-user"
-                                                    style="color: #f6f6f6;"></i> Profile</a>
+                                        <li>
+                                            <a href="/admin/profile"><i class="fa-solid fa-user" style="color: #f6f6f6;"></i> Profile</a>
                                         </li>
                                         <li>
                                             <a href="#" id="logout-link"

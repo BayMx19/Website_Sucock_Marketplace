@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('pembayaran', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
+            $table->unsignedbigInteger('pesanan_id');
             $table->enum('metode_pembayaran',['cod','cockpay']);
             $table->date('tanggal_pembayaran');
             $table->string('status_pembayaran');
             $table->timestamps();
         });
         Schema::table('pembayaran', function (Blueprint $table){
-            $table->foreign('user_id')->references('id')->on('users')
+            $table->foreign('pesanan_id')->references('id')->on('pesanan')
             ->onDelete('cascade')->onUpdate('cascade');
         });
     }

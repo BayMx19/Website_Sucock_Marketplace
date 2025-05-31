@@ -1,68 +1,155 @@
 @extends('layout.template2')
 @section('contentadmin')
-<div class="row">
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-        <div class="breadcome-list">
-            <div class="admin-content analysis-progrebar-ctn res-mg-t-15">
-                {{-- <i class="fa-solid fa-user" style="color: #f6f6f6;"></i> --}}
-                <h4 class="text-left text-uppercase"><b>Total Users</b></h4>
-                <div class="row vertical-center-box vertical-center-box-tablet">
-                    <div class="col-xs-1 cus-gh-hd-pro">
-                        <h1 class="text-right no-margin text-white">6</h1>
-                    </div>
 
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-        <div class="breadcome-list">
-            <div class="admin-content analysis-progrebar-ctn res-mg-t-15">
-                <h4 class="text-left text-uppercase"><b>Total Review</b></h4>
-                <div class="row vertical-center-box vertical-center-box-tablet">
-                    <div class="col-xs-1 cus-gh-hd-pro">
-                        <h1 class="text-right no-margin text-white">3</h1>
-                    </div>
+<div class="container-xl py-4">
+    
+    {{-- Cards Section --}}
+    <div class="row g-4 mb-5">
+        @php
+            $cards = [
+                ['icon' => 'fa-solid fa-user', 'label' => 'Jumlah Pengguna', 'value' => $total_pengguna],
+                ['icon' => 'fa-solid fa-comment', 'label' => 'Jumlah Review', 'value' => $total_review],
+                ['icon' => 'fa-solid fa-store', 'label' => 'Jumlah Toko', 'value' => $total_toko],
+                ['icon' => 'fa-solid fa-box', 'label' => 'Jumlah Produk', 'value' => $total_produk],
+            ];
+        @endphp
 
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-        <div class="breadcome-list">
-            <div class="admin-content analysis-progrebar-ctn res-mg-t-15">
-                <h4 class="text-left text-uppercase"><b>Total Toko</b></h4>
-                <div class="row vertical-center-box vertical-center-box-tablet">
-                    <div class="col-xs-1 cus-gh-hd-pro">
-                        <h1 class="text-right no-margin text-white">3</h1>
+        @foreach($cards as $card)
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+            <div class="card shadow-sm border-0" style="min-height: 120px; background: linear-gradient(135deg, #6fa8ba, #548c99); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.2)';"
+            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                <div class="card-body text-white text-center p-1" style="padding-top: 2 !important; padding-bottom: 2;">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="icon-circle mb-3 mx-auto" style="background-color: rgba(255,255,255,0.15); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fa-solid {{ $card['icon'] }} fa-xl"></i>
+                            </div>
+                        </div>
+                        <div class="col-8" style="margin-top: -20px;">
+                            <h6 class="text-uppercase fw-bold mb-1 mt-1" style="letter-spacing: 1px;">{{ $card['label'] }}</h6>
+                            <h2 class="fw-bold mb-2">{{ $card['value'] }}</h2>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-        <div class="breadcome-list">
-            <div class="admin-content analysis-progrebar-ctn res-mg-t-15">
-                <h4 class="text-left text-uppercase"><b>Total Produk</b></h4>
-                <div class="row vertical-center-box vertical-center-box-tablet">
-                    <div class="col-xs-1 cus-gh-hd-pro">
-                        <h1 class="text-right no-margin text-white">3</h1>
-                    </div>
+
+    {{-- Charts Section --}}
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h2 class="h2 fw-bold mb-4">Diagram Pemasukan</h2>
+                    <canvas id="grafik_pemasukan"></canvas>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-        <div class="breadcome-list">
-            <div class="admin-content analysis-progrebar-ctn res-mg-t-15">
-                <h4 class="text-left text-uppercase"><b>Total Transaksi</b></h4>
-                <div class="row vertical-center-box vertical-center-box-tablet">
-                    <div class="col-xs-1 cus-gh-hd-pro">
-                        <h1 class="text-right no-margin text-white">4</h1>
-                    </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h2 class="h2 fw-bold mb-4">Diagram Review Pelanggan</h2>
+                    <canvas id="grafik_review"></canvas>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+    // Diagram Garis Pemasukan
+    const ctx = document.getElementById('grafik_pemasukan');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($jml_pendapatan->pluck('bulan')) !!},
+            datasets: [{
+                label: 'Jumlah Pemasukan',
+                data: {!! json_encode($jml_pendapatan->pluck('total')) !!},
+                borderWidth: 2,
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 2,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                        callback: function(value) {
+                            // Format angka besar (contoh: 1000000 jadi 1jt)
+                            if (value >= 1000000) return (value / 1000000) + ' jt';
+                            if (value >= 1000) return (value / 1000) + ' rb';
+                            return value;
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Total Pemasukan (Rp)',
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            // Format tooltip jadi Rupiah
+                            let value = context.parsed.y;
+                            return 'Rp ' + value.toLocaleString('id-ID');
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+
+    // Diagram Batang Review
+    const ctx2 = document.getElementById('grafik_review').getContext('2d');
+    
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($jml_rerata_review->pluck('name')) !!},
+            datasets: [{
+                label: 'Rata-Rata Review',
+                data: {!! json_encode($jml_rerata_review->pluck('rerata_bintang')) !!},
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+                backgroundColor: '#679FB0',
+                borderWidth: 1
+                }]
+            },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 2,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                            callback: function(value) {
+                                return Number.isInteger(value) ? value : null;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+
+</script>
+
 @endsection

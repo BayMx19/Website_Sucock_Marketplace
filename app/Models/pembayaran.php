@@ -15,7 +15,7 @@ class pembayaran extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
+        'pesanan_id',
         'metode_pembayaran',
         'tanggal_pembayaran',
         'status_pembayaran',

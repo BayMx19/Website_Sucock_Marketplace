@@ -10,9 +10,11 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexadmin()
+    public function indexadmin(Request $request)
     {
-        $review = DB::select("
+        $search = $request->query('searchorders');
+
+        $query = "
             SELECT
                 review.id,
                 pembeli.name AS nama_pembeli,
@@ -25,9 +27,24 @@ class ReviewController extends Controller
             JOIN users AS pembeli ON pesanan.user_id = pembeli.id
             JOIN produk ON pesanan.produk_id = produk.id
             JOIN users AS penjual ON produk.penjual_id = penjual.id
-        ");
+        ";
+
+        $bindings = [];
+
+        if (!empty($search)) {
+            $query .= "
+            WHERE 
+                pembeli.name LIKE ? OR
+                penjual.name LIKE ? OR
+                produk.nama_produk LIKE ?
+            ";
+            $bindings = array_fill(0, 3, "%$search%");
+        }
+
+        $review = DB::select($query, $bindings);
+
         // dd($review);
-        return view('admin.data_review.index', compact('review'));
+        return view('admin.data_review.index', compact('review', 'search'));
     }
 
     /**
@@ -49,7 +66,7 @@ class ReviewController extends Controller
         JOIN users AS pembeli ON pesanan.user_id = pembeli.id
         JOIN produk ON pesanan.produk_id = produk.id
         JOIN users AS penjual ON produk.penjual_id = penjual.id
-        WHERE pesanan.id = ?", [$id]);
+        WHERE review.id = ?", [$id]);
         // dd($review);
         return view('admin.data_review.detail', compact('review'));
     }

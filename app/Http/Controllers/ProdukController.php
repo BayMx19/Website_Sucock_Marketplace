@@ -16,11 +16,26 @@ class ProdukController extends Controller
         return view('pembeli_detailproduk');
     }
 
-    public function dataproduk()
+    public function dataproduk(Request $request)
     {
-        $produk = Produk::with('user')->get();
-        // dd($produk);
-        return view('admin.data_produk.index', compact('produk'));
+        $search = $request->query('searchorders');
+
+        if(empty($search)) {
+            $produk = Produk::with('user')->get();
+        } else {
+            $produk = Produk::with('user')
+              ->where(function ($query) use ($search) {
+                $query->Where('nama_produk', 'like', "%{$search}%")
+                    ->orWhere('harga', 'like', "%{$search}%")
+                    ->orWhere('stok', 'like', "%{$search}%");
+            })
+            ->orWhereHas('user', function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->get();
+        }
+
+        return view('admin.data_produk.index', compact('produk', 'search'));
     }
     public function dataprodukdetail($id)
     {

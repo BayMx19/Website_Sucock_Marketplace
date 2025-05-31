@@ -24,7 +24,7 @@
                             <tr>
                         </thead>
 
-                        @foreach($users as $user)
+                        @forelse($users as $user)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $user->name }}</td>
@@ -53,7 +53,11 @@
                                 </form>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="2">Data tidak ditemukan.</td>
+                        </tr>
+                        @endforelse
                     </table>
                 </div>
             </div>

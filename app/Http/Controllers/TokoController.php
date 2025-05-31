@@ -10,11 +10,23 @@ class TokoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $toko = Toko::where('role', 'Penjual')->get();
-        // dd($toko);
-        return view('admin.data_toko.index', compact('toko'));
+        $search = $request->query('searchorders');
+
+        if(empty($search)) {
+             $toko = Toko::where('role', 'Penjual')->get();
+        } else {
+            $toko = Toko::where('role', 'Penjual')
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('role', 'like', "%{$search}%")
+                    ->orWhere('jenis_kelamin', 'like', "%{$search}%");
+            })->get();
+        }
+
+        return view('admin.data_toko.index', compact('toko', 'search'));
     }
     /**
      * Show the form for creating a new resource.

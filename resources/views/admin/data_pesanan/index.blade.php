@@ -24,7 +24,7 @@
                                 <th>Pengaturan</th>
                             </tr>
                         </thead>
-                        @foreach($pesanan as $p)
+                        @forelse($pesanan as $p)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $p->nama_pembeli }}</td>
@@ -48,7 +48,11 @@
                                 </form> -->
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="2">Data tidak ditemukan.</td>
+                        </tr>
+                        @endforelse
                         <!-- <tr>
                             <td>1</td>
                             <td>Kurnia Sari</td>

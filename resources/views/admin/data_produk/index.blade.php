@@ -24,7 +24,7 @@
                             <tr>
                         </thead>
 
-                        @foreach($produk as $produk)
+                        @forelse($produk as $produk)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $produk->user->name }}</td>
@@ -44,7 +44,11 @@
 
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="2">Data tidak ditemukan.</td>
+                        </tr>
+                        @endforelse
                     </table>
                 </div>
             </div>

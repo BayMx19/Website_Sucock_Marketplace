@@ -26,7 +26,7 @@
                             <th colspan="2">Pengaturan</th>
                         </tr>
 
-                        @foreach($review as $r)
+                        @forelse($review as $r)
 
                         <tr>
                             <td>{{ $loop->iteration }}</td>
@@ -46,8 +46,11 @@
                                 </form>
                             </td>
                         </tr>
-
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="2">Data tidak ditemukan.</td>
+                        </tr>
+                        @endforelse
 
                         <!-- <tr>
                             <td>1</td>
