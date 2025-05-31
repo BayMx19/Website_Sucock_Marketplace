@@ -28,7 +28,11 @@
                                     <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn"
                                         style="margin-left: -120px ; background-color:#000000;">
                                         <li>
+                                            @if(Auth::user()->role === 'Admin')
                                             <a href="/admin/profile"><i class="fa-solid fa-user" style="color: #f6f6f6;"></i> Profile</a>
+                                            @elseif(Auth::user()->role === 'Penjual')
+                                            <a href="/penjual/profile"><i class="fa-solid fa-user" style="color: #f6f6f6;"></i> Profile</a>
+                                            @endif
                                         </li>
                                         <li>
                                             <a href="#" id="logout-link"

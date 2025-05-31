@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $total_review = $review->count();
         $total_toko =  $pengguna->where('role', 'Penjual')->count();
         $total_produk = produk::count();
-        
+
         $jml_pendapatan = pesanan::selectRaw("
             DATE_FORMAT(tanggal_pesanan, '%b %Y') as bulan,
             SUM(total_harga) as total
@@ -32,7 +32,7 @@ class DashboardController extends Controller
         ->get();
 
         $jml_rerata_review = collect(DB::select("
-            SELECT users.name, ROUND(AVG(review.bintang), 1) AS rerata_bintang 
+            SELECT users.name, ROUND(AVG(review.bintang), 1) AS rerata_bintang
             FROM review
             JOIN pesanan ON pesanan.id = review.pesanan_id
             JOIN users ON users.id = pesanan.user_id
@@ -40,5 +40,9 @@ class DashboardController extends Controller
         "));
 
         return view('admin.home', compact('total_pengguna', 'total_review', 'total_toko', 'total_produk', 'jml_rerata_review', 'jml_pendapatan'));
+    }
+
+    public function dashboardpenjual(){
+        return view('penjual.home');
     }
 }

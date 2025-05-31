@@ -118,6 +118,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 // --- Route Penjual ---
 
 Route::middleware(['auth', 'role:Penjual'])->group(function () {
+        Route::get('/penjual/home/', [DashboardController::class, 'dashboardpenjual'])->name('penjual.home');
 
 });
 
