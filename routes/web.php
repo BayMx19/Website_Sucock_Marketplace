@@ -133,6 +133,10 @@ Route::middleware(['auth', 'role:Penjual'])->group(function () {
     // Route Data Review
     // Route Chat
     // Route Profile
+    Route::get('/penjual/profile/', [ProfilController::class, 'indexpenjual'])->name('penjual.profile.index');
+    Route::get('/penjual/profile/{id}/edit', [ProfilController::class, 'editpenjual'])->name('penjual.profile.edit');
+    Route::put('/penjual/profile/{id}', [ProfilController::class, 'updatepenjual'])->name('penjual.profile.update');
+
 });
 
 // --- END Route Penjual ---
