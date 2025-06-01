@@ -118,8 +118,21 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 // --- Route Penjual ---
 
 Route::middleware(['auth', 'role:Penjual'])->group(function () {
-        Route::get('/penjual/home/', [DashboardController::class, 'dashboardpenjual'])->name('penjual.home');
+    Route::get('/penjual/home/', [DashboardController::class, 'dashboardpenjual'])->name('penjual.home');
 
+    // Route Data Produk
+    Route::get('/penjual/data_produk/', [ProdukController::class, 'indexpenjual'])->name('penjual.data_produk.index');
+    Route::get('/penjual/data_produk/create', [ProdukController::class, 'createpenjual'])->name('penjual.data_produk.create');
+    Route::post('/penjual/data_produk/store', [ProdukController::class, 'storepenjual'])->name('penjual.data_produk.store');
+    Route::get('/penjual/data_produk/{id}/detail', [ProdukController::class, 'detailpenjual'])->name('penjual.data_produk.detail');
+    Route::get('/penjual/data_produk/{id}/edit', [ProdukController::class, 'editpenjual'])->name('penjual.data_produk.edit');
+    Route::put('/penjual/data_produk/{id}', [ProdukController::class, 'updatepenjual'])->name('penjual.data_produk.update');
+    Route::delete('/penjual/data_produk/{id}', [ProdukController::class, 'destroypenjual'])->name('penjual.data_produk.destroy');
+
+    // Route Data Transaksi
+    // Route Data Review
+    // Route Chat
+    // Route Profile
 });
 
 // --- END Route Penjual ---

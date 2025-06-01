@@ -31,7 +31,7 @@
                     <li><a title="Data Produk" href="{{ route('admin.data_produk.index') }}"><span
                                 class="mini-sub-pro">Data Produk</span></a></li>
                     <li><a title="Data Pesanan" href="{{ route('admin.data_pesanan.index') }}"><span
-                                class="mini-sub-pro">Data Transaksi</span></a></li>
+                                class="mini-sub-pro">Data Pesanan</span></a></li>
                     <li><a title="Data Review" href="{{ route('admin.data_review.index') }}"><span
                                 class="mini-sub-pro">Data Review</span></a></li>
                 </ul>
@@ -92,10 +92,10 @@
                 <ul class="submenu-angle" aria-expanded="false">
 
 
-                    <li><a title="Data Produk" href=""><span
+                    <li><a title="Data Produk" href="{{ route('penjual.data_produk.index') }}"><span
                                 class="mini-sub-pro">Data Produk</span></a></li>
                     <li><a title="Data Pesanan" href=""><span
-                                class="mini-sub-pro">Data Transaksi</span></a></li>
+                                class="mini-sub-pro">Data Pesanan</span></a></li>
                     <li><a title="Data Review" href=""><span
                                 class="mini-sub-pro">Data Review</span></a></li>
                 </ul>

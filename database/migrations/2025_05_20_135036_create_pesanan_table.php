@@ -16,8 +16,7 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('kode_pesanan');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->bigInteger('produk_id')->unsigned();
-            $table->foreign('produk_id')->references('id')->on('produk')->onDelete('cascade')->onUpdate('cascade');
+            $table->text('produk');
             $table->string('total_harga');
             $table->date('tanggal_pesanan');
             $table->string('status_pesanan');

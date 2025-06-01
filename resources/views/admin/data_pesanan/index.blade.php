@@ -18,8 +18,6 @@
                                 <th>Nama Pembeli</th>
                                 <th>Kode Pesanan</th>
                                 <th>Waktu Pesanan</th>
-                                <th>Produk</th>
-                                <th>Nama Toko</th>
                                 <th>Status Pesanan</th>
                                 <th>Pengaturan</th>
                             </tr>
