@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\pesanan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
@@ -77,9 +78,38 @@ class TransaksiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function indexpenjual(Request $request)
     {
-        //
+        $search = $request->query('searchorders');
+
+        $penjual = Auth::id();
+
+        $query = "
+            SELECT
+                pesanan.id,
+                pembeli.name AS nama_pembeli,
+                pesanan.kode_pesanan,
+                pesanan.tanggal_pesanan,
+                pesanan.status_pesanan,
+                pesanan.total_harga
+            FROM pesanan
+            JOIN users AS pembeli ON pesanan.user_id = pembeli.id
+            JOIN produk ON JSON_EXTRACT(pesanan.produk, '$[0].produk_id') = produk.id
+            JOIN users AS penjual ON produk.penjual_id = penjual.id
+            WHERE penjual.id = ?
+        ";
+
+         $bindings = [$penjual];
+
+        if (!empty($search)) {
+            $query .= " AND (pembeli.name LIKE ? OR pesanan.kode_pesanan LIKE ?) ";
+            $bindings[] = "%$search%";
+            $bindings[] = "%$search%";
+        }
+
+        $pesanan = DB::select($query, $bindings);
+
+        return view('penjual.data_pesanan.index', compact('pesanan', 'search'));
     }
 
 
