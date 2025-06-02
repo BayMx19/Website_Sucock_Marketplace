@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfilController extends Controller
 {
@@ -37,7 +38,8 @@ class ProfilController extends Controller
      */
     public function indexpenjual()
     {
-        return view('penjual_profil');
+        $profilPenjual = Auth::user();
+        return view('/penjual/profile/index', compact('profilPenjual'));
     }
     /**
      * Show the form for editing the specified resource.
@@ -45,7 +47,9 @@ class ProfilController extends Controller
     public function editpenjual($id)
     //(string $id)
     {
-        return view('penjual_editdata');
+        $profilPenjual = User::findOrFail($id);
+        // dd($profilPenjual);
+        return view('/penjual/profile/edit', compact('profilPenjual'));
     }
     /*
     /**
@@ -53,7 +57,32 @@ class ProfilController extends Controller
      */
     public function updatepenjual(Request $request, $id)
     {
-        //
+        // dd($request);
+        $profilPenjual = User::findOrFail($id);
+        $dataUpdate = [
+        'name' => $request->name,
+        'nohp' => $request->nohp,
+        'alamat' => $request->alamat,
+        'provinsi' => $request->provinsi,
+        'kota' => $request->kota,
+        'kecamatan' => $request->kecamatan,
+        'kelurahan' => $request->kelurahan,
+        'RT' => $request->RT,
+        'RW' => $request->RW,
+        'kode_pos' => $request->kode_pos,
+        'jenis_kelamin' => $request->jenis_kelamin,
+        'status' => $request->status,
+        ];
+
+        if ($request->hasFile('foto_profil')) {
+            $file = $request->file('foto_profil');
+            $path = $file->store('foto_profil', 'public');
+            $dataUpdate['foto_profil'] = $path;
+        }
+
+        DB::table('users')->where('id', $id)->update($dataUpdate);
+
+        return redirect('/penjual/profile/')->with('success', 'Data berhasil diperbarui!');
     }
         /**
      * Display a listing of the resource.
