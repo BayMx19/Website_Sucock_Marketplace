@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('pesanan', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('pembeli_id')->unsigned();
+            $table->foreign('pembeli_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->bigInteger('alamat_id')->unsigned();
+            $table->foreign('alamat_id')->references('id')->on('alamat')->onDelete('cascade')->onUpdate('cascade');
             $table->string('kode_pesanan');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->text('produk');
+            $table->bigInteger('keranjang_id')->unsigned();
+            $table->foreign('keranjang_id')->references('id')->on('keranjang')->onDelete('cascade')->onUpdate('cascade');
             $table->string('total_harga');
             $table->date('tanggal_pesanan');
             $table->string('status_pesanan');
