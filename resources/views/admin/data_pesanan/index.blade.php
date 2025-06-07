@@ -16,6 +16,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Pembeli</th>
+                                <th>Nama Toko</th>
                                 <th>Kode Pesanan</th>
                                 <th>Waktu Pesanan</th>
                                 <th>Status Pesanan</th>
@@ -26,10 +27,9 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $p->nama_pembeli }}</td>
+                            <td>{{ $p->nama_penjual }}</td>
                             <td>{{ $p->kode_pesanan }}</td>
                             <td>{{ $p->tanggal_pesanan }}</td>
-                            <td>{{ $p->nama_produk }}</td>
-                            <td>{{ $p->nama_penjual }}</td>
                             <td>{{ $p->status_pesanan }}</td>
                             <td>
                                 <a href="{{ route('admin.data_pesanan.detail', $p->id) }}"

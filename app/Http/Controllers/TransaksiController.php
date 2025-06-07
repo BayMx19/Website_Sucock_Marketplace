@@ -9,26 +9,23 @@ use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function indexadmin(Request $request)
     {
         $search = $request->query('searchorders');
 
         $query = "
-            SELECT
+             SELECT
                 pesanan.id,
+                pembeli.name AS nama_pembeli,
                 pesanan.kode_pesanan,
                 pesanan.tanggal_pesanan,
                 pesanan.status_pesanan,
-                pembeli.name AS nama_pembeli,
-                produk.nama_produk,
+                pesanan.total_harga,
                 penjual.name AS nama_penjual
             FROM pesanan
             JOIN users AS pembeli ON pesanan.user_id = pembeli.id
-            JOIN produk ON pesanan.produk_id = produk.id
-            JOIN users AS penjual ON penjual.id = produk.penjual_id
+            JOIN produk ON JSON_EXTRACT(pesanan.produk, '$[0].produk_id') = produk.id
+            JOIN users AS penjual ON produk.penjual_id = penjual.id
         ";
 
         $bindings = [];
@@ -38,11 +35,8 @@ class TransaksiController extends Controller
             WHERE 
                 pembeli.name LIKE ? OR
                 pesanan.kode_pesanan LIKE ? OR
-                produk.nama_produk LIKE ? OR
-                pesanan.tanggal_pesanan LIKE ? OR
-                penjual.name LIKE ?
             ";
-            $bindings = array_fill(0, 5, "%$search%");
+            $bindings = array_fill(0, 2, "%$search%");
         }
 
         $pesanan = DB::select($query, $bindings);
@@ -57,6 +51,7 @@ class TransaksiController extends Controller
     {
         $pesanan = DB::table('pesanan')
         ->select(
+            'pesanan.produk',
             'pesanan.id',
             'pesanan.kode_pesanan',
             'pesanan.tanggal_pesanan',
@@ -67,7 +62,7 @@ class TransaksiController extends Controller
             'penjual.name as nama_penjual'
         )
         ->join('users as pembeli', 'pesanan.user_id', '=', 'pembeli.id')
-        ->join('produk', 'pesanan.produk_id', '=', 'produk.id')
+        ->join('produk', DB::raw("CAST(JSON_EXTRACT(pesanan.produk, '$[0].produk_id') AS UNSIGNED)"), '=', 'produk.id')
         ->join('users as penjual', 'produk.penjual_id', '=', 'penjual.id')
         ->where('pesanan.id', $id)
         ->first();
