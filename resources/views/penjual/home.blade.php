@@ -7,10 +7,10 @@
     <div class="row g-4 mb-5">
         @php
             $cards = [
-                ['icon' => 'fa-solid fa-user', 'label' => 'Jumlah Pengguna', 'value' => 9],
-                ['icon' => 'fa-solid fa-comment', 'label' => 'Jumlah Review', 'value' => 0],
-                ['icon' => 'fa-solid fa-store', 'label' => 'Jumlah Toko', 'value' => 0],
-                ['icon' => 'fa-solid fa-box', 'label' => 'Jumlah Produk', 'value' => 0],
+                ['icon' => 'fa-solid fa-wallet', 'label' => 'Saldo Toko', 'value' => 'Rp. ' . number_format($saldo ?? 0, 0, ',', '.') ],
+                ['icon' => 'fa-solid fa-box', 'label' => 'Jumlah Produk', 'value' => $jmlProduk],
+                ['icon' => 'fa-solid fa-clock', 'label' => 'Pesanan Belum Selesai', 'value' => $pesananBelum],
+                ['icon' => 'fa-solid fa-circle-check', 'label' => 'Pesanan Selesai', 'value' => $pesananSelesai],
             ];
         @endphp
 

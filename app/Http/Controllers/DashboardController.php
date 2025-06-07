@@ -8,6 +8,7 @@ use App\Models\pesanan;
 use App\Models\produk;
 use App\Models\Toko;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -53,11 +54,23 @@ class DashboardController extends Controller
         ->where('status_pesanan', 'Selesai')
         ->first();
 
-        $jmlProduk = produk::count()->where('penjual_id', Auth::id());
+        $saldo = $saldo_penjual->saldo ?? 0;
 
-        $pesananSelesai = pesanan::count()->where('penjual_id', Auth::id())->where('status_pesanan', 'Selesai');
+        $jmlProduk = produk::where('penjual_id', Auth::id())->count();
 
-        return view('penjual.home');
+        $pesananSelesai = pesanan::join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+        ->where('penjual_id', Auth::id())
+        ->where('status_pesanan', 'Selesai')
+        ->count();
+
+        $pesananBelum = pesanan::join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+        ->where('penjual_id', Auth::id())
+        ->whereIn('status_pesanan', ['Diproses', 'Dikirim'])
+        ->count();
+
+        return view('penjual.home', compact('saldo', 'jmlProduk', 'pesananSelesai', 'pesananBelum'));
     }
 
     /**
@@ -66,8 +79,9 @@ class DashboardController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function dashboardpembeli(){
-        $list_produk = produk::limit(5)->get();
+        $list_produk = produk::with('user')->limit(5)->get();
         $list_toko = Toko::where('role', 'Penjual')->get();
+        // dd($list_produk);
         
         return view ('pembeli.home', compact('list_toko', 'list_produk'));
     }
