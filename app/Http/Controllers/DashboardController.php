@@ -44,6 +44,19 @@ class DashboardController extends Controller
     }
 
     public function dashboardpenjual(){
+        $saldo_penjual = pesanan::selectRaw("
+            SUM(total_harga) as saldo
+        ")
+        ->join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+        ->where('penjual_id', Auth::id())
+        ->where('status_pesanan', 'Selesai')
+        ->first();
+
+        $jmlProduk = produk::count()->where('penjual_id', Auth::id());
+
+        $pesananSelesai = pesanan::count()->where('penjual_id', Auth::id())->where('status_pesanan', 'Selesai');
+
         return view('penjual.home');
     }
 
@@ -54,7 +67,7 @@ class DashboardController extends Controller
      */
     public function dashboardpembeli(){
         $list_produk = produk::limit(5)->get();
-        $list_toko = Toko::get();
+        $list_toko = Toko::where('role', 'Penjual')->get();
         
         return view ('pembeli.home', compact('list_toko', 'list_produk'));
     }
