@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\review;
 use App\Models\pesanan;
 use App\Models\produk;
+use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -44,5 +45,17 @@ class DashboardController extends Controller
 
     public function dashboardpenjual(){
         return view('penjual.home');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function dashboardpembeli(){
+        $list_produk = produk::limit(5)->get();
+        $list_toko = Toko::get();
+        
+        return view ('pembeli.home', compact('list_toko', 'list_produk'));
     }
 }

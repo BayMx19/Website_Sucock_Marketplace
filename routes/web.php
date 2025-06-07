@@ -27,18 +27,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/home', [DashboardController::class, 'dashboardpembeli'])->name('home');
+
 Route::get('/', function () {
-    return view('home');
+    if (Auth::check()) {
+        $role = Auth::user()->role;
+
+        if ($role === 'Admin') {
+            return redirect()->route('admin.home');
+        } elseif ($role === 'Penjual') {
+            return redirect()->route('penjual.home');
+        } elseif ($role === 'Pembeli') {
+            return redirect()->route('pembeli.home');
+        }
+    }
+
+    return redirect('/home');
 });
 
 Auth::routes();
-
-Route::get('/daftarpenjual', function () {
-    return view('auth.daftar');
-})->name('daftarpenjual');
-
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // --- Route Admin ---
 

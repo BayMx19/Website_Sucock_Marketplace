@@ -1,7 +1,7 @@
 <!-- Menu Tengah -->
 <ul class="nav mx-auto">
     <li class="nav-item">
-        <a class="nav-link active" href="/#hero">Beranda</a>
+        <a class="nav-link active" href="/home">Beranda</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="/produk">Produk</a>
