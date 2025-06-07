@@ -38,7 +38,8 @@ class ProfilController extends Controller
      */
     public function indexpenjual()
     {
-        $profilPenjual = Auth::user();
+        $profilPenjual = Auth::user()->load('dataAlamat');
+        // dd($profilPenjual);
         return view('/penjual/profile/index', compact('profilPenjual'));
     }
     /**
@@ -55,13 +56,30 @@ class ProfilController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updatepenjual(Request $request, $id)
-    {
-        // dd($request);
-        $profilPenjual = User::findOrFail($id);
-        $dataUpdate = [
+public function updatepenjual(Request $request, $id)
+{
+    $profilPenjual = User::findOrFail($id);
+
+    // Data untuk tabel users
+    $dataUser = [
         'name' => $request->name,
         'nohp' => $request->nohp,
+        'jenis_kelamin' => $request->jenis_kelamin,
+        'status' => $request->status,
+    ];
+
+    // Cek & upload foto profil jika ada
+    if ($request->hasFile('foto_profil')) {
+        $file = $request->file('foto_profil');
+        $path = $file->store('foto_profil', 'public');
+        $dataUser['foto_profil'] = $path;
+    }
+
+    // Update tabel users
+    $profilPenjual->update($dataUser);
+
+    // Data untuk tabel alamat
+    $dataAlamat = [
         'alamat' => $request->alamat,
         'provinsi' => $request->provinsi,
         'kota' => $request->kota,
@@ -70,20 +88,18 @@ class ProfilController extends Controller
         'RT' => $request->RT,
         'RW' => $request->RW,
         'kode_pos' => $request->kode_pos,
-        'jenis_kelamin' => $request->jenis_kelamin,
-        'status' => $request->status,
-        ];
+    ];
 
-        if ($request->hasFile('foto_profil')) {
-            $file = $request->file('foto_profil');
-            $path = $file->store('foto_profil', 'public');
-            $dataUpdate['foto_profil'] = $path;
-        }
-
-        DB::table('users')->where('id', $id)->update($dataUpdate);
-
-        return redirect('/penjual/profile/')->with('success', 'Data berhasil diperbarui!');
+    // Update atau insert alamat (jika belum ada)
+    if ($profilPenjual->dataAlamat) {
+        $profilPenjual->dataAlamat()->update($dataAlamat);
+    } else {
+        $profilPenjual->dataAlamat()->create($dataAlamat);
     }
+
+    return redirect('/penjual/profile/')->with('success', 'Data berhasil diperbarui!');
+}
+
         /**
      * Display a listing of the resource.
      */

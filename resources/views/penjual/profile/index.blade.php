@@ -50,17 +50,17 @@
                                                     <h4 style="margin-top: 15px;">Status Akun : {{$profilPenjual->status}}
                                                     </h4>
                                                     <h2 style="margin-top: 20px !important">Informasi Alamat</h2>
-                                                    <h4 style="margin-top: 15px;">Alamat : {{$profilPenjual->alamat}}</h4>
-                                                    <h4 style="margin-top: 15px;">Provinsi : {{$profilPenjual->provinsi}}
+                                                    <h4 style="margin-top: 15px;">Alamat : {{$profilPenjual->dataAlamat?->alamat}}</h4>
+                                                    <h4 style="margin-top: 15px;">Provinsi : {{$profilPenjual->dataAlamat?->provinsi}}
                                                     </h4>
-                                                    <h4 style="margin-top: 15px;">Kota : {{$profilPenjual->kota}}</h4>
+                                                    <h4 style="margin-top: 15px;">Kota : {{$profilPenjual->dataAlamat?->kota}}</h4>
                                                     <h4 style="margin-top: 15px;">Kecamatan :
-                                                        {{$profilPenjual->kecamatan}}</h4>
+                                                        {{$profilPenjual->dataAlamat?->kecamatan}}</h4>
                                                     <h4 style="margin-top: 15px;">Kelurahan :
-                                                        {{$profilPenjual->kelurahan}}</h4>
-                                                    <h4 style="margin-top: 15px;">RT : {{$profilPenjual->RT}}</h4>
-                                                    <h4 style="margin-top: 15px;">RW : {{$profilPenjual->RW}}</h4>
-                                                    <h4 style="margin-top: 15px;">Kode Pos : {{$profilPenjual->kode_pos}}
+                                                        {{$profilPenjual->dataAlamat?->kelurahan}}</h4>
+                                                    <h4 style="margin-top: 15px;">RT : {{$profilPenjual->dataAlamat?->RT}}</h4>
+                                                    <h4 style="margin-top: 15px;">RW : {{$profilPenjual->dataAlamat?->RW}}</h4>
+                                                    <h4 style="margin-top: 15px;">Kode Pos : {{$profilPenjual->dataAlamat?->kode_pos}}
                                                     </h4>
                                                     </h4>
 

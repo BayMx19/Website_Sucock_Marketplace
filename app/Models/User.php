@@ -60,6 +60,6 @@ class User extends Authenticatable
     }
     public function dataAlamat()
     {
-        return $this->hasOne(Alamat::class, 'user_id');
+        return $this->hasOne(Alamat::class, 'user_id', 'id');
     }
 }
