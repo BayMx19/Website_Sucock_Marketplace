@@ -8,6 +8,7 @@ use App\Models\pesanan;
 use App\Models\produk;
 use App\Models\Toko;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -68,7 +69,8 @@ class DashboardController extends Controller
     public function dashboardpembeli(){
         $list_produk = produk::limit(5)->get();
         $list_toko = Toko::where('role', 'Penjual')->get();
-        
+        // dd($list_toko);
+
         return view ('pembeli.home', compact('list_toko', 'list_produk'));
     }
 }

@@ -39,6 +39,35 @@
     </section><!-- /Hero Section -->
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-5 mt-5">
+            <div class="col-xl-12 content">
+                <h1 class="judul-produk"><span>Mitra Kami</span></h1>
+            </div>
+
+            <section class="popular-items w-100">
+                <div class="container-fluid px-5">
+
+                    <div class="swiper swiperMitra" style="height: 150px;">
+                        <div class="swiper-wrapper align-items-center">
+                            @foreach($list_toko as $toko)
+                            <div class="swiper-slide d-flex justify-content-center">
+                                <img src="{{ asset('storage/' . $toko->foto_profil) }}"
+                                    alt="Foto Mitra"
+                                    class="rounded-circle"
+                                    style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd;">
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Navigasi -->
+                        <div class="swiper-button-next swiperMitraNext"></div>
+                        <div class="swiper-button-prev swiperMitraPrev"></div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
         <div class="row gy-5">
 
             <div class="col-xl-12 content">
