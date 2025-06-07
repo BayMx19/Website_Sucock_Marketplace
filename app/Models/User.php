@@ -25,14 +25,6 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'alamat',
-        'provinsi',
-        'kota',
-        'kecamatan',
-        'kelurahan',
-        'RT',
-        'RW',
-        'kode_pos',
         'foto_profil',
         'jenis_kelamin',
         'status',
@@ -65,5 +57,9 @@ class User extends Authenticatable
     public function pesanan()
     {
         return $this->hasMany(pesanan::class);
+    }
+    public function dataAlamat()
+    {
+        return $this->hasOne(Alamat::class, 'user_id');
     }
 }

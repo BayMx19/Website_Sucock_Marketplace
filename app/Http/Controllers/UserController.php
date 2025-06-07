@@ -55,12 +55,18 @@ class UserController extends Controller
                 $path = null;
             }
 
-            DB::table('users')->insert([
+            $userId = DB::table('users')->insertGetId([
                 'name' => $request->name,
                 'nohp' => $request->nohp,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role' => $request->role,
+                'foto_profil' => $path,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'status' => $request->status,
+            ]);
+            DB::table('alamat')->insert([
+                'user_id' => $userId,
                 'alamat' => $request->alamat,
                 'provinsi' => $request->provinsi,
                 'kota' => $request->kota,
@@ -69,10 +75,9 @@ class UserController extends Controller
                 'RT' => $request->RT,
                 'RW' => $request->RW,
                 'kode_pos' => $request->kode_pos,
-                'foto_profil' => $path,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'status' => $request->status,
+
             ]);
+
 
             return redirect('/admin/data_users/')->with('success', 'User berhasil ditambahkan.');
         } catch (QueryException $e) {
@@ -85,7 +90,7 @@ class UserController extends Controller
      */
     public function detail($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('dataAlamat')->findOrFail($id);
         // dd($user);
          return view('admin.data_users.detail', compact('user'));
 
@@ -96,7 +101,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('dataAlamat')->findOrFail($id);
         // dd($user);
          return view('admin.data_users.edit', compact('user'));
     }
@@ -106,34 +111,45 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-        $dataUpdate = [
-        'name' => $request->name,
-        'nohp' => $request->nohp,
-        'email' => $request->email,
-        'role' => $request->role,
-        'alamat' => $request->alamat,
-        'provinsi' => $request->provinsi,
-        'kota' => $request->kota,
-        'kecamatan' => $request->kecamatan,
-        'kelurahan' => $request->kelurahan,
-        'RT' => $request->RT,
-        'RW' => $request->RW,
-        'kode_pos' => $request->kode_pos,
-        'jenis_kelamin' => $request->jenis_kelamin,
-        'status' => $request->status,
+        $user = User::findOrFail($id);
+
+        $dataUser = [
+            'name' => $request->name,
+            'nohp' => $request->nohp,
+            'email' => $request->email,
+            'role' => $request->role,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'status' => $request->status,
         ];
 
         if ($request->hasFile('foto_profil')) {
             $file = $request->file('foto_profil');
             $path = $file->store('foto_profil', 'public');
-            $dataUpdate['foto_profil'] = $path;
+            $dataUser['foto_profil'] = $path;
         }
 
-        DB::table('users')->where('id', $id)->update($dataUpdate);
+        $user->update($dataUser);
+
+        $dataAlamat = [
+            'alamat' => $request->alamat,
+            'provinsi' => $request->provinsi,
+            'kota' => $request->kota,
+            'kecamatan' => $request->kecamatan,
+            'kelurahan' => $request->kelurahan,
+            'RT' => $request->RT,
+            'RW' => $request->RW,
+            'kode_pos' => $request->kode_pos,
+        ];
+
+        if ($user->dataAlamat) {
+            $user->dataAlamat()->update($dataAlamat);
+        } else {
+            $user->dataAlamat()->create($dataAlamat);
+        }
 
         return redirect('/admin/data_users/')->with('success', 'Data berhasil diperbarui!');
     }
+
 
     /**
      * Remove the specified resource from storage.

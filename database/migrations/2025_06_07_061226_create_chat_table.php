@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('review', function (Blueprint $table) {
+        Schema::create('chat', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('pesanan_id')->unsigned();
-            $table->foreign('pesanan_id')->references('id')->on('pesanan')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('bintang');
-            $table->text('review_text')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('review');
+        Schema::dropIfExists('chat');
     }
 };

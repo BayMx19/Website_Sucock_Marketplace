@@ -11,18 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pesanan', function (Blueprint $table) {
+        Schema::create('alamat', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->string('kode_pesanan');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->text('produk');
-            $table->string('total_harga');
-            $table->date('tanggal_pesanan');
-            $table->string('status_pesanan');
+            $table->text('alamat')->nullable();
+            $table->text('provinsi')->nullable();
+            $table->text('kota')->nullable();
+            $table->text('kecamatan')->nullable();
+            $table->text('kelurahan')->nullable();
+            $table->text('RT', 3)->nullable();
+            $table->text('RW', 3)->nullable();
+            $table->string('kode_pos')->nullable();
+
             $table->timestamps();
         });
-
     }
 
     /**
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pesanan');
+        Schema::dropIfExists('alamat');
     }
 };
