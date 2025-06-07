@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('pesanan_id')->unsigned();
             $table->foreign('pesanan_id')->references('id')->on('pesanan')->onDelete('cascade')->onUpdate('cascade');
-            // $table->bigInteger('user_id')->unsigned();
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('bintang');
             $table->text('review_text')->nullable();
             $table->timestamps();

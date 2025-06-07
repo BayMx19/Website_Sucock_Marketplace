@@ -35,7 +35,7 @@ class DashboardController extends Controller
             SELECT users.name, ROUND(AVG(review.bintang), 1) AS rerata_bintang
             FROM review
             JOIN pesanan ON pesanan.id = review.pesanan_id
-            JOIN users ON users.id = pesanan.user_id
+            JOIN users ON users.id = pesanan.pembeli_id
             GROUP BY users.id, users.name
         "));
 
