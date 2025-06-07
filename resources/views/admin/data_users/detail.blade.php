@@ -155,7 +155,7 @@
                                                                                 <input type="text" id="alamat"
                                                                                     name="alamat" class="form-control"
                                                                                     placeholder="Masukkan Alamat Anda"
-                                                                                    value="{{$user->alamat}}" readonly>
+                                                                                    value="{{$user->alamat?->alamat}}" readonly>
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -166,7 +166,7 @@
                                                                                 <input type="text" id="provinsi"
                                                                                     name="provinsi" class="form-control"
                                                                                     placeholder="Masukkan Provinsi Anda"
-                                                                                    value="{{$user->provinsi}}"
+                                                                                    value="{{$user->dataAlamat?->provinsi}}"
                                                                                     readonly>
                                                                             </div>
                                                                             <div
@@ -178,7 +178,7 @@
                                                                                 <input type="text" id="kota" name="kota"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kota Anda"
-                                                                                    value="{{$user->kota}}" readonly>
+                                                                                    value="{{$user->dataAlamat?->kota}}" readonly>
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -190,7 +190,7 @@
                                                                                     name="kecamatan"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kecamatan Anda"
-                                                                                    value="{{$user->kecamatan}}"
+                                                                                    value="{{$user->dataAlamat?->kecamatan}}"
                                                                                     readonly>
                                                                             </div>
                                                                             <div
@@ -203,7 +203,7 @@
                                                                                     name="kelurahan"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kelurahan Anda"
-                                                                                    value="{{$user->kelurahan}}"
+                                                                                    value="{{$user->dataAlamat?->kelurahan}}"
                                                                                     readonly>
                                                                             </div>
                                                                             <div
@@ -215,7 +215,7 @@
                                                                                 <input type="text" id="RT" name="RT"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan RT Anda"
-                                                                                    value="{{$user->RT}}" readonly>
+                                                                                    value="{{$user->dataAlamat?->RT}}" readonly>
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -226,7 +226,7 @@
                                                                                 <input type="text" id="RW" name="RW"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan RW Anda"
-                                                                                    value="{{$user->RW}}" readonly>
+                                                                                    value="{{$user->dataAlamat?->RW}}" readonly>
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -237,7 +237,7 @@
                                                                                 <input type="text" id="kode_pos"
                                                                                     name="kode_pos" class="form-control"
                                                                                     placeholder="Masukkan Kode Pos Anda"
-                                                                                    value="{{$user->kode_pos}}"
+                                                                                    value="{{$user->dataAlamat?->kode_pos}}"
                                                                                     readonly>
                                                                             </div>
                                                                             <div
