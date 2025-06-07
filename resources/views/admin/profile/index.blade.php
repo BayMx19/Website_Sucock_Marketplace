@@ -49,20 +49,7 @@
                                                         {{$profilAdmin->jenis_kelamin}}</h4>
                                                     <h4 style="margin-top: 15px;">Status Akun : {{$profilAdmin->status}}
                                                     </h4>
-                                                    <h2 style="margin-top: 20px !important">Informasi Alamat</h2>
-                                                    <h4 style="margin-top: 15px;">Alamat : {{$profilAdmin->alamat}}</h4>
-                                                    <h4 style="margin-top: 15px;">Provinsi : {{$profilAdmin->provinsi}}
-                                                    </h4>
-                                                    <h4 style="margin-top: 15px;">Kota : {{$profilAdmin->kota}}</h4>
-                                                    <h4 style="margin-top: 15px;">Kecamatan :
-                                                        {{$profilAdmin->kecamatan}}</h4>
-                                                    <h4 style="margin-top: 15px;">Kelurahan :
-                                                        {{$profilAdmin->kelurahan}}</h4>
-                                                    <h4 style="margin-top: 15px;">RT : {{$profilAdmin->RT}}</h4>
-                                                    <h4 style="margin-top: 15px;">RW : {{$profilAdmin->RW}}</h4>
-                                                    <h4 style="margin-top: 15px;">Kode Pos : {{$profilAdmin->kode_pos}}
-                                                    </h4>
-                                                    </h4>
+
 
                                                 </div>
                                                 <!-- <div class="single-pro-cn"
