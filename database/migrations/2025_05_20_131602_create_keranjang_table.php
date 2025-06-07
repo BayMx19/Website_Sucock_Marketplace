@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('produk_id')->references('id')->on('produk')->onDelete('cascade')->onUpdate('cascade');
             $table->bigInteger('pembeli_id')->unsigned();
             $table->foreign('pembeli_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->int('amount');
+            $table->integer('amount');
             $table->string('status');
             $table->timestamps();
         });

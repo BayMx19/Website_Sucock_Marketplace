@@ -13,17 +13,14 @@ return new class extends Migration
     {
         Schema::create('pembayaran', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('pesanan_id');
+            $table->bigInteger('pesanan_id')->unsigned();
             $table->foreign('pesanan_id')->references('id')->on('pesanan')->onDelete('cascade')->onUpdate('cascade');
             $table->string('metode_pembayaran');
             $table->date('tanggal_pembayaran');
             $table->string('status_pembayaran');
             $table->timestamps();
         });
-        Schema::table('pembayaran', function (Blueprint $table){
-            $table->foreign('pesanan_id')->references('id')->on('pesanan')
-            ->onDelete('cascade')->onUpdate('cascade');
-        });
+
     }
 
     /**
