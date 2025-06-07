@@ -86,11 +86,9 @@
                                     <div class="popular-img">
                                         <img src="{{ asset('storage/' . $produk->gambar) }}" alt="gambar produk"
                                             class="img-fluid" style="height: 300px; object-fit: cover; width: 100%;">
-                                        <a href="/produk/detail/{{ $produk->id }}">
-                                            <div class="img-cap">
-                                                <span>Beli Sekarang</span>
-                                            </div>
-                                        </a>
+                                        <div class="img-cap" data-bs-toggle="modal" data-bs-target="#modalProduk{{ $produk->id }}">
+                                            <span>Lihat Produk</span>
+                                        </div>
                                     </div>
                                     <div class="popular-caption">
                                         <h3><a href="/produk/detail/{{ $produk->id }}">{{ $produk->nama }}</a></h3>
@@ -100,6 +98,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             @endforeach
                             <div class="swiper-slide d-flex justify-content-center align-items-center" style="height: 100%;">
                                 <div class="text-center w-100">
@@ -114,6 +113,28 @@
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
                     </div>
+                    <!-- Modal -->
+<div class="modal fade" id="modalProduk{{ $produk->id }}" tabindex="-1" aria-labelledby="produkModalLabel{{ $produk->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="produkModalLabel{{ $produk->id }}">{{ $produk->nama }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body d-flex flex-wrap">
+                <div class="col-md-6">
+                    <img src="{{ asset('storage/' . $produk->gambar) }}" class="img-fluid rounded" alt="Gambar Produk">
+                </div>
+                <div class="col-md-6 ps-md-4 pt-3 pt-md-0">
+                    <h4 style="font-weight: bold;">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</h4>
+                    <p class="mt-2">{{ $produk->deskripsi }}</p>
+                    {{-- Tambahkan info lain jika ada --}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                 </div>
             </section>
