@@ -81,7 +81,6 @@ class DashboardController extends Controller
     public function dashboardpembeli(){
         $list_produk = produk::with('user')->limit(5)->get();
         $list_toko = Toko::where('role', 'Penjual')->get();
-        // dd($list_produk);
         
         return view ('pembeli.home', compact('list_toko', 'list_produk'));
     }

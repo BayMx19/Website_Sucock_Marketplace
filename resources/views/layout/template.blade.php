@@ -103,6 +103,36 @@
             });
         });
     </script>
+    <script>
+    var swiperMitra = new Swiper(".swiperMitra", {
+        slidesPerView: 5,
+        spaceBetween: 30,
+        loop: true,
+        navigation: {
+            nextEl: ".swiperMitraNext",
+            prevEl: ".swiperMitraPrev",
+        },
+        autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+        },
+        breakpoints: {
+            320: {
+                slidesPerView: 3,
+                spaceBetween: 15,
+            },
+            768: {
+                slidesPerView: 5,
+                spaceBetween: 20,
+            },
+            1024: {
+                slidesPerView: 6,
+                spaceBetween: 30,
+            }
+        }
+    });
+</script>
+
 
 </body>
 
