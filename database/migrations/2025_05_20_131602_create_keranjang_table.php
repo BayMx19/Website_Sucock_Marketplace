@@ -18,7 +18,6 @@ return new class extends Migration
             $table->bigInteger('pembeli_id')->unsigned();
             $table->foreign('pembeli_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('amount');
-            $table->string('status');
             $table->timestamps();
         });
     }

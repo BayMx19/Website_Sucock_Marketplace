@@ -70,6 +70,21 @@ class DashboardController extends Controller
         ->whereIn('status_pesanan', ['Diproses', 'Dikirim'])
         ->count();
 
+        $jml_pendapatan_penjual = pesanan::selectRaw("
+            DATE_FORMAT(tanggal_pesanan, '%b %Y') as bulan,
+            SUM(total_harga) as total
+        ")
+        ->join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+        ->where('penjual_id', Auth::id())
+        ->where('status_pesanan', 'Selesai')
+        ->where('tanggal_pesanan', '>=', now()->subMonths(5)->startOfMonth())
+        ->groupByRaw("DATE_FORMAT(tanggal_pesanan, '%b %Y')")
+        ->orderByRaw("MIN(tanggal_pesanan)")
+        ->get();
+
+        dd($jml_pendapatan_penjual);
+
         return view('penjual.home', compact('saldo', 'jmlProduk', 'pesananSelesai', 'pesananBelum'));
     }
 
