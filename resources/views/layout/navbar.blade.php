@@ -36,7 +36,7 @@
     </li>
     <li class="nav-item position-relative">
         @auth
-        <a href="/keranjang" class="nav-link position-relative">
+        <a href="/keranjang" class="nav-link position-relative" style="padding : 0px !important;">
             <i class="fa-solid fa-cart-shopping"></i>
             @if (($jumlahKeranjang ?? 0) > 0)
             <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
