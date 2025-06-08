@@ -305,9 +305,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     cartLink.appendChild(newBadge);
                 }
             }
-        } else if (badge) {
-            badge.remove();
-        }
+            } else if (badge) {
+                badge.remove();
+            }
 
                 } else {
                     alert('Gagal menambahkan ke keranjang');
