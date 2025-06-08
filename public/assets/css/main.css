@@ -2303,3 +2303,8 @@ h6 {
 .nav-link:hover{
     color: #548c9a !important;
 }
+
+.badge {
+    font-size: 0.7rem;
+    padding: 4px 6px;
+}

@@ -37,8 +37,7 @@
           <input type="checkbox" class="form-check-input me-3 checkbox-produk" data-harga="{{ $subtotal }}" style="width: 20px; height: 20px;">
           <img src="{{ asset('storage/' . $produk->gambar) }}" alt="Produk" style="width: 120px; height: 100px; object-fit: cover; border-radius: 8px;">
           <div class="ms-3 flex-grow-1">
-            <h6 style="font-weight: 600; margin-bottom: 5px;">{{ $produk->nama_produk }}</h6>
-            <p style="color: #666; font-size: 14px;">- Toko: {{ $namaToko }}</p>
+            <h6 style="font-weight: 600; margin-bottom: 5px; font-size: 24px;">{{ $produk->nama_produk }}</h6>
             <p style="font-weight: 700; color: #548c9a;">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</p>
           </div>
           <div style="width: 80px; text-align: center;">
@@ -67,7 +66,7 @@
       <hr class="my-4">
 
       <div class="d-flex justify-content-end align-items-center mb-3" style="font-weight: 700; font-size: 18px; color: #0f8c56;">
-        Total Harga: <span id="totalHarga" class="ms-2">Rp. 0</span>
+        Total Harga : <span id="totalHarga" class="ms-2">Rp. 0</span>
       </div>
 
       <div class="d-flex justify-content-center gap-4 mt-2">

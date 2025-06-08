@@ -91,37 +91,59 @@
     const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.btn-increase').forEach(btn => {
-            btn.addEventListener('click', function () {
-                let input = this.previousElementSibling;
-                input.value = parseInt(input.value) + 1;
-            });
-        });
-
-        document.querySelectorAll('.btn-decrease').forEach(btn => {
-            btn.addEventListener('click', function () {
-                let input = this.nextElementSibling;
-                if (parseInt(input.value) > 1) {
-                    input.value = parseInt(input.value) - 1;
-                }
-            });
-        });
-
-        document.querySelectorAll('.btn-tambah-keranjang').forEach(btn => {
-            btn.addEventListener('click', function () {
-
-                if (!isLoggedIn) {
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-tambah-keranjang').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const produkId = btn.dataset.produkId;
+            const amount = document.getElementById('jumlah_' + produkId).value;
+            if (!isLoggedIn) {
                     window.location.href = '/login';
                     return;
+                }
+            fetch("{{ route('keranjang.tambah') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    produk_id: produkId,
+                    amount: amount
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalProduk' + produkId));
+                    modal.hide();
+                } else {
+                    alert('Gagal menambahkan ke keranjang');
                 }
-                const produkId = this.dataset.produkId;
-                const jumlahInput = document.querySelector(`#jumlah_${produkId}`);
-                const jumlah = parseInt(jumlahInput.value);
-
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Terjadi kesalahan.');
             });
         });
     });
+
+    document.querySelectorAll('.btn-increase').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const input = btn.previousElementSibling;
+            input.value = parseInt(input.value) + 1;
+        });
+    });
+
+    document.querySelectorAll('.btn-decrease').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const input = btn.nextElementSibling;
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        });
+    });
+});
 </script>
 
 @endsection

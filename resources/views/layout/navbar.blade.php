@@ -34,9 +34,16 @@
         <a href="{{ route('login') }}" class="nav-link"><i class="fa-solid fa-message"></i></a>
         @endauth
     </li>
-    <li class="nav-item">
+    <li class="nav-item position-relative">
         @auth
-        <a href="/keranjang" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a href="/keranjang" class="nav-link position-relative">
+            <i class="fa-solid fa-cart-shopping"></i>
+            @if(isset($jumlahKeranjang) && $jumlahKeranjang > 0)
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ $jumlahKeranjang }}
+                </span>
+            @endif
+        </a>
         @else
         <a href="{{ route('login') }}" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a>
         @endauth

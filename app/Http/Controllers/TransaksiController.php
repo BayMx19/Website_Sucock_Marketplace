@@ -7,6 +7,7 @@ use App\Models\pesanan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TransaksiController extends Controller
 {
@@ -146,4 +147,55 @@ class TransaksiController extends Controller
 
         return view('pembeli.keranjang.index', compact('grouped'));
     }
+
+    public function tambahKeranjang(Request $request)
+    {
+        $request->validate([
+            'produk_id' => 'required|exists:produk,id',
+            'amount' => 'required|integer|min:1',
+        ]);
+
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Anda harus login terlebih dahulu.'
+            ], 401);
+        }
+        $keranjang = Keranjang::where('produk_id', $request->produk_id)
+                            ->where('pembeli_id', $user->id)
+                            ->first();
+
+        if ($keranjang) {
+            $keranjang->amount += $request->amount;
+            $keranjang->save();
+        } else {
+            Keranjang::create([
+                'produk_id' => $request->produk_id,
+                'pembeli_id' => $user->id,
+                'amount' => $request->amount,
+                'status' => 'Belum Checkout',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Produk berhasil ditambahkan ke keranjang.'
+        ]);
+    }
+
+    public function destroyKeranjang($id)
+    {
+        $keranjang = Keranjang::findOrFail($id);
+
+        if ($keranjang->pembeli_id !== auth()->id()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk menghapus item ini.');
+        }
+
+        $keranjang->delete();
+
+        return redirect()->back()->with('success', 'Item berhasil dihapus dari keranjang.');
+    }
+
+
 }

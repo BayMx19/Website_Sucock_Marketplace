@@ -120,7 +120,8 @@ Route::middleware(['auth', 'role:Penjual'])->group(function () {
 // Pembeli
 Route::middleware(['auth', 'role:Pembeli'])->group(function () {
     Route::get('/keranjang', [TransaksiController::class, 'keranjang'])->name('pembeli.keranjang');
-    Route::delete('/keranjang/{id}', [TransaksiController::class, 'destroy'])->name('hapus.keranjang');
+    Route::delete('/keranjang/{id}', [TransaksiController::class, 'destroyKeranjang'])->name('hapus.keranjang');
+    Route::post('/keranjang/tambah', [TransaksiController::class, 'tambahKeranjang'])->name('keranjang.tambah');
 
 });
 
