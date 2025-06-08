@@ -1,77 +1,119 @@
 @extends('layout.template')
 @section('content')
 <main>
-<div class="popular-items section-padding halaman-keranjang" >
-  <div class="container">
+  <div class="popular-items section-padding halaman-keranjang">
+    <div class="container">
 
- <!-- Section tittle -->
-        <div class="row justify-content-center">
-          <div class="col-xl-7 col-lg-8 col-md-10">
-            <div class="section-tittle text-center mt-100">
-              <h1 class="judul-produk"><span>Keranjang Saya</span></h1>
-            </div>
+      <!-- Section Title -->
+      <div class="row justify-content-center">
+        <div class="col-xl-7 col-lg-8 col-md-10">
+          <div class="section-tittle text-center mt-100">
+            <h1 class="judul-produk"><span>Keranjang Saya</span></h1>
           </div>
         </div>
-        @if($grouped->isEmpty())
-        <div class="text-center py-5">
-            <img src="{{ asset('assets/img/empty-cart.png') }}" alt="Keranjang Kosong" style="width: 150px; opacity: 0.7;">
-            <h4 class="mt-3" style="color: #777;">Keranjang kamu masih kosong</h4>
-        </div>
-        @endif
-        @foreach($grouped as $namaToko => $items)
-        <div class="cart-toko" style="background: #f9fafd; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-            <h5 style="font-weight: 600; color: #333;">Toko: {{ $namaToko }}</h5>
+      </div>
 
-            @php $totalPerToko = 0; @endphp
+      @if($grouped->isEmpty())
+      <div class="text-center py-5">
+        <img src="{{ asset('assets/img/empty-cart.png') }}" alt="Keranjang Kosong" style="width: 150px; opacity: 0.7;">
+        <h4 class="mt-3" style="color: #777;">Keranjang kamu masih kosong</h4>
+      </div>
+      @endif
 
-            @foreach($items as $item)
-            @php
-                $produk = $item->produk;
-                $subtotal = $produk->harga * $item->amount;
-                $totalPerToko += $subtotal;
-            @endphp
+      @foreach($grouped as $namaToko => $items)
+      <div class="cart-toko" style="background: #f9fafd; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+        <h5 style="font-weight: 600; color: #333;">Toko: {{ $namaToko }}</h5>
 
-            <div class="produk-item d-flex align-items-center bg-white rounded shadow-sm p-3 mb-3">
-                <input type="checkbox" class="form-check-input me-3" style="width: 20px; height: 20px;">
-                <img src="{{ asset('storage/' . $produk->gambar) }}" alt="Produk" style="width: 120px; height: 100px; object-fit: cover; border-radius: 8px;">
-                <div class="ms-3 flex-grow-1">
-                <h6 style="font-weight: 600; margin-bottom: 5px;">{{ $produk->nama }}</h6>
-                <p style="color: #666; font-size: 14px;">- Toko: {{ $namaToko }}</p>
-                <p style="font-weight: 700; color: #548c9a;">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</p>
-                </div>
-                <div style="width: 80px; text-align: center;">
-                <input type="number" value="{{ $item->amount }}" min="1" style="width: 60px; text-align: center;" readonly>
-                </div>
-                <div style="width: 120px; text-align: right; font-weight: 700; color: #333;">
-                Rp. {{ number_format($subtotal, 0, ',', '.') }}
-                </div>
-                <div style="width: 50px; text-align: center;">
-                <form action="{{ route('hapus.keranjang', $item->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger btn-sm" title="Hapus"><i class="fa fa-trash"></i></button>
-                </form>
-                </div>
-            </div>
-            @endforeach
+        @php $totalPerToko = 0; @endphp
 
-            <div class="d-flex justify-content-end align-items-center" style="font-weight: 700; font-size: 16px; color: #0f8c56;">
-            Total : Rp. {{ number_format($totalPerToko, 0, ',', '.') }}
-            </div>
+        @foreach($items as $item)
+        @php
+          $produk = $item->produk;
+          $subtotal = $produk->harga * $item->amount;
+          $totalPerToko += $subtotal;
+        @endphp
+
+        <div class="produk-item d-flex align-items-center bg-white rounded shadow-sm p-3 mb-3">
+          <input type="checkbox" class="form-check-input me-3 checkbox-produk" data-harga="{{ $subtotal }}" style="width: 20px; height: 20px;">
+          <img src="{{ asset('storage/' . $produk->gambar) }}" alt="Produk" style="width: 120px; height: 100px; object-fit: cover; border-radius: 8px;">
+          <div class="ms-3 flex-grow-1">
+            <h6 style="font-weight: 600; margin-bottom: 5px;">{{ $produk->nama_produk }}</h6>
+            <p style="color: #666; font-size: 14px;">- Toko: {{ $namaToko }}</p>
+            <p style="font-weight: 700; color: #548c9a;">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</p>
+          </div>
+          <div style="width: 80px; text-align: center;">
+            <input type="number" value="{{ $item->amount }}" min="1" style="width: 60px; text-align: center;" readonly>
+          </div>
+          <div style="width: 120px; text-align: right; font-weight: 700; color: #333;">
+            Rp. {{ number_format($subtotal, 0, ',', '.') }}
+          </div>
+          <div style="width: 50px; text-align: center;">
+            <form action="{{ route('hapus.keranjang', $item->id) }}" method="POST">
+              @csrf
+              @method('DELETE')
+              <button class="btn btn-danger btn-sm" title="Hapus"><i class="fa fa-trash"></i></button>
+            </form>
+          </div>
         </div>
         @endforeach
 
-    @if(!$grouped->isEmpty())
-  <div class="d-flex justify-content-center gap-4 mt-4">
-    <a href="{{ route('home') }}" class="btn btn-secondary px-4 py-2" style="border-radius: 6px;">Kembali Berbelanja</a>
-    <a href="#" class="btn btn-keranjang px-4 py-2" style="border-radius: 6px;">Selesaikan Pesanan</a>
+        <!-- <div class="d-flex justify-content-end align-items-center" style="font-weight: 700; font-size: 16px; color: #0f8c56;">
+          Total : Rp. {{ number_format($totalPerToko, 0, ',', '.') }}
+        </div> -->
+      </div>
+      @endforeach
+
+      @if(!$grouped->isEmpty())
+      <hr class="my-4">
+
+      <div class="d-flex justify-content-end align-items-center mb-3" style="font-weight: 700; font-size: 18px; color: #0f8c56;">
+        Total Harga: <span id="totalHarga" class="ms-2">Rp. 0</span>
+      </div>
+
+      <div class="d-flex justify-content-center gap-4 mt-2">
+        <a href="{{ route('home') }}" class="btn btn-secondary px-4 py-2" style="border-radius: 6px;">Kembali Berbelanja</a>
+        <a href="#" id="btnCheckout" class="btn btn-keranjang px-4 py-2 disabled" style="border-radius: 6px; pointer-events: none;">Selesaikan Pesanan</a>
+      </div>
+      @else
+      <div class="d-flex justify-content-center mt-4">
+        <a href="{{ route('home') }}" class="btn btn-keranjang px-4 py-2" style="border-radius: 6px;">Belanja Sekarang</a>
+      </div>
+      @endif
+
+    </div>
   </div>
-@else
-  <div class="d-flex justify-content-center mt-4">
-    <a href="{{ route('home') }}" class="btn btn-keranjang px-4 py-2" style="border-radius: 6px;">Belanja Sekarang</a>
-  </div>
-@endif
-  </div>
-</div>
 </main>
+
+<!-- Script perhitungan total harga -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('.checkbox-produk');
+    const totalHargaEl = document.getElementById('totalHarga');
+    const btnCheckout = document.getElementById('btnCheckout');
+
+    function updateTotal() {
+      let total = 0;
+      let checkedCount = 0;
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          total += parseInt(cb.dataset.harga || 0);
+          checkedCount++;
+        }
+      });
+      totalHargaEl.textContent = "Rp. " + total.toLocaleString('id-ID');
+
+      if (checkedCount > 0) {
+        btnCheckout.classList.remove('disabled');
+        btnCheckout.style.pointerEvents = 'auto';
+      } else {
+        btnCheckout.classList.add('disabled');
+        btnCheckout.style.pointerEvents = 'none';
+      }
+    }
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', updateTotal);
+    });
+  });
+</script>
 @endsection

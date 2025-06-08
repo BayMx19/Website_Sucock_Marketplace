@@ -9,8 +9,7 @@
     <meta name="keywords" content="">
 
     <!-- Favicons -->
-    <link href="{{ asset('/assets/img/logo_WEB.png') }}" rel="icon">
-    <link href="{{ asset('/assets/img/logo_WEB.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('/assets/img/logo-WEB1.jpg') }}" rel="icon">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -50,7 +49,7 @@
         <div class="container-fluid container-xl d-flex justify-content-between align-items-center">
 
             <!-- Logo (Kiri) -->
-            <a href="index.html" class="logo d-flex align-items-center me-3">
+            <a href="{{''}}" class="logo d-flex align-items-center me-3">
                 <img src="{{ asset('assets') }}/img/logo_WEB.png" alt="Logo" style="height: 40px;">
             </a>
             @include('layout.navbar')

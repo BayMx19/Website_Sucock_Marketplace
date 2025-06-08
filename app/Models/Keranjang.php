@@ -9,7 +9,9 @@ class Keranjang extends Model
 {
     use HasFactory;
     protected $table = 'keranjang';
-    public function produk() {
-        return $this->belongsTo(Produk::class);
-    }
+        public function produk()
+        {
+            return $this->belongsTo(Produk::class, 'produk_id');
+        }
+
 }
