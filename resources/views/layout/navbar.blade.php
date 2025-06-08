@@ -24,9 +24,7 @@
         <a href="{{ route('login') }}" class="btn_3 me-3">Login</a>
     </li>
     @endguest
-    <li class="nav-item">
-        <a href="#" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i></a>
-    </li>
+
     <li class="nav-item">
         @auth
         <a href="/pesan" class="nav-link"><i class="fa-solid fa-message"></i></a>
