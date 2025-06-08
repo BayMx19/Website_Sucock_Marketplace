@@ -13,9 +13,11 @@
           <div class="col-lg-6  d-flex flex-column justify-content-center" data-aos="fade-in">
             <h1 class="redressed-regular"> Sucock </h1>
             <p class="font-white">Dukung produk lokal dan temukan shuttlecock terbaik dari Sumengko di sini!</p>
+            @guest
             <div class="d-flex">
               <a href="{{ route('register') }}" class="btn-get-started">Daftar Sekarang!</a>
             </div>
+            @endguest
           </div>
 
         </div>
@@ -75,7 +77,7 @@
             </div>
 
             <section class="popular-items w-100">
-                <div class="container-fluid px-5"> <!-- pakai fluid biar lebih lebar -->
+                <div class="container-fluid px-5">
 
                     <!-- Swiper -->
                     <div class="swiper mySwiper" style="height: 400px;">
@@ -114,22 +116,37 @@
                         <div class="swiper-button-prev"></div>
                     </div>
                     <!-- Modal -->
-<div class="modal fade" id="modalProduk{{ $produk->id }}" tabindex="-1" aria-labelledby="produkModalLabel{{ $produk->id }}" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="produkModalLabel{{ $produk->id }}">{{ $produk->nama }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-            </div>
-            <div class="modal-body d-flex flex-wrap">
-                <div class="col-md-6">
-                    <img src="{{ asset('storage/' . $produk->gambar) }}" class="img-fluid rounded" alt="Gambar Produk">
+                <div class="modal fade" id="modalProduk{{ $produk->id }}" tabindex="-1" aria-labelledby="produkModalLabel{{ $produk->id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="produkModalLabel{{ $produk->id }}">{{ $produk->nama }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                            </div>
+                            <div class="modal-body d-flex flex-wrap">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('storage/' . $produk->gambar) }}" class="img-fluid rounded" alt="Gambar Produk">
+                                </div>
+                                <div class="col-md-6 ps-md-4 pt-3 pt-md-0">
+                        <h4 style="font-weight: bold;">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</h4>
+                        <p class="mb-1"><strong>Stok:</strong> {{ $produk->stok }}</p>
+                        <p class="mb-1"><strong>Penjual:</strong> {{ $produk->user->name }}</p>
+                        <p class="mt-2">{{ $produk->deskripsi }}</p>
+                        <hr>
+                <div class="mt-3">
+                    <label for="jumlah_{{ $produk->id }}" class="form-label"><strong>Jumlah:</strong></label>
+                    <div class="input-group" style="width: 150px;">
+                        <button class="btn btn-outline-secondary btn-decrease" type="button">−</button>
+                        <input type="number" name="jumlah" id="jumlah_{{ $produk->id }}" class="form-control text-center jumlah-input" value="1" min="1">
+                        <button class="btn btn-outline-secondary btn-increase" type="button">+</button>
+                    </div>
+
+                    <button class="btn btn-primary mt-3 btn-tambah-keranjang" data-produk-id="{{ $produk->id }}">
+                        Tambahkan ke Keranjang
+                    </button>
                 </div>
-                <div class="col-md-6 ps-md-4 pt-3 pt-md-0">
-                    <h4 style="font-weight: bold;">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</h4>
-                    <p class="mt-2">{{ $produk->deskripsi }}</p>
-                    {{-- Tambahkan info lain jika ada --}}
-                </div>
+    </div>
+
             </div>
         </div>
     </div>
@@ -244,5 +261,42 @@
     </section><!-- /Contact Section -->
 
 </main>
+<script>
+    const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-increase').forEach(btn => {
+            btn.addEventListener('click', function () {
+                let input = this.previousElementSibling;
+                input.value = parseInt(input.value) + 1;
+            });
+        });
+
+        document.querySelectorAll('.btn-decrease').forEach(btn => {
+            btn.addEventListener('click', function () {
+                let input = this.nextElementSibling;
+                if (parseInt(input.value) > 1) {
+                    input.value = parseInt(input.value) - 1;
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-tambah-keranjang').forEach(btn => {
+            btn.addEventListener('click', function () {
+
+                if (!isLoggedIn) {
+                    window.location.href = '/login';
+                    return;
+                }
+                const produkId = this.dataset.produkId;
+                const jumlahInput = document.querySelector(`#jumlah_${produkId}`);
+                const jumlah = parseInt(jumlahInput.value);
+
+            });
+        });
+    });
+</script>
+
 
 @endsection

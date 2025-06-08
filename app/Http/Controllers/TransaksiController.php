@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Keranjang;
 use App\Models\pesanan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class TransaksiController extends Controller
 
         if (!empty($search)) {
             $query .= "
-            WHERE 
+            WHERE
                 pembeli.name LIKE ? OR
                 pesanan.kode_pesanan LIKE ? OR
             ";
@@ -131,5 +132,11 @@ class TransaksiController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function keranjang(){
+        $keranjang = Keranjang::all();
+        // dd($keranjang);
+        return view('pembeli.keranjang.index');
     }
 }

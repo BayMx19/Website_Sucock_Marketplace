@@ -15,12 +15,14 @@ class ProdukController extends Controller
 {
     public function index()
     {
-        return view('pembeli_produk');
+        $list_produk = produk::with('user')->get();
+
+        return view('pembeli.produk.produk', compact('list_produk'));
     }
-    public function show()
-    {
-        return view('pembeli_detailproduk');
-    }
+    // public function show()
+    // {
+    //     return view('pembeli_detailproduk');
+    // }
 
     public function dataproduk(Request $request)
     {

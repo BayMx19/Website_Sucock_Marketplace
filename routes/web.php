@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/home', [DashboardController::class, 'dashboardpembeli'])->name('home');
-
+Route::get('/produk', [ProdukController::class, 'index'])->name('index');
 Route::get('/', function () {
     if (Auth::check()) {
         $role = Auth::user()->role;
@@ -119,7 +119,7 @@ Route::middleware(['auth', 'role:Penjual'])->group(function () {
 
 // Pembeli
 Route::middleware(['auth', 'role:Pembeli'])->group(function () {
-
+    Route::get('/keranjang', [TransaksiController::class, 'keranjang'])->name('pembeli.keranjang');
 });
 
 // --- END Route Pembeli ---

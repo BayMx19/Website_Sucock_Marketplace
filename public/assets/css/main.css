@@ -872,7 +872,16 @@ section,
     background: #548c9a;
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
 }
-
+    .btn-tambah-keranjang{
+        background-color: #548c9a !important;
+        border: 3px solid #548c9a !important;
+        color: white !important;
+    }
+    .btn-tambah-keranjang:hover{
+        background-color: white !important;
+        color: #548c9a !important;
+        border: 3px solid #548c9a !important;
+    }
 .hero .btn-watch-video {
     font-size: 16px;
     transition: 0.5s;
@@ -2255,4 +2264,39 @@ h6 {
 .login_part_text_iner h1 {
     width: 100%;
     text-align: center;
+}
+
+.pencarian-produk {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100% !important;
+}
+
+.search-form-wrapper {
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-form-wrapper .input-group {
+    width: 100%;
+}
+
+.btn-search-bar {
+    color: white !important;
+    background-color:  #548c9a !important;
+}
+
+.btn-keranjang{
+    color: white !important;
+    background-color: #548c9a !important;
+    border: 2px solid #548c9a !important;
+}
+
+.btn-keranjang:hover{
+    color: #548c9a !important;
+    background-color: white !important;
+    border: 2px solid #548c9a !important;
+    font-weight: bold;
 }
