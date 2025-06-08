@@ -1,6 +1,6 @@
 @if(Auth::user()->role === 'Admin')
 <div class="sidebar-header">
-    <a href="/admin/home"><img class="main-logo" src="{{ asset('assets') }}/img/logo WEB.jpg" alt=""
+    <a href="/admin/home"><img class="main-logo" src="{{ asset('assets') }}/img/logo_WEB.png" alt=""
             style="width: 60px;" /></a>
 </div>
 <div class="nalika-profile">
@@ -66,7 +66,7 @@
 </div>
 @elseif(Auth::user()->role === 'Penjual')
 <div class="sidebar-header">
-    <a href="/penjual/home"><img class="main-logo" src="{{ asset('assets') }}/img/logo WEB.jpg" alt=""
+    <a href="/penjual/home"><img class="main-logo" src="{{ asset('assets') }}/img/logo_WEB.png" alt=""
             style="width: 60px;" /></a>
 </div>
 <div class="nalika-profile">

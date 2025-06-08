@@ -8,8 +8,8 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicons -->
-    <link href="{{ asset('/assets/img/logo WEB.jpg') }}" rel="icon">
-    <!-- <link href="{{ asset('/assets/img/logo WEB.jpg') }}" rel="apple-touch-icon"> -->
+    <link href="{{ asset('/assets/img/logo_WEB.png') }}" rel="icon">
+    <!-- <link href="{{ asset('/assets/img/logo_WEB.png') }}" rel="apple-touch-icon"> -->
     <!-- Google Fonts
 		============================================ -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">

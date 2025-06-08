@@ -62,4 +62,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Alamat::class, 'user_id', 'id');
     }
+
+    public function penjual() {
+        return $this->belongsTo(User::class, 'penjual_id');
+    }
 }

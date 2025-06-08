@@ -134,9 +134,16 @@ class TransaksiController extends Controller
         //
     }
 
-    public function keranjang(){
-        $keranjang = Keranjang::all();
-        // dd($keranjang);
-        return view('pembeli.keranjang.index');
+    public function keranjang()
+    {
+        $keranjang = Keranjang::with(['produk.penjual'])
+            ->where('pembeli_id', auth()->id())
+            ->get();
+
+        $grouped = $keranjang->groupBy(function ($item) {
+            return $item->produk->penjual->name ?? 'Toko Tidak Diketahui';
+        });
+
+        return view('pembeli.keranjang.index', compact('grouped'));
     }
 }

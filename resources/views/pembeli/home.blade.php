@@ -167,7 +167,7 @@
 
         <div class="row gy-4 align-items-center features-item">
           <div class="col-md-5 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="100">
-            <img src="{{ asset('assets') }}/img/logo WEB.jpg" class="img-fluid" alt="">
+            <img src="{{ asset('assets') }}/img/logo_WEB.png" class="img-fluid" alt="">
           </div>
           <div class="col-md-7" data-aos="fade-up" data-aos-delay="100">
             <h1 class="fw-bold">Sucock</h1>
