@@ -180,7 +180,10 @@ class TransaksiController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Produk berhasil ditambahkan ke keranjang.'
+            'message' => 'Produk berhasil ditambahkan ke keranjang.',
+            'jumlah_keranjang' => Keranjang::where('pembeli_id', $user->id)
+                                   ->where('status', 'Belum Checkout')
+                                   ->count()
         ]);
     }
 

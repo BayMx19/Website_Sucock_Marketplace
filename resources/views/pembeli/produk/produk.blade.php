@@ -117,6 +117,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert(data.message);
                     const modal = bootstrap.Modal.getInstance(document.getElementById('modalProduk' + produkId));
                     modal.hide();
+                    const badge = document.getElementById('cart-badge');
+                    if (data.jumlah_keranjang > 0) {
+            if (badge) {
+                badge.innerText = data.jumlah_keranjang;
+            } else {
+                const cartLink = document.querySelector('.nav-link[href="/keranjang"]');
+                if (cartLink) {
+                    const newBadge = document.createElement('span');
+                    newBadge.id = 'cart-badge';
+                    newBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger';
+                    newBadge.innerText = data.jumlah_keranjang;
+                    cartLink.appendChild(newBadge);
+                }
+            }
+            } else if (badge) {
+                badge.remove();
+            }
+
                 } else {
                     alert('Gagal menambahkan ke keranjang');
                 }

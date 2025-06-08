@@ -38,10 +38,10 @@
         @auth
         <a href="/keranjang" class="nav-link position-relative">
             <i class="fa-solid fa-cart-shopping"></i>
-            @if(isset($jumlahKeranjang) && $jumlahKeranjang > 0)
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {{ $jumlahKeranjang }}
-                </span>
+            @if (($jumlahKeranjang ?? 0) > 0)
+            <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ $jumlahKeranjang }}
+            </span>
             @endif
         </a>
         @else
