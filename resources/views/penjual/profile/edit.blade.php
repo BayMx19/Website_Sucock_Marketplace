@@ -42,7 +42,7 @@
                                                                 <div class="col-lg-12">
                                                                     <div class="pro-edt-img"
                                                                         style="border: 1px solid #cccccc; max-width: 100%; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                                                        <img src="{{ asset('storage/' . $profilPenjual->foto_profil) }}"
+                                                                        <img src="{{ $profilPenjual->foto_profil ? asset('storage/' . $profilPenjual->foto_profil) : asset('assets/img/default-user.png')}}"
                                                                             alt="Foto Profil {{$profilPenjual->name}}"
                                                                             style="width: 150px; height: 150px;"
                                                                             id="foto" />

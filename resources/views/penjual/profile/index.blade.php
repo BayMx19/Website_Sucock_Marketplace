@@ -50,17 +50,20 @@
                                                     <h4 style="margin-top: 15px;">Status Akun : {{$profilPenjual->status}}
                                                     </h4>
                                                     <h2 style="margin-top: 20px !important">Informasi Alamat</h2>
-                                                    <h4 style="margin-top: 15px;">Alamat : {{$profilPenjual->dataAlamat?->alamat}}</h4>
-                                                    <h4 style="margin-top: 15px;">Provinsi : {{$profilPenjual->dataAlamat?->provinsi}}
+                                                    @php
+                                                    $alamat = $profilPenjual->dataAlamat->first();
+                                                    @endphp
+                                                    <h4 style="margin-top: 15px;">Alamat : {{$alamat->alamat ?? ''}}</h4>
+                                                    <h4 style="margin-top: 15px;">Provinsi : {{$alamat->provinsi ?? ''}}
                                                     </h4>
-                                                    <h4 style="margin-top: 15px;">Kota : {{$profilPenjual->dataAlamat?->kota}}</h4>
+                                                    <h4 style="margin-top: 15px;">Kota : {{$alamat->kota ?? ''}}</h4>
                                                     <h4 style="margin-top: 15px;">Kecamatan :
-                                                        {{$profilPenjual->dataAlamat?->kecamatan}}</h4>
+                                                        {{$alamat->kecamatan ?? ''}}</h4>
                                                     <h4 style="margin-top: 15px;">Kelurahan :
-                                                        {{$profilPenjual->dataAlamat?->kelurahan}}</h4>
-                                                    <h4 style="margin-top: 15px;">RT : {{$profilPenjual->dataAlamat?->RT}}</h4>
-                                                    <h4 style="margin-top: 15px;">RW : {{$profilPenjual->dataAlamat?->RW}}</h4>
-                                                    <h4 style="margin-top: 15px;">Kode Pos : {{$profilPenjual->dataAlamat?->kode_pos}}
+                                                        {{$alamat->kelurahan ?? ''}}</h4>
+                                                    <h4 style="margin-top: 15px;">RT : {{$alamat->RT ?? ''}}</h4>
+                                                    <h4 style="margin-top: 15px;">RW : {{$alamat->RW ?? ''}}</h4>
+                                                    <h4 style="margin-top: 15px;">Kode Pos : {{$alamat->kode_pos ?? ''}}
                                                     </h4>
                                                     </h4>
 
