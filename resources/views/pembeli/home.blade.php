@@ -53,7 +53,7 @@
                         <div class="swiper-wrapper align-items-center">
                             @foreach($list_toko as $toko)
                             <div class="swiper-slide d-flex justify-content-center">
-                                <img src="{{ asset('storage/' . $toko->foto_profil) }}"
+                                <img src="{{ $toko->foto_profil ? asset('storage/' . $toko->foto_profil) : asset('assets/img/default-user.png') }}"
                                     alt="Foto Mitra"
                                     class="rounded-circle"
                                     style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd;">

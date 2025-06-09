@@ -48,7 +48,7 @@
     </li>
     @auth
     <li class="nav-item">
-        <a href="/profil" class="nav-link"><i class="fa-solid fa-user"></i></a>
+        <a href="{{ route('pembeli.profile') }}" class="nav-link"><i class="fa-solid fa-user"></i></a>
     </li>
     @endauth
     @auth
