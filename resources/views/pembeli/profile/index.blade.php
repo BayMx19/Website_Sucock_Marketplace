@@ -104,7 +104,7 @@
                                 <form id="formAlamatUtama" action="{{ route('pembeli.profil.alamat-utama') }}" method="POST">
                                     @csrf
                                     @foreach(auth()->user()->dataAlamat as $alamat)
-                                        <div class="alamat-block mb-3 p-3" style="border: 1px solid #ddd; border-radius: 5px; position: relative;">
+                                        <div class="alamat-block mb-3 p-3" style="background-color : white !important; border: 1px solid #ddd; border-radius: 5px; position: relative;">
                                             <div style="font-weight: bold;">
                                                 {{ $alamat->label ?? 'Alamat' }}
                                                 @if($alamat->is_utama)
@@ -113,11 +113,12 @@
                                             </div>
                                             <div style="margin-top: 4px;">
                                                 {{ $alamat->alamat ?? '' }} <br>
-                                                Provinsi : {{ $alamat->provinsi ?? ''}} <br>
-                                                Kota : {{ $alamat->kota ?? '' }} <br>
-                                                Kecamatan : {{ $alamat->kecamatan ?? ''}} <br>
-                                                Kelurahan : {{ $alamat->kelurahan ?? '' }} <br>
+                                                Provinsi {{ $alamat->provinsi ?? ''}} <br>
+                                                Kota {{ $alamat->kota ?? '' }} <br>
+                                                Kecamatan {{ $alamat->kecamatan ?? ''}} <br>
+                                                Kelurahan {{ $alamat->kelurahan ?? '' }} <br>
                                                 RT {{ $alamat->RT ?? '-' }} / RW {{ $alamat->RW ?? '-' }} <br>
+                                                {{ $alamat->kode_pos ?? ''}}
 
                                             </div>
                                             <input type="radio" name="alamat_id" value="{{ $alamat->id }}" id="alamat-{{ $alamat->id }}"
