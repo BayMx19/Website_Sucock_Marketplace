@@ -14,24 +14,95 @@ class ProfilController extends Controller
      */
     public function indexpembeli()
     {
-        $user = User::with('dataAlamat')->get();
+        $user = User::with('dataAlamat')->find(auth()->id());
         return view('pembeli.profile.index', compact('user'));
     }
-    /**
+
+    public function setAlamatUtama(Request $request)
+    {
+        $user = auth()->user();
+
+        // Reset semua alamat is_utama = false
+        $user->dataAlamat()->update(['is_utama' => false]);
+
+        // Set alamat yang dipilih jadi utama
+        $alamatUtama = $user->dataAlamat()->where('id', $request->alamat_id)->first();
+        if ($alamatUtama) {
+            $alamatUtama->is_utama = true;
+            $alamatUtama->save();
+        }
+
+        return back()->with('success', 'Alamat utama berhasil diubah.');
+    }
+
+        public function createAlamatpembeli()
+    {
+        return view('pembeli.alamat.create');
+    }
+
+    public function storeAlamatpembeli(Request $request)
+    {
+        $request->validate([
+            'alamat' => 'required|string',
+            'provinsi' => 'required|string',
+            'kota' => 'required|string',
+            'kecamatan' => 'required|string',
+            'kelurahan' => 'required|string',
+            'RT' => 'nullable|string|max:3',
+            'RW' => 'nullable|string|max:3',
+            'kode_pos' => 'nullable|string',
+        ]);
+
+        $user = auth()->user();
+
+        $user->dataAlamat()->create([
+            'alamat' => $request->alamat,
+            'provinsi' => $request->provinsi,
+            'kota' => $request->kota,
+            'kecamatan' => $request->kecamatan,
+            'kelurahan' => $request->kelurahan,
+            'RT' => $request->RT,
+            'RW' => $request->RW,
+            'kode_pos' => $request->kode_pos,
+        ]);
+
+        return redirect()->route('pembeli.profile')->with('success', 'Alamat berhasil ditambahkan.');
+    }
+     /**
      * Show the form for editing the specified resource.
      */
-    public function editpembeli($id)
+    public function editpembeli()
     //(string $id)
     {
-        return view('pembeli_editdata');
+        $user = auth()->user();
+        return view('pembeli.profile.edit', compact('user'));
     }
-    /*
-    /**
-     * Update the specified resource in storage.
-     */
-    public function updatepembeli(Request $request, $id)
+
+    public function updatePembeli(Request $request)
     {
-        //
+        $user = auth()->user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'nohp' => 'nullable|string|max:13',
+            'jenis_kelamin' => 'nullable|in:L,P',
+            'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->nohp = $request->nohp;
+        $user->jenis_kelamin = $request->jenis_kelamin;
+
+        if ($request->hasFile('foto_profil')) {
+            $foto = $request->file('foto_profil')->store('foto_profil', 'public');
+            $user->foto_profil = $foto;
+        }
+
+        $user->save();
+
+        return redirect()->route('pembeli.profile')->with('success', 'Profil berhasil diperbarui.');
     }
 
     /**

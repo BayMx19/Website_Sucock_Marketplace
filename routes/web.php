@@ -123,6 +123,9 @@ Route::middleware(['auth', 'role:Pembeli'])->group(function () {
     Route::delete('/keranjang/{id}', [TransaksiController::class, 'destroyKeranjang'])->name('hapus.keranjang');
     Route::post('/keranjang/tambah', [TransaksiController::class, 'tambahKeranjang'])->name('keranjang.tambah');
     Route::get('/profile', [ProfilController::class, 'indexpembeli'])->name('pembeli.profile');
-});
+    Route::post('/profil/alamat-utama', [ProfilController::class, 'setAlamatUtama'])->name('pembeli.profil.alamat-utama');
+    Route::get('/pembeli/alamat/create', [ProfilController::class, 'createAlamatpembeli'])->name('pembeli.alamat.create');
+    Route::post('/pembeli/alamat/store', [ProfilController::class, 'storeAlamatpembeli'])->name('pembeli.alamat.store');    Route::get('/profile/edit', [ProfilController::class, 'editpembeli'])->name('pembeli.edit.profile');
+    Route::put('/profil/update', [ProfilController::class, 'updatepembeli'])->name('pembeli.update.profile');});
 
 // --- END Route Pembeli ---

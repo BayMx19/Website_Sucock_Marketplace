@@ -60,10 +60,14 @@ class User extends Authenticatable
     }
     public function dataAlamat()
     {
-        return $this->hasOne(Alamat::class, 'user_id', 'id');
+        return $this->hasMany(Alamat::class, 'user_id', 'id');
     }
 
     public function penjual() {
         return $this->belongsTo(User::class, 'penjual_id');
+    }
+    public function getAlamatAttribute()
+    {
+        return $this->dataAlamat()->where('is_utama', true)->first();
     }
 }
