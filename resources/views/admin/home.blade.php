@@ -36,12 +36,12 @@
         @endforeach
     </div>
 
-    {{-- Charts Section --}}
+    <!-- {{-- Charts Section --}} -->
     <div class="row g-4">
         <div class="col-md-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
-                    <h2 class="h2 fw-bold mb-4">Diagram Pemasukan</h2>
+                    <h2 class="h2 fw-bold mb-4">Laporan Saldo Pemasukan</h2>
                     <canvas id="grafik_pemasukan"></canvas>
                 </div>
             </div>
@@ -50,7 +50,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
-                    <h2 class="h2 fw-bold mb-4">Diagram Review Pelanggan</h2>
+                    <h2 class="h2 fw-bold mb-4">Laporan Review Pelanggan</h2>
                     <canvas id="grafik_review"></canvas>
                 </div>
             </div>
@@ -60,7 +60,7 @@
 
 <script>
 
-    // Diagram Garis Pemasukan
+    // Diagram Saldo Pemasukan
     const ctx = document.getElementById('grafik_pemasukan');
 
     new Chart(ctx, {

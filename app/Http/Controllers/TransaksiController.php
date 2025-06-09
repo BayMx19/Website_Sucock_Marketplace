@@ -90,8 +90,9 @@ class TransaksiController extends Controller
                 pesanan.status_pesanan,
                 pesanan.total_harga
             FROM pesanan
-            JOIN users AS pembeli ON pesanan.user_id = pembeli.id
-            JOIN produk ON JSON_EXTRACT(pesanan.produk, '$[0].produk_id') = produk.id
+            JOIN users AS pembeli ON pembeli.id = pesanan.pembeli_id
+            JOIN keranjang ON pesanan.keranjang_id = keranjang.id
+            JOIN produk ON produk.id = keranjang.produk_id
             JOIN users AS penjual ON produk.penjual_id = penjual.id
             WHERE penjual.id = ?
         ";
@@ -105,6 +106,8 @@ class TransaksiController extends Controller
         }
 
         $pesanan = DB::select($query, $bindings);
+
+        // dd($pesanan);
 
         return view('penjual.data_pesanan.index', compact('pesanan', 'search'));
     }

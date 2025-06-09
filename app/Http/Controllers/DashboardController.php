@@ -83,9 +83,20 @@ class DashboardController extends Controller
         ->orderByRaw("MIN(tanggal_pesanan)")
         ->get();
 
-        dd($jml_pendapatan_penjual);
+        $jml_transaksi_selesai = Pesanan::selectRaw("
+            DATE_FORMAT(tanggal_pesanan, '%b %Y') as bulan,
+            COUNT(*) as jumlah_pesanan
+        ")
+        ->join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+        ->where('produk.penjual_id', Auth::id())
+        ->where('pesanan.status_pesanan', 'Selesai')
+        ->where('tanggal_pesanan', '>=', now()->subMonths(5)->startOfMonth())
+        ->groupByRaw("DATE_FORMAT(tanggal_pesanan, '%b %Y')")
+        ->orderByRaw("MIN(tanggal_pesanan)")
+        ->get();
 
-        return view('penjual.home', compact('saldo', 'jmlProduk', 'pesananSelesai', 'pesananBelum'));
+        return view('penjual.home', compact('saldo', 'jmlProduk', 'pesananSelesai', 'pesananBelum', 'jml_pendapatan_penjual', 'jml_transaksi_selesai'));
     }
 
     /**
