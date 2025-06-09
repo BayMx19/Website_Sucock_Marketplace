@@ -122,7 +122,7 @@ Route::middleware(['auth', 'role:Pembeli'])->group(function () {
     Route::get('/keranjang', [TransaksiController::class, 'keranjang'])->name('pembeli.keranjang');
     Route::delete('/keranjang/{id}', [TransaksiController::class, 'destroyKeranjang'])->name('hapus.keranjang');
     Route::post('/keranjang/tambah', [TransaksiController::class, 'tambahKeranjang'])->name('keranjang.tambah');
-
+    Route::get('/profile', [ProfilController::class, 'indexpembeli'])->name('pembeli.profile');
 });
 
 // --- END Route Pembeli ---

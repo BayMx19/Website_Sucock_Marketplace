@@ -14,7 +14,8 @@ class ProfilController extends Controller
      */
     public function indexpembeli()
     {
-        return view('pembeli_profil');
+        $user = User::with('dataAlamat')->get();
+        return view('pembeli.profile.index', compact('user'));
     }
     /**
      * Show the form for editing the specified resource.
