@@ -13,97 +13,131 @@ class TransaksiController extends Controller
 {
     public function indexadmin(Request $request)
     {
-        $search = $request->query('searchorders');
+        $validated = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'per_page' => 'nullable|integer|min:1|max:100'
+        ]);
 
-        $query = "
-             SELECT
-                pesanan.id,
-                pembeli.name AS nama_pembeli,
-                pesanan.kode_pesanan,
-                pesanan.tanggal_pesanan,
-                pesanan.status_pesanan,
-                pesanan.total_harga,
-                penjual.name AS nama_penjual
-            FROM pesanan
-            JOIN users AS pembeli ON pesanan.user_id = pembeli.id
-            JOIN produk ON JSON_EXTRACT(pesanan.produk, '$[0].produk_id') = produk.id
-            JOIN users AS penjual ON produk.penjual_id = penjual.id
-        ";
+        $perPage = $validated['per_page'] ?? 10;
 
-        $bindings = [];
+        $subKeranjang = DB::table('keranjang_pesanan as kp')
+        ->select('kp.pesanan_id', DB::raw('MIN(kp.keranjang_id) as keranjang_id'))
+        ->groupBy('kp.pesanan_id');
 
-        if (!empty($search)) {
-            $query .= "
-            WHERE
-                pembeli.name LIKE ? OR
-                pesanan.kode_pesanan LIKE ? OR
-            ";
-            $bindings = array_fill(0, 2, "%$search%");
-        }
+        $query = DB::table('pesanan')
+            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+            ->joinSub($subKeranjang, 'sub_kp', function ($join) {
+                $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+            })
+            ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
+            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+            ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+            ->select(
+                'pesanan.id',
+                'pembeli.name AS nama_pembeli',
+                'pesanan.kode_pesanan',
+                'pesanan.tanggal_pesanan',
+                'pesanan.status_pesanan',
+                'pesanan.total_harga',
+                'penjual.name AS nama_penjual'
+            )
+            ->when($validated['search'] ?? null, function ($q, $search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('pembeli.name', 'like', "%{$search}%")
+                        ->orWhere('penjual.name', 'like', "%{$search}%")
+                        ->orWhere('pesanan.kode_pesanan', 'like', "%{$search}%");
+                });
+            });
 
-        $pesanan = DB::select($query, $bindings);
+        $pesanan = $query->paginate($perPage);
 
-        return view('admin.data_pesanan.index', compact('pesanan', 'search'));
+        return view('admin.data_pesanan.index', compact('pesanan'));
     }
 
     public function detailadmin($id)
     {
+        $subKeranjang = DB::table('keranjang_pesanan as kp')
+            ->select('kp.pesanan_id', 'kp.keranjang_id')
+            ->groupBy('kp.pesanan_id', 'kp.keranjang_id');
+
         $pesanan = DB::table('pesanan')
-        ->select(
-            'pesanan.produk',
-            'pesanan.id',
-            'pesanan.kode_pesanan',
-            'pesanan.tanggal_pesanan',
-            'pesanan.total_harga',
-            'pesanan.status_pesanan',
-            'pembeli.name as nama_pembeli',
-            'produk.nama_produk',
-            'penjual.name as nama_penjual'
-        )
-        ->join('users as pembeli', 'pesanan.user_id', '=', 'pembeli.id')
-        ->join('produk', DB::raw("CAST(JSON_EXTRACT(pesanan.produk, '$[0].produk_id') AS UNSIGNED)"), '=', 'produk.id')
-        ->join('users as penjual', 'produk.penjual_id', '=', 'penjual.id')
-        ->where('pesanan.id', $id)
-        ->first();
-        // dd($pesanan);
-         return view('admin.data_pesanan.detail', compact('pesanan'));
+            ->select(
+                'alamat.*',
+                'pesanan.id',
+                'pesanan.kode_pesanan',
+                'pesanan.tanggal_pesanan',
+                'pesanan.total_harga',
+                'pesanan.status_pesanan',
+                'pembeli.name as nama_pembeli',
+                'pembeli.nohp',
+                'produk.nama_produk',
+                'produk.harga',
+                'produk.gambar',
+                'penjual.name as nama_penjual',
+                'pengiriman.metode_pengiriman',
+                'pembayaran.metode_pembayaran',
+                'keranjang.amount as jumlah_produk'
+            )
+            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+            ->joinSub($subKeranjang, 'sub_kp', function ($join) {
+                $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+            })
+            ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
+            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+            ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+            ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
+            ->leftJoin('pembayaran', 'pembayaran.pesanan_id', '=', 'pesanan.id')
+            ->leftJoin('pengiriman', 'pengiriman.pesanan_id', '=', 'pesanan.id')
+            ->where('pesanan.id', $id)
+            ->get();
+        
+        dd($pesanan);
+        
+        return view('admin.data_pesanan.detail', compact('pesanan'));
     }
 
     public function indexpenjual(Request $request)
     {
-        $search = $request->query('searchorders');
+        $penjual_id = Auth::id();
 
-        $penjual = Auth::id();
+        $validated = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'per_page' => 'nullable|integer|min:1|max:100'
+        ]);
 
-        $query = "
-            SELECT
-                pesanan.id,
-                pembeli.name AS nama_pembeli,
-                pesanan.kode_pesanan,
-                pesanan.tanggal_pesanan,
-                pesanan.status_pesanan,
-                pesanan.total_harga
-            FROM pesanan
-            JOIN users AS pembeli ON pembeli.id = pesanan.pembeli_id
-            JOIN keranjang ON pesanan.keranjang_id = keranjang.id
-            JOIN produk ON produk.id = keranjang.produk_id
-            JOIN users AS penjual ON produk.penjual_id = penjual.id
-            WHERE penjual.id = ?
-        ";
+        $perPage = $validated['per_page'] ?? 10;
 
-         $bindings = [$penjual];
+        $subKeranjang = DB::table('keranjang_pesanan as kp')
+        ->select('kp.pesanan_id', DB::raw('MIN(kp.keranjang_id) as keranjang_id'))
+        ->groupBy('kp.pesanan_id');
 
-        if (!empty($search)) {
-            $query .= " AND (pembeli.name LIKE ? OR pesanan.kode_pesanan LIKE ?) ";
-            $bindings[] = "%$search%";
-            $bindings[] = "%$search%";
-        }
+        $query = DB::table('pesanan')
+            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+            ->joinSub($subKeranjang, 'sub_kp', function ($join) {
+                $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+            })
+            ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
+            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+            ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+            ->where('penjual_id', $penjual_id)
+            ->select(
+                'pesanan.id',
+                'pembeli.name AS nama_pembeli',
+                'pesanan.kode_pesanan',
+                'pesanan.tanggal_pesanan',
+                'pesanan.status_pesanan',
+                'pesanan.total_harga'
+            )
+            ->when($validated['search'] ?? null, function ($q, $search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('pembeli.name', 'like', "%{$search}%")
+                        ->orWhere('pesanan.kode_pesanan', 'like', "%{$search}%");
+                });
+            });
 
-        $pesanan = DB::select($query, $bindings);
+        $pesanan = $query->paginate($perPage);
 
-        // dd($pesanan);
-
-        return view('penjual.data_pesanan.index', compact('pesanan', 'search'));
+        return view('penjual.data_pesanan.index', compact('pesanan'));
     }
 
 
@@ -111,22 +145,45 @@ class TransaksiController extends Controller
     {
         $penjual = Auth::id();
 
-        $pesanan = DB::table('pesanan')
-        ->select(
-            'pesanan.kode_pesanan',
-            'pesanan.total_harga'
-        )
-        ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
-        ->join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
-        ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
-        ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
-        ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
-        ->join('pembayaran', 'pembayaran.pesanan_id', '=', 'pesanan.id')
-        ->join('pengiriman', 'pengiriman.pesanan_id', '=', 'pesanan.id')
-        ->where('pesanan.id', $id)
-        ->first();
+        $subKeranjang = DB::table('keranjang_pesanan as kp')
+            ->select('kp.pesanan_id', 'kp.keranjang_id')
+            ->groupBy('kp.pesanan_id', 'kp.keranjang_id');
 
-        return view();
+        $pesanan = DB::table('pesanan')
+            ->select(
+                'alamat.*',
+                'pesanan.id',
+                'pesanan.kode_pesanan',
+                'pesanan.tanggal_pesanan',
+                'pesanan.total_harga',
+                'pesanan.status_pesanan',
+                'pembeli.name as nama_pembeli',
+                'pembeli.nohp',
+                'produk.nama_produk',
+                'produk.harga',
+                'produk.gambar',
+                'penjual.name as nama_penjual',
+                'pengiriman.metode_pengiriman',
+                'pembayaran.metode_pembayaran',
+                'keranjang.amount as jumlah_produk'
+            )
+            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+            ->joinSub($subKeranjang, 'sub_kp', function ($join) {
+                $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+            })
+            ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
+            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+            ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+            ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
+            ->leftJoin('pembayaran', 'pembayaran.pesanan_id', '=', 'pesanan.id')
+            ->leftJoin('pengiriman', 'pengiriman.pesanan_id', '=', 'pesanan.id')
+            ->where('penjual.id', $penjual)
+            ->where('pesanan.id', $id)
+            ->get();
+        
+        dd($pesanan);
+
+        return view('penjual.data_pesanan.detail');
     }
 
     public function keranjang()

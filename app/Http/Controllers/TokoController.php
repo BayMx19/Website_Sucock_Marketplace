@@ -12,7 +12,7 @@ class TokoController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->query('searchorders');
+        $search = $request->query('search');
 
         if(empty($search)) {
              $toko = Toko::where('role', 'Penjual')->get();

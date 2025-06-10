@@ -33,15 +33,7 @@
                             <td>{{ $r->nama_produk }}</td>
                             <td>{{ $r->review_text }}</td>
                             <td><i class="fa fa-star" style="color: #24CAA1;"> {{ $r->bintang }}</i></td>
-                            <td> <a href="{{ route('penjual.data_review.detail', $r->id) }}"
-                                    class="btn btn-primary btn-sm me-2">Detail</a>
-                                <form action="{{ route('penjual.data_review.destroy', $r->id) }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Yakin ingin menghapus?');">Hapus</button>
-                                </form>
+                            <td><a href="{{ route('penjual.data_review.detail', $r->id) }}" class="btn btn-primary btn-sm me-2">Detail</a>
                             </td>
                         </tr>
                         @empty
@@ -51,7 +43,7 @@
                         @endforelse
                     </table>
                 </div>
-                <div class="custom-pagination">
+                <!-- <div class="custom-pagination">
                     <ul class="pagination">
                         <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                         <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -59,7 +51,7 @@
                         <li class="page-item"><a class="page-link" href="#">3</a></li>
                         <li class="page-item"><a class="page-link" href="#">Next</a></li>
                     </ul>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

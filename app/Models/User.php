@@ -60,7 +60,7 @@ class User extends Authenticatable
     }
     public function dataAlamat()
     {
-        return $this->hasMany(Alamat::class, 'user_id', 'id');
+        return $this->hasMany(Alamat::class, 'user_id');
     }
 
     public function penjual() {

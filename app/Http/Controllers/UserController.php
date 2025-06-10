@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->query('searchorders');
+        $search = $request->query('search');
 
         if (empty($search)) {
             $users = User::all();

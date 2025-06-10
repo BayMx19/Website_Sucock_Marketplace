@@ -11,7 +11,7 @@ class ReviewController extends Controller
 {
     public function indexadmin(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'search' => 'nullable|string|max:255',
             'per_page' => 'nullable|integer|min:1|max:100'
         ]);
@@ -69,10 +69,12 @@ class ReviewController extends Controller
     {
         $penjual_id = Auth::id();
 
-        $request->validate([
-            'search' => 'string|max:255',
-            'per_page' => 'integer|min:1|max:100'
+        $validated = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'per_page' => 'nullable|integer|min:1|max:100'
         ]);
+
+        $perPage = $validated['per_page'] ?? 10;
 
         $query = DB::table('review')
             ->join('pesanan', 'pesanan.id', '=', 'review.pesanan_id')
@@ -80,7 +82,6 @@ class ReviewController extends Controller
             ->join('produk', 'produk.id', '=', 'review.produk_id')
             ->join('users as penjual', 'produk.penjual_id', '=', 'penjual.id')
             ->where('penjual.id', $penjual_id)
-            
             ->select(
                 'review.id',
                 'pembeli.name as nama_pembeli',
@@ -88,15 +89,12 @@ class ReviewController extends Controller
                 'review.review_text',
                 'review.bintang'
             )
-            ->when($request->search, function ($q) use ($request) {
-                $search = $request->search;
+            ->when($validated['search'] ?? null, function ($q, $search) {
                 $q->where(function ($q2) use ($search) {
                     $q2->where('pembeli.name', 'like', "%{$search}%")
-                    ->orWhere('produk.nama_produk', 'like', "%{$search}%");
+                        ->orWhere('produk.nama_produk', 'like', "%{$search}%");
                 });
             });
-
-        $perPage = min($request->get('per_page', 10), 100);
 
         $review = $query->paginate($perPage);
 
@@ -105,7 +103,7 @@ class ReviewController extends Controller
         return view('penjual.data_review.index', compact('review'));
     }
 
-    public function detailpenjual()
+    public function detailpenjual($id)
     {
         $penjual_id = Auth::id();
 
@@ -126,9 +124,9 @@ class ReviewController extends Controller
                 'review.bintang'
             )->first();
 
-            dd($review);
+            // dd($review);
 
-        return view('penjual.data_review.detail');
+        return view('penjual.data_review.detail', compact('review'));
     }
     
 }

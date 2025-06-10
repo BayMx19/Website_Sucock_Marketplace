@@ -32,7 +32,7 @@
                             <td>{{ $p->tanggal_pesanan }}</td>
                             <td>{{ $p->status_pesanan }}</td>
                             <td>
-                                <a href="{{ route('admin.data_pesanan.detail', $p->id) }}"
+                                <a href="{{ route('penjual.data_pesanan.detail', $p->id) }}"
                                     class="btn btn-primary btn-sm me-2">Detail</a>
                             </td>
                         </tr>

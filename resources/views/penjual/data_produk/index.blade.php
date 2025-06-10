@@ -15,7 +15,6 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Toko</th>
                                 <th>Nama Produk</th>
                                 <th>Harga</th>
                                 <th>Stok</th>
@@ -27,7 +26,6 @@
                         @forelse($produk as $produk)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $produk->user->name }}</td>
                             <td>{{ $produk->nama_produk }}</td>
                             <td>{{ $produk->harga }}</td>
                             <td>{{ $produk->stok }}</td>
@@ -37,7 +35,6 @@
                                     {{ $produk->status }}
                                 </span>
                             </td>
-
                             <td>
                                 <a href="{{ route('penjual.data_produk.detail', $produk->id) }}"
                                     class="btn btn-primary btn-sm me-2">Detail</a>
