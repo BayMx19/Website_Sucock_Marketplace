@@ -90,9 +90,9 @@ class TransaksiController extends Controller
             ->leftJoin('pengiriman', 'pengiriman.pesanan_id', '=', 'pesanan.id')
             ->where('pesanan.id', $id)
             ->get();
-        
+
         dd($pesanan);
-        
+
         return view('admin.data_pesanan.detail', compact('pesanan'));
     }
 
@@ -141,7 +141,7 @@ class TransaksiController extends Controller
     }
 
 
-    public function detailpenjual($id) 
+    public function detailpenjual($id)
     {
         $penjual = Auth::id();
 
@@ -180,7 +180,7 @@ class TransaksiController extends Controller
             ->where('penjual.id', $penjual)
             ->where('pesanan.id', $id)
             ->get();
-        
+
         dd($pesanan);
 
         return view('penjual.data_pesanan.detail');
@@ -250,6 +250,13 @@ class TransaksiController extends Controller
 
         return redirect()->back()->with('success', 'Item berhasil dihapus dari keranjang.');
     }
+    public function riwayatPesanan(){
+        return view('pembeli.riwayat_transaksi.index');
+    }
 
+    public function checkoutPesanan()
+    {
+        return view('pembeli.checkout.index');
+    }
 
 }

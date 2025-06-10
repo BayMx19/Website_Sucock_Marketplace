@@ -84,9 +84,9 @@
                 <div class="col-lg-4">
                     <div class="blog_right_sidebar">
                         <aside class="single_sidebar_widget newsletter_widget" style="background-color: whitesmoke;">
-                            <h4 class="widget_title">Riwayat Transaksi</h4>
-                            <a href="">
-                                <button class="w-100 btn_1 "> <i class="fa fa-clock-rotate-left"></i> Riwayat Transaksi</button>
+                            <h4 class="widget_title">Riwayat Pesanan</h4>
+                            <a href="{{route('pembeli.riwayat-pesanan')}}">
+                                <button class="w-100 btn_1 "> <i class="fa fa-clock-rotate-left"></i> Riwayat Pesanan</button>
                             </a>
 
                         </aside>

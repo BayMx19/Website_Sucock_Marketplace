@@ -344,9 +344,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="row align-items-center mb-3">
-                        <div class="col-auto">
-                            <img id="productImage" src="" alt="Product Image" class="rounded"
-                                style="width: 60px; height: 60px; object-fit: cover;">
+                        <div class="col-auto text-center">
+                            Custom Watch
                         </div>
                         <div class="col">
                             <p class="mb-0 fw-bold" id="productNameModal"></p>
@@ -356,7 +355,6 @@
 
                     <div class="d-flex justify-content-center mb-3">
                         <div class="rating-stars" id="ratingStars">
-                            {{-- Hapus kelas text-secondary dan text-warning dari sini --}}
                             <i class="fas fa-star star-icon" data-rating="1"></i>
                             <i class="fas fa-star star-icon" data-rating="2"></i>
                             <i class="fas fa-star star-icon" data-rating="3"></i>
@@ -367,11 +365,7 @@
                         {{-- Default value 0 --}}
                     </div>
 
-                    {{-- Bagian "Bisa dapat 200 GoPay Coins, Iho! Pelajari" --}}
-                    <div class="alert alert-info py-2 px-3 mb-3 d-flex align-items-center" role="alert">
-                        <i class="fas fa-info-circle me-2"></i>
-                        Bisa dapat 200 GoPay Coins, Iho! <a href="#" class="alert-link ms-1">Pelajari</a>
-                    </div>
+
 
 
                     <p class="fw-bold">Apa yang bikin kamu puas?</p>

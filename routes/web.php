@@ -131,5 +131,6 @@ Route::middleware(['auth', 'role:Pembeli'])->group(function () {
     Route::get('/pembeli/alamat/create', [ProfilController::class, 'createAlamatpembeli'])->name('pembeli.alamat.create');
     Route::post('/pembeli/alamat/store', [ProfilController::class, 'storeAlamatpembeli'])->name('pembeli.alamat.store');    Route::get('/profile/edit', [ProfilController::class, 'editpembeli'])->name('pembeli.edit.profile');
     Route::put('/profil/update', [ProfilController::class, 'updatepembeli'])->name('pembeli.update.profile');});
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('pembeli.checkout');
+    Route::get('/checkout', [TransaksiController::class, 'checkoutPesanan'])->name('pembeli.checkout');
+    Route::get('/riwayat-pesanan', [TransaksiController::class, 'riwayatPesanan'])->name('pembeli.riwayat-pesanan');
 // --- END Route Pembeli ---
