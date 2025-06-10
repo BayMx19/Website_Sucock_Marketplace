@@ -27,7 +27,7 @@ class DashboardController extends Controller
             DATE_FORMAT(tanggal_pesanan, '%b %Y') as bulan,
             SUM(total_harga) as total
         ")
-        ->where('status_pesanan', 'Sudah Dibayar')
+        ->where('status_pesanan', 'Selesai')
         ->where('tanggal_pesanan', '>=', now()->subMonths(5)->startOfMonth())
         ->groupByRaw("DATE_FORMAT(tanggal_pesanan, '%b %Y')")
         ->orderByRaw("MIN(tanggal_pesanan)")
@@ -45,10 +45,17 @@ class DashboardController extends Controller
     }
 
     public function dashboardpenjual(){
+        $subKeranjang = DB::table('keranjang_pesanan as kp')
+        ->select('kp.pesanan_id', DB::raw('MIN(kp.keranjang_id) as keranjang_id'))
+        ->groupBy('kp.pesanan_id');
+
         $saldo_penjual = pesanan::selectRaw("
             SUM(total_harga) as saldo
         ")
-        ->join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        ->joinSub($subKeranjang, 'sub_kp', function ($join) {
+                $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+            })
+        ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
         ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
         ->where('penjual_id', Auth::id())
         ->where('status_pesanan', 'Selesai')
@@ -58,13 +65,19 @@ class DashboardController extends Controller
 
         $jmlProduk = produk::where('penjual_id', Auth::id())->count();
 
-        $pesananSelesai = pesanan::join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        $pesananSelesai = pesanan::joinSub($subKeranjang, 'sub_kp', function ($join) {
+            $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+        })
+        ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
         ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
         ->where('penjual_id', Auth::id())
         ->where('status_pesanan', 'Selesai')
         ->count();
 
-        $pesananBelum = pesanan::join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        $pesananBelum = pesanan::joinSub($subKeranjang, 'sub_kp', function ($join) {
+            $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+        })
+        ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
         ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
         ->where('penjual_id', Auth::id())
         ->whereIn('status_pesanan', ['Diproses', 'Dikirim'])
@@ -74,7 +87,10 @@ class DashboardController extends Controller
             DATE_FORMAT(tanggal_pesanan, '%b %Y') as bulan,
             SUM(total_harga) as total
         ")
-        ->join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        ->joinSub($subKeranjang, 'sub_kp', function ($join) {
+            $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+        })
+        ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
         ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
         ->where('penjual_id', Auth::id())
         ->where('status_pesanan', 'Selesai')
@@ -87,7 +103,10 @@ class DashboardController extends Controller
             DATE_FORMAT(tanggal_pesanan, '%b %Y') as bulan,
             COUNT(*) as jumlah_pesanan
         ")
-        ->join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        ->joinSub($subKeranjang, 'sub_kp', function ($join) {
+            $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+        })
+        ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
         ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
         ->where('produk.penjual_id', Auth::id())
         ->where('pesanan.status_pesanan', 'Selesai')
@@ -95,6 +114,8 @@ class DashboardController extends Controller
         ->groupByRaw("DATE_FORMAT(tanggal_pesanan, '%b %Y')")
         ->orderByRaw("MIN(tanggal_pesanan)")
         ->get();
+
+        // dd($jml_transaksi_selesai);
 
         return view('penjual.home', compact('saldo', 'jmlProduk', 'pesananSelesai', 'pesananBelum', 'jml_pendapatan_penjual', 'jml_transaksi_selesai'));
     }

@@ -7,7 +7,7 @@
                         <div class="header-top-menu tabl-d-n hd-search-rp">
                             <div class="breadcome-heading">
                                 <form role="search" method="GET" action="" style="display: flex; align-items: center; gap: 8px;">
-                                    <input type="text" placeholder="Search..." class="form-control" name="searchorders" value="{{ request('searchorders') }}" style="max-width: 180px;">
+                                    <input type="text" placeholder="Search..." class="form-control" name="search" value="{{ request('search') }}" style="max-width: 180px;">
                                     <button type="submit" class="btn btn-md" style="background-color: transparent; border: none;">
                                         <i class="fa fa-search"></i>
                                     </button>

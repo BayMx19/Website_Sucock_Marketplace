@@ -13,37 +13,28 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
-    public function index()
-    {
-        $list_produk = produk::with('user')->get();
-
-        return view('pembeli.produk.produk', compact('list_produk'));
-    }
-    // public function show()
-    // {
-    //     return view('pembeli_detailproduk');
-    // }
-
     public function dataproduk(Request $request)
     {
-        $search = $request->query('searchorders');
+        $validated = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'per_page' => 'nullable|integer|min:1|max:100'
+        ]);
 
-        if(empty($search)) {
-            $produk = Produk::with('user')->get();
-        } else {
-            $produk = Produk::with('user')
-              ->where(function ($query) use ($search) {
-                $query->Where('nama_produk', 'like', "%{$search}%")
-                    ->orWhere('harga', 'like', "%{$search}%")
-                    ->orWhere('stok', 'like', "%{$search}%");
-            })
-            ->orWhereHas('user', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->get();
-        }
+        $perPage = $validated['per_page'] ?? 10;
 
-        return view('admin.data_produk.index', compact('produk', 'search'));
+        $query = DB::table('produk')
+            ->join('users', 'users.id', '=', 'produk.penjual_id')
+            ->select('produk.id', 'produk.nama_produk', 'produk.harga', 'produk.status', 'produk.stok', 'users.name')
+            ->when($validated['search'] ?? null, function ($q, $search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('users.name', 'like', "%{$search}%")
+                        ->orWhere('produk.nama_produk', 'like', "%{$search}%");
+                });
+            });
+
+        $produk = $query->paginate($perPage);
+
+        return view('admin.data_produk.index', compact('produk'));
     }
     public function dataprodukdetail($id)
     {
@@ -52,8 +43,33 @@ class ProdukController extends Controller
         return view('admin.data_produk.detail', compact('produk'));
     }
 
-    public function indexpenjual(){
-        $produk = Produk::where('penjual_id', Auth::id())->latest()->get();
+    public function indexpenjual(Request $request){
+        $penjual_id = Auth::id();
+
+        $validated = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'per_page' => 'nullable|integer|min:1|max:100'
+        ]);
+
+        $perPage = $validated['per_page'] ?? 10;
+
+        $query = DB::table('produk')
+            ->where('penjual_id', $penjual_id)
+            ->select(
+                'nama_produk',
+                'harga',
+                'status',
+                'stok',
+                'id'
+            )
+            ->when($validated['search'] ?? null, function ($q, $search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('nama_produk', 'like', "%{$search}%");
+                });
+            });
+        
+        $produk = $query->paginate($perPage);
+
         return view('penjual.data_produk.index', compact('produk'));
     }
     public function createpenjual()

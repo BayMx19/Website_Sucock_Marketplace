@@ -102,8 +102,12 @@ Route::middleware(['auth', 'role:Penjual'])->group(function () {
 
     // Route Data Transaksi
     Route::get('/penjual/data_pesanan/', [TransaksiController::class, 'indexpenjual'])->name('penjual.data_pesanan.index');
+    Route::get('/penjual/data_pesanan/{id}/detail', [TransaksiController::class, 'detailpenjual'])->name('penjual.data_pesanan.detail');
 
     // Route Data Review
+    Route::get('/penjual/data_review/', [ReviewController::class, 'indexpenjual'])->name('penjual.data_review.index');
+    Route::get('/penjual/data_review/{id}/detail', [ReviewController::class, 'detailpenjual'])->name('penjual.data_review.detail');
+
     // Route Chat
     // Route Profile
     Route::get('/penjual/profile/', [ProfilController::class, 'indexpenjual'])->name('penjual.profile.index');

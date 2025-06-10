@@ -27,7 +27,7 @@
                         @forelse($produk as $produk)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $produk->user->name }}</td>
+                            <td>{{ $produk->name }}</td>
                             <td>{{ $produk->nama_produk }}</td>
                             <td>{{ $produk->harga }}</td>
                             <td>{{ $produk->stok }}</td>
