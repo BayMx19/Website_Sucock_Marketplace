@@ -2308,3 +2308,32 @@ h6 {
     font-size: 0.7rem;
     padding: 4px 6px;
 }
+
+.form-check-input {
+  margin-right: 12px; /* beri jarak lebih lebar ke kanan dari radio button */
+}
+
+.form-check i.fa-solid {
+  margin-right: 10px; /* beri jarak lebih antara ikon dan teks */
+  font-size: 18px; /* ukuran icon agar tidak terlalu kecil */
+  vertical-align: middle; /* supaya icon sejajar dengan teks */
+}
+
+.form-check .font-weight-bold {
+  margin-bottom: 2px; /* jarak kecil antar judul dan harga */
+  display: inline-block;
+}
+
+.btn-checkout{
+    background-color: #548c9a !important;
+    color: white !important;
+    border: 2px solid #548c9a !important;
+    width: 60%;
+}
+
+.btn-checkout:hover{
+    background-color: white !important;
+    color: #548c9a !important;
+    border: 2px solid #548c9a !important;
+
+}

@@ -7,10 +7,8 @@
     <title>Sucock</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
-
     <!-- Favicons -->
     <link href="{{ asset('/assets/img/logo-WEB1.jpg') }}" rel="icon">
-
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -26,10 +24,8 @@
     <link href="{{ asset('/assets/vendor/aos/aos.css') }}" rel="stylesheet">
     <link href="{{ asset('/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-
     <!-- Main CSS File -->
     <link href="{{ asset('/assets/css/main.css') }}" rel="stylesheet">
-
     <!-- =======================================================
   * Template Name: Bootslander
   * Template URL: https://bootstrapmade.com/bootslander-free-bootstrap-landing-page-template/
@@ -37,27 +33,19 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-
-  <style>
-
-  </style>
+    <style>
+    </style>
 </head>
 
 <body class="index-page">
-
     <header id="header" class="header d-flex align-items-center fixed-top bg-white shadow-sm">
         <div class="container-fluid container-xl d-flex justify-content-between align-items-center">
-
             <!-- Logo (Kiri) -->
             <a href="{{''}}" class="logo d-flex align-items-center me-3">
                 <img src="{{ asset('assets') }}/img/logo_WEB.png" alt="Logo" style="height: 40px;">
-            </a>
-            @include('layout.navbar')
-            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </a> @include('layout.navbar') <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </div>
-    </header>
-    @yield('content')
-    <footer id="footer" class="footer dark-background">
+    </header> @yield('content') <footer id="footer" class="footer dark-background">
         <div class="container copyright text-center mt-4">
             <p><span>Copyright ©2025 Sucock (SumengkoShuttlecock), All rights reserved.</span></p>
             <div class="credits">
@@ -68,14 +56,11 @@
             </div>
         </div>
     </footer>
-
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
-
     <!-- Preloader -->
     <div id="preloader"></div>
-
     <!-- Vendor JS Files -->
     <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('/assets/vendor/php-email-form/validate.js') }}"></script>
@@ -84,14 +69,14 @@
     <script src="{{ asset('/assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>
     <script src="{{ asset('/assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('/assets/js/vendor/jquery-1.12.4.min.js') }}"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
     <!-- Main JS File -->
     <script src="{{ asset('/assets/js/main.js') }}"></script>
-
     <!-- Inisialisasi Swiper -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const swiper = new Swiper(".mySwiper", {
+    document.addEventListener("DOMContentLoaded", function() {
+        const swiper = new Swiper(".mySwiper", {
             slidesPerView: 3,
             spaceBetween: 30,
             navigation: {
@@ -99,12 +84,18 @@
                 prevEl: ".swiper-button-prev",
             },
             breakpoints: {
-                992: { slidesPerView: 3 },
-                768: { slidesPerView: 2 },
-                576: { slidesPerView: 1 }
+                992: {
+                    slidesPerView: 3
+                },
+                768: {
+                    slidesPerView: 2
+                },
+                576: {
+                    slidesPerView: 1
+                }
             }
-            });
         });
+    });
     </script>
     <script>
     var swiperMitra = new Swiper(".swiperMitra", {
@@ -134,9 +125,7 @@
             }
         }
     });
-</script>
-
-
+    </script>
 </body>
 
 </html>
