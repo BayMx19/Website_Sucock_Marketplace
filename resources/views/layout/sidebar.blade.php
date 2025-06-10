@@ -96,7 +96,7 @@
                                 class="mini-sub-pro">Data Produk</span></a></li>
                     <li><a title="Data Pesanan" href="{{ route('penjual.data_pesanan.index') }}"><span
                                 class="mini-sub-pro">Data Pesanan</span></a></li>
-                    <li><a title="Data Review" href=""><span
+                    <li><a title="Data Review" href="{{route('penjual.data_review.index') }}"><span
                                 class="mini-sub-pro">Data Review</span></a></li>
                 </ul>
             </li>
