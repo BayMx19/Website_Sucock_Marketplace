@@ -11,7 +11,7 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        return view('pembeli.checkout.index');
+        return view('pembeli.riwayat_transaksi.index');
     }
 
     /**

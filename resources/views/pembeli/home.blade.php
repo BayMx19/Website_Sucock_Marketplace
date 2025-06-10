@@ -88,8 +88,8 @@
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
                     </div>
-                    <!-- Modal -->
-                    <div class="modal fade" id="modalProduk{{ $produk->id }}" tabindex="-1"
+                    <!-- Modal --> @foreach($list_produk as $produk) <div class="modal fade"
+                        id="modalProduk{{ $produk->id }}" tabindex="-1"
                         aria-labelledby="produkModalLabel{{ $produk->id }}" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> @endforeach
                 </div>
             </section>
         </div>
@@ -214,11 +214,8 @@
     </section><!-- /Contact Section -->
 </main>
 <script>
-const isLoggedIn = {
-    {
-        auth() - > check() ? 'true' : 'false'
-    }
-};
+const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
