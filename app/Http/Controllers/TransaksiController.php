@@ -46,9 +46,6 @@ class TransaksiController extends Controller
         return view('admin.data_pesanan.index', compact('pesanan', 'search'));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function detailadmin($id)
     {
         $pesanan = DB::table('pesanan')
@@ -72,9 +69,6 @@ class TransaksiController extends Controller
          return view('admin.data_pesanan.detail', compact('pesanan'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function indexpenjual(Request $request)
     {
         $search = $request->query('searchorders');
@@ -113,29 +107,26 @@ class TransaksiController extends Controller
     }
 
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit()
-    //(string $id)
+    public function detailpenjual($id) 
     {
-        return view('admin_datatransaksiedit');
-    }
+        $penjual = Auth::id();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $pesanan = DB::table('pesanan')
+        ->select(
+            'pesanan.kode_pesanan',
+            'pesanan.total_harga'
+        )
+        ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+        ->join('keranjang', 'keranjang.id', '=', 'pesanan.keranjang_id')
+        ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
+        ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+        ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+        ->join('pembayaran', 'pembayaran.pesanan_id', '=', 'pesanan.id')
+        ->join('pengiriman', 'pengiriman.pesanan_id', '=', 'pesanan.id')
+        ->where('pesanan.id', $id)
+        ->first();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view();
     }
 
     public function keranjang()

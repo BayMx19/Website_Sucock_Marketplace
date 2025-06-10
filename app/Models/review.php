@@ -17,4 +17,13 @@ class review extends Model
         'review_text'
     ];
 
+    public function pesanan()
+    {
+        return $this->belongsTo(pesanan::class);
+    }
+    public function produk()
+    {
+        return $this->belongsTo(produk::class);
+    }
+
 }

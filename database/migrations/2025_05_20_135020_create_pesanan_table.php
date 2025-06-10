@@ -18,8 +18,6 @@ return new class extends Migration
             $table->bigInteger('alamat_id')->unsigned();
             $table->foreign('alamat_id')->references('id')->on('alamat')->onDelete('cascade')->onUpdate('cascade');
             $table->string('kode_pesanan');
-            $table->bigInteger('keranjang_id')->unsigned();
-            $table->foreign('keranjang_id')->references('id')->on('keranjang')->onDelete('cascade')->onUpdate('cascade');
             $table->string('total_harga');
             $table->date('tanggal_pesanan');
             $table->string('status_pesanan');
