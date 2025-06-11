@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -120,7 +121,7 @@ class ProfilController extends Controller
     public function editpenjual($id)
     //(string $id)
     {
-        $profilPenjual = User::findOrFail($id);
+        $profilPenjual = Toko::with('alamat')->findOrFail($id);
         // dd($profilPenjual);
         return view('/penjual/profile/edit', compact('profilPenjual'));
     }

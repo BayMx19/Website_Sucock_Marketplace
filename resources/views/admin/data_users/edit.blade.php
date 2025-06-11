@@ -173,7 +173,7 @@
                                                                                 <input type="text" id="alamat"
                                                                                     name="alamat" class="form-control"
                                                                                     placeholder="Masukkan Alamat Anda"
-                                                                                    value="{{$user->alamat?->alamat}}">
+                                                                                    value="{{$user->dataAlamat->first()?->alamat}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -184,7 +184,7 @@
                                                                                 <input type="text" id="provinsi"
                                                                                     name="provinsi" class="form-control"
                                                                                     placeholder="Masukkan Provinsi Anda"
-                                                                                    value="{{$user->alamat?->provinsi}}">
+                                                                                    value="{{$user->dataAlamat->first()?->provinsi}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -195,7 +195,7 @@
                                                                                 <input type="text" id="kota" name="kota"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kota Anda"
-                                                                                    value="{{$user->alamat?->kota}}">
+                                                                                    value="{{$user->dataAlamat->first()?->kota}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -207,7 +207,7 @@
                                                                                     name="kecamatan"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kecamatan Anda"
-                                                                                    value="{{$user->alamat?->kecamatan}}">
+                                                                                    value="{{$user->dataAlamat->first()?->kecamatan}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -219,7 +219,7 @@
                                                                                     name="kelurahan"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kelurahan Anda"
-                                                                                    value="{{$user->alamat?->kelurahan}}">
+                                                                                    value="{{$user->dataAlamat->first()?->kelurahan}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -230,7 +230,7 @@
                                                                                 <input type="text" id="RT" name="RT"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan RT Anda"
-                                                                                    value="{{$user->alamat?->RT}}">
+                                                                                    value="{{$user->dataAlamat->first()?->RT}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -241,7 +241,7 @@
                                                                                 <input type="text" id="RW" name="RW"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan RW Anda"
-                                                                                    value="{{$user->alamat?->RW}}">
+                                                                                    value="{{$user->dataAlamat->first()?->RW}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -252,7 +252,7 @@
                                                                                 <input type="text" id="kode_pos"
                                                                                     name="kode_pos" class="form-control"
                                                                                     placeholder="Masukkan Kode Pos Anda"
-                                                                                    value="{{$user->alamat?->kode_pos}}">
+                                                                                    value="{{$user->dataAlamat->first()?->kode_pos}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
