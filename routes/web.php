@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/home', [DashboardController::class, 'dashboardpembeli'])->name('home');
+Route::get('/home', [DashboardController::class, 'dashboardpembeli'])->name('pembeli.home');
 Route::get('/produk', [ProdukController::class, 'index'])->name('index');
 Route::get('/', function () {
     if (Auth::check()) {

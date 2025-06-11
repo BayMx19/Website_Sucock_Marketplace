@@ -2,12 +2,12 @@
 @section('contentadmin')
 
 <div class="container-xl py-4">
-    
+
     {{-- Cards Section --}}
     <div class="row g-4 mb-5">
         @php
             $cards = [
-                ['icon' => 'fa-solid fa-user', 'label' => 'Jumlah Pengguna', 'value' => $total_pengguna],
+                ['icon' => 'fa-solid fa-user', 'label' => 'Jumlah Pelanggan', 'value' => $total_pengguna],
                 ['icon' => 'fa-solid fa-comment', 'label' => 'Jumlah Review', 'value' => $total_review],
                 ['icon' => 'fa-solid fa-store', 'label' => 'Jumlah Toko', 'value' => $total_toko],
                 ['icon' => 'fa-solid fa-box', 'label' => 'Jumlah Produk', 'value' => $total_produk],
@@ -118,7 +118,7 @@
 
     // Diagram Batang Review
     const ctx2 = document.getElementById('grafik_review').getContext('2d');
-    
+
     new Chart(ctx2, {
         type: 'bar',
         data: {
