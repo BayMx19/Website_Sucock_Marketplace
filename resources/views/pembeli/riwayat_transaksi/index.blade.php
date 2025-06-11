@@ -19,25 +19,84 @@
                             <div class="card-header">
                                 <ul class="nav nav-tabs card-header-tabs" id="orderStatusTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="diproses-tab" data-bs-toggle="tab"
-                                            href="#diproses" role="tab" aria-controls="diproses"
-                                            aria-selected="false">Diproses (1)</a>
+                                        <a class="nav-link active" id="sudah-dibayar-tab" data-bs-toggle="tab" href="#sudah-dibayar" role="tab" aria-controls="sudah-dibayar" aria-selected="true">Sudah Dibayar ({{ $jmlDibayar }})</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="sudah-dikirim-tab" data-bs-toggle="tab"
-                                            href="#sudah-dikirim" role="tab" aria-controls="sudah-dikirim"
-                                            aria-selected="false">Sudah Dikirim (3)</a>
+                                        <a class="nav-link {{ request('filter') === 'Diproses' ? 'active' : '' }}" id="diproses-tab" data-bs-toggle="tab"
+                                            href="{{ request()->fullUrlWithQuery(['filter' => 'Diproses']) }}" role="tab" aria-controls="diproses"
+                                            aria-selected="{{ request('filter') === 'Diproses' ? 'true' : 'false' }}">Diproses ({{ $jmlDiproses }})</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="selesai-tab" data-bs-toggle="tab" href="#selesai"
-                                            role="tab" aria-controls="selesai" aria-selected="false">Selesai (5)</a>
+                                        <a class="nav-link {{ request('filter') === 'Sudah Dikirim' ? 'active' : '' }}" id="sudah-dikirim-tab" data-bs-toggle="tab"
+                                                href="{{ request()->fullUrlWithQuery(['filter' => 'Sudah Dikirim']) }}" role="tab" aria-controls="sudah-dikirim"
+                                                aria-selected="{{ request('filter') === 'Sudah Dikirim' ? 'true' : 'false' }}">Sudah Dikirim ({{ $jmlDikirim }})</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request('filter') === 'Selesai' ? 'active' : '' }}" id="selesai-tab" data-bs-toggle="tab"
+                                                href="{{ request()->fullUrlWithQuery(['filter' => 'Selesai']) }}" role="tab" aria-controls="selesai"
+                                                aria-selected="{{ request('filter') === 'Selesai' ? 'true' : 'false' }}">Selesai ({{ $jmlSelesai }})</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="orderStatusTabContent">
 
+                                    {{-- Tab: Sudah Dibayar --}}
+                                    @if(request('filter') === 'Sudah Dibayar')
+                                    <div class="tab-pane fade show active" id="sudah-dibayar" role="tabpanel"
+                                        aria-labelledby="sudah-dibayar-tab">
+                                        <div class="accordion" id="accordionDiproses">
+                                            {{-- Order 1: Diproses --}}
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingDiprosesOne">
+                                                    <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#orderDiproses1"
+                                                        aria-expanded="false" aria-controls="orderDiproses1"
+                                                        style="background-color: whitesmoke;">
+                                                        Pesanan #123458 - Total: Rp. 320.000
+                                                    </button>
+                                                </h2>
+                                                <div id="orderDiproses1" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingDiprosesOne">
+                                                    <div class="accordion-body">
+                                                        {{-- Product 1 for Order 123458 --}}
+                                                        <div class="row mb-3 product-item align-items-center">
+                                                            <div class="col-md-3">
+                                                                <img src="https://via.placeholder.com/170x150?text=Gold+Necklace"
+                                                                    alt="Gold Necklace" class="img-fluid"
+                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
+                                                            </div>
+                                                            <div class="col-md-9">
+                                                                <p class="mb-1"><strong>Nama Produk:</strong> Gold
+                                                                    Necklace</p>
+                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 200.000</p>
+                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
+                                                            </div>
+                                                        </div>
+                                                        {{-- Product 2 for Order 123458 --}}
+                                                        <div class="row mb-3 product-item align-items-center">
+                                                            <div class="col-md-3">
+                                                                <img src="https://via.placeholder.com/170x150?text=Silver+Ring"
+                                                                    alt="Silver Ring" class="img-fluid"
+                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
+                                                            </div>
+                                                            <div class="col-md-9">
+                                                                <p class="mb-1"><strong>Nama Produk:</strong> Silver
+                                                                    Ring</p>
+                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 120.000</p>
+                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
+                                                            </div>
+                                                        </div>
+                                                        <p class="mt-3"><strong>Status Pesanan:</strong> Sedang Diproses</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
+
                                     {{-- Tab: Diproses --}}
+                                    @if(request('filter') == 'Diproses')
                                     <div class="tab-pane fade show active" id="diproses" role="tabpanel"
                                         aria-labelledby="diproses-tab">
                                         <div class="accordion" id="accordionDiproses">
@@ -88,6 +147,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
 
                                     {{-- Tab: Sudah Dikirim --}}
                                     <div class="tab-pane fade" id="sudah-dikirim" role="tabpanel"

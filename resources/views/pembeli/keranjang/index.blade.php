@@ -70,7 +70,7 @@
       </div>
 
       <div class="d-flex justify-content-center gap-4 mt-2">
-        <a href="{{ route('home') }}" class="btn btn-secondary px-4 py-2" style="border-radius: 6px;">Kembali Berbelanja</a>
+        <a href="{{ route('pembeli.home') }}" class="btn btn-secondary px-4 py-2" style="border-radius: 6px;">Kembali Berbelanja</a>
         <a href="#" id="btnCheckout" class="btn btn-keranjang px-4 py-2 disabled" style="border-radius: 6px; pointer-events: none;">Selesaikan Pesanan</a>
       </div>
       @else
