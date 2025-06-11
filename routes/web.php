@@ -73,7 +73,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     // Route Data Pesanan
     Route::get('/admin/data_pesanan/', [TransaksiController::class, 'indexadmin'])->name('admin.data_pesanan.index');
     Route::get('/admin/data_pesanan/{id}/detail', [TransaksiController::class, 'detailadmin'])->name('admin.data_pesanan.detail');
-
+    Route::put('/admin/data-pesanan/{id}/update-status', [TransaksiController::class, 'updateStatusadmin'])->name('admin.data_pesanan.update_status');
     // Route Data Review
     Route::get('/admin/data_review/', [ReviewController::class, 'indexadmin'])->name('admin.data_review.index');
     Route::get('/admin/data_review/{id}/detail', [ReviewController::class, 'detailadmin'])->name('admin.data_review.detail');
@@ -103,7 +103,7 @@ Route::middleware(['auth', 'role:Penjual'])->group(function () {
     // Route Data Transaksi
     Route::get('/penjual/data_pesanan/', [TransaksiController::class, 'indexpenjual'])->name('penjual.data_pesanan.index');
     Route::get('/penjual/data_pesanan/{id}/detail', [TransaksiController::class, 'detailpenjual'])->name('penjual.data_pesanan.detail');
-
+    Route::put('/penjual/data-pesanan/{id}/update-status', [TransaksiController::class, 'updateStatuspenjual'])->name('penjual.data_pesanan.update_status');
     // Route Data Review
     Route::get('/penjual/data_review/', [ReviewController::class, 'indexpenjual'])->name('penjual.data_review.index');
     Route::get('/penjual/data_review/{id}/detail', [ReviewController::class, 'detailpenjual'])->name('penjual.data_review.detail');

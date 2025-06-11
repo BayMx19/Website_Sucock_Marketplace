@@ -96,6 +96,17 @@ class TransaksiController extends Controller
         return view('admin.data_pesanan.detail', compact('pesanan'));
     }
 
+        public function updateStatusadmin($id)
+    {
+        $pesanan = pesanan::findOrFail($id);
+        if ($pesanan->status_pesanan === 'Sudah Dibayar') {
+            $pesanan->status_pesanan = 'Diproses';
+            $pesanan->save();
+        }
+
+        return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
+    }
+
     public function indexpenjual(Request $request)
     {
         $penjual_id = Auth::id();
@@ -185,7 +196,16 @@ class TransaksiController extends Controller
 
         return view('penjual.data_pesanan.detail', compact('pesanan'));
     }
+public function updateStatuspenjual($id)
+    {
+        $pesanan = pesanan::findOrFail($id);
+        if ($pesanan->status_pesanan === 'Diproses') {
+            $pesanan->status_pesanan = 'Sedang Dikirim';
+            $pesanan->save();
+        }
 
+        return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
+    }
     public function keranjang()
     {
         $keranjang = Keranjang::with(['produk.penjual'])

@@ -30,6 +30,14 @@
                             <td>
                                 <a href="{{ route('penjual.data_pesanan.detail', $p->id) }}"
                                     class="btn btn-primary btn-sm me-2">Detail</a>
+                                    @if($p->status_pesanan === 'Diproses')
+                                            <form action="{{ route('penjual.data_pesanan.update_status', $p->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="btn btn-success btn-sm"
+                                                    onclick="return confirm('Anda yakin ingin mengirim pesanan?')">Kirim Pesanan</button>
+                                            </form>
+                                        @endif
                             </td>
                         </tr>
                         @empty

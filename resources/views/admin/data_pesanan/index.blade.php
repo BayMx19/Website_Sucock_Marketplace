@@ -30,16 +30,15 @@
                             <td>
                                 <a href="{{ route('admin.data_pesanan.detail', $p->id) }}"
                                     class="btn btn-primary btn-sm me-2">Detail</a>
-                                <!-- <a href="{{ route('admin.data_users.edit', $p->id) }}"
-                                    class="btn btn-warning btn-sm me-2">Edit</a>
+                                    @if($p->status_pesanan === 'Sudah Dibayar')
+                                            <form action="{{ route('admin.data_pesanan.update_status', $p->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="btn btn-success btn-sm"
+                                                    onclick="return confirm('Ganti status menjadi Diproses?')">Proses Pesanan</button>
+                                            </form>
+                                        @endif
 
-                                <form action="{{ route('admin.data_users.destroy', $p->id) }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Yakin ingin menghapus?');">Hapus</button>
-                                </form> -->
                             </td>
                         </tr>
                         @empty
@@ -47,27 +46,7 @@
                             <td colspan="2">Data tidak ditemukan.</td>
                         </tr>
                         @endforelse
-                        <!-- <tr>
-                            <td>1</td>
-                            <td>Kurnia Sari</td>
-                            <td>TR20230524182407</td>
-                            <td>2023-05-24 23:24:07</td>
-                            <td>JP Gold</td>
-                            <td><button class='dt-setting'>Belum diBayar</button></td>
-                            <td><button class='pt-setting'>Sedang Dikemas</button></td>
-                            <td>
-                                <button data-toggle='modal' data-target="#exampleModalLong" class='pd-setting-ed'>
-                                    <i class='fa fa-light fa-eye'style="color: #ffffff;"></i>
-                                </button>
-                                <a href='/admin/datatransaksi/edit'><button data-toggle='tooltip' title='Edit Status' class='pt-setting'><i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i></button>
-                                </a>
-                                <a href='#' onclick="javascript: if(confirm('Apakah produk dengan nama JP Gold mau dihapus?')==true){window.location.href=''; } ">
-                                    <button data-toggle='tooltip' title='Hapus' class='ds-setting'>
-                                        <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
-                                    </button>
-                                </a>
-                            </td>
-                        </tr> -->
+
                     </table>
                 </div>
             </div>
