@@ -48,7 +48,7 @@ class TokoController extends Controller
      */
     public function detail($id)
     {
-        $toko = Toko::findOrFail($id);
+        $toko = Toko::with('alamat')->findOrFail($id);
         // dd($toko);
          return view('admin.data_toko.detail', compact('toko'));
 

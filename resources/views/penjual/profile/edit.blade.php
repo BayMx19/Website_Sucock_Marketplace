@@ -154,7 +154,7 @@
                                                                                 <input type="text" id="alamat"
                                                                                     name="alamat" class="form-control"
                                                                                     placeholder="Masukkan Alamat Anda"
-                                                                                    value="{{$profilPenjual->alamat}}">
+                                                                                    value="{{$profilPenjual->alamat->first()?->alamat}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -165,7 +165,7 @@
                                                                                 <input type="text" id="provinsi"
                                                                                     name="provinsi" class="form-control"
                                                                                     placeholder="Masukkan Provinsi Anda"
-                                                                                    value="{{$profilPenjual->provinsi}}">
+                                                                                    value="{{$profilPenjual->alamat->first()?->provinsi}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -176,7 +176,7 @@
                                                                                 <input type="text" id="kota" name="kota"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kota Anda"
-                                                                                    value="{{$profilPenjual->kota}}">
+                                                                                    value="{{$profilPenjual->alamat->first()?->kota}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -188,7 +188,7 @@
                                                                                     name="kecamatan"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kecamatan Anda"
-                                                                                    value="{{$profilPenjual->kecamatan}}">
+                                                                                    value="{{$profilPenjual->alamat->first()?->kecamatan}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -200,7 +200,7 @@
                                                                                     name="kelurahan"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kelurahan Anda"
-                                                                                    value="{{$profilPenjual->kelurahan}}">
+                                                                                    value="{{$profilPenjual->alamat->first()?->kelurahan}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -211,7 +211,7 @@
                                                                                 <input type="text" id="RT" name="RT"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan RT Anda"
-                                                                                    value="{{$profilPenjual->RT}}">
+                                                                                    value="{{$profilPenjual->alamat->first()?->RT}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -222,7 +222,7 @@
                                                                                 <input type="text" id="RW" name="RW"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan RW Anda"
-                                                                                    value="{{$profilPenjual->RW}}">
+                                                                                    value="{{$profilPenjual->alamat->first()?->RW}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -233,7 +233,7 @@
                                                                                 <input type="text" id="kode_pos"
                                                                                     name="kode_pos" class="form-control"
                                                                                     placeholder="Masukkan Kode Pos Anda"
-                                                                                    value="{{$profilPenjual->kode_pos}}">
+                                                                                    value="{{$profilPenjual->alamat->first()?->kode_pos}}">
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">

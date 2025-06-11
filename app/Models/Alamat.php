@@ -25,4 +25,9 @@ class Alamat extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    
+    public function toko()
+    {
+        return $this->belongsTo(Toko::class, 'user_id');
+    }
 }

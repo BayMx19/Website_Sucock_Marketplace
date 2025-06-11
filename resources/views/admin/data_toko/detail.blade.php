@@ -155,7 +155,7 @@
                                                                                 <input type="text" id="alamat"
                                                                                     name="alamat" class="form-control"
                                                                                     placeholder="Masukkan Alamat Toko Anda"
-                                                                                    value="{{$toko->alamat}}" readonly>
+                                                                                    value="{{$toko->alamat->first()?->alamat}}" readonly>
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -166,7 +166,7 @@
                                                                                 <input type="text" id="provinsi"
                                                                                     name="provinsi" class="form-control"
                                                                                     placeholder="Masukkan Provinsi Toko Anda"
-                                                                                    value="{{$toko->provinsi}}"
+                                                                                    value="{{$toko->alamat->first()?->provinsi}}"
                                                                                     readonly>
                                                                             </div>
                                                                             <div
@@ -178,7 +178,7 @@
                                                                                 <input type="text" id="kota" name="kota"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kota Toko Anda"
-                                                                                    value="{{$toko->kota}}" readonly>
+                                                                                    value="{{$toko->alamat->first()?->kota}}" readonly>
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -190,7 +190,7 @@
                                                                                     name="kecamatan"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kecamatan Toko Anda"
-                                                                                    value="{{$toko->kecamatan}}"
+                                                                                    value="{{$toko->alamat->first()?->kecamatan}}"
                                                                                     readonly>
                                                                             </div>
                                                                             <div
@@ -203,7 +203,7 @@
                                                                                     name="kelurahan"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan Kelurahan Toko Anda"
-                                                                                    value="{{$toko->kelurahan}}"
+                                                                                    value="{{$toko->alamat->first()?->kelurahan}}"
                                                                                     readonly>
                                                                             </div>
                                                                             <div
@@ -215,7 +215,7 @@
                                                                                 <input type="text" id="RT" name="RT"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan RT Toko Anda"
-                                                                                    value="{{$toko->RT}}" readonly>
+                                                                                    value="{{$toko->alamat->first()?->RT}}" readonly>
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -226,7 +226,7 @@
                                                                                 <input type="text" id="RW" name="RW"
                                                                                     class="form-control"
                                                                                     placeholder="Masukkan RW Toko Anda"
-                                                                                    value="{{$toko->RW}}" readonly>
+                                                                                    value="{{$toko->alamat->first()?->RW}}" readonly>
                                                                             </div>
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
@@ -237,7 +237,7 @@
                                                                                 <input type="text" id="kode_pos"
                                                                                     name="kode_pos" class="form-control"
                                                                                     placeholder="Masukkan Kode Pos Toko Anda"
-                                                                                    value="{{$toko->kode_pos}}"
+                                                                                    value="{{$toko->alamat->first()?->kode_pos}}"
                                                                                     readonly>
                                                                             </div>
                                                                             <!-- <div

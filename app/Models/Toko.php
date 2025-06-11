@@ -36,4 +36,9 @@ class Toko extends Model
         'password' => 'hashed',
     ];
 
+    public function alamat()
+    {
+        return $this->hasMany(Alamat::class, 'user_id');
+    }
+
 }
