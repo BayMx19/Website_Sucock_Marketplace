@@ -5,7 +5,8 @@
         <div class="product-status-wrap" style="margin-top: 75px;">
             <div class="row">
                 <div class="col-sm-12 table_inside">
-                    <h4 style="margin-left: 15px;">Data Produk</h4>
+                    <h4 style="text-align:center !important;">Chat</h4>
+                    <hr>
                     <div class="h-screen overflow-hidden">
                             @livewire('chat.chat-box')
                         </div>

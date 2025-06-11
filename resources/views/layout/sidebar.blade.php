@@ -104,7 +104,7 @@
                 <a class="has-arrow" href="#" aria-expanded="false"><i class="fa-solid fa-envelope"
                         style="color: #fefefe;"></i> <span class="mini-click-non" style=" color: #fff;">Chat</span></a>
                 <ul class="submenu-angle" aria-expanded="false">
-                    <li><a title="Semua Pesan" href="/penjual/datapesan"><span class="mini-sub-pro"
+                    <li><a title="Semua Pesan" href="/penjual/chat"><span class="mini-sub-pro"
                                 style=" color: #fff;">Semua Chat
                             </span></a></li>
                 </ul>

@@ -27,7 +27,7 @@
 
     <li class="nav-item">
         @auth
-        <a href="/pesan" class="nav-link"><i class="fa-solid fa-message"></i></a>
+        <a href="/chat" class="nav-link"><i class="fa-solid fa-message"></i></a>
         @else
         <a href="{{ route('login') }}" class="nav-link"><i class="fa-solid fa-message"></i></a>
         @endauth
