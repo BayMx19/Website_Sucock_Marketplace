@@ -113,7 +113,9 @@ Route::middleware(['auth', 'role:Penjual'])->group(function () {
     Route::get('/penjual/profile/', [ProfilController::class, 'indexpenjual'])->name('penjual.profile.index');
     Route::get('/penjual/profile/{id}/edit', [ProfilController::class, 'editpenjual'])->name('penjual.profile.edit');
     Route::put('/penjual/profile/{id}', [ProfilController::class, 'updatepenjual'])->name('penjual.profile.update');
-
+    Route::get('/penjual/chat', function () {
+        return view('Penjual.chat.index');
+    });
 });
 
 // --- END Route Penjual ---
@@ -133,4 +135,7 @@ Route::middleware(['auth', 'role:Pembeli'])->group(function () {
     Route::put('/profil/update', [ProfilController::class, 'updatepembeli'])->name('pembeli.update.profile');});
     Route::get('/checkout', [TransaksiController::class, 'checkoutPesanan'])->name('pembeli.checkout');
     Route::get('/riwayat-pesanan', [TransaksiController::class, 'riwayatPesanan'])->name('pembeli.riwayat-pesanan');
+    Route::get('/chat', function () {
+        return view('Pembeli.chat.index');
+    });
 // --- END Route Pembeli ---

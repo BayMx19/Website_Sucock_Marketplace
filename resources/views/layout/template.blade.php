@@ -33,8 +33,112 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-    <style>
-    </style>
+<style>
+    /* Custom styles for specific elements not fully covered by Tailwind or for finer control */
+    .chat-container {
+        min-height: calc(100vh - 80px); /* Sesuaikan tinggi sesuai kebutuhan, mempertimbangkan header/footer */
+        border-radius: 1rem; /* Sudut lebih membulat */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Shadow lebih besar */
+        font-family: 'Inter', sans-serif;
+    }
+
+    .chat-sidebar {
+        background-color: #e3f2fd; /* Latar belakang biru muda untuk sidebar */
+        border-radius: 1rem 0 0 1rem; /* Sudut membulat hanya di kiri */
+    }
+
+    .chat-main {
+        background-color: #ffffff; /* Latar belakang putih untuk area chat utama */
+        border-radius: 0 1rem 1rem 0; /* Sudut membulat hanya di kanan */
+    }
+
+    .user-list-item.active {
+        background-color: #d1e7dd; /* Hijau muda untuk pengguna aktif, seperti di gambar */
+        font-weight: 600;
+        color: #1a202c;
+    }
+
+    .message-bubble {
+        padding: 0.75rem 1rem;
+        border-radius: 1rem; /* Bubble pesan membulat */
+        line-height: 1.4;
+        max-width: 75%; /* Batasi lebar bubble */
+        word-break: break-word;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Shadow lembut untuk bubble */
+    }
+
+    .message-bubble.sent {
+        background-color: #007bff; /* Biru untuk pesan terkirim */
+        color: #ffffff;
+        border-bottom-right-radius: 0.25rem; /* 'Ekor' sudut sedikit */
+        margin-left: auto; /* Dorong ke kanan */
+    }
+
+    .message-bubble.received {
+        background-color: #f0f2f5; /* Abu-abu muda untuk pesan diterima */
+        color: #333;
+        border-bottom-left-radius: 0.25rem; /* 'Ekor' sudut sedikit */
+        margin-right: auto; /* Dorong ke kiri */
+    }
+
+    .chat-input-container {
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .chat-input-field {
+        padding: 0.75rem 1rem;
+        border-radius: 1.5rem; /* Field input sangat membulat */
+        border: 1px solid #cbd5e0;
+        outline: none;
+        transition: border-color 0.2s ease-in-out;
+    }
+
+    .chat-input-field:focus {
+        border-color: #4299e1; /* Border biru saat fokus */
+    }
+
+    .send-button {
+        background-color: #4299e1; /* Tombol kirim biru */
+        color: white;
+        padding: 0.75rem 1.25rem;
+        border-radius: 1.5rem;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .send-button:hover {
+        background-color: #3182ce; /* Biru lebih gelap saat hover */
+    }
+
+    .action-button {
+        color: #a0aec0; /* Ikon abu-abu */
+        font-size: 1.25rem;
+        transition: color 0.2s ease-in-out;
+    }
+
+    .action-button:hover {
+        color: #4a5568; /* Abu-abu lebih gelap saat hover */
+    }
+
+    /* Scrollbar styling (opsional, untuk estetika) */
+    .chat-messages-scrollable::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .chat-messages-scrollable::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .chat-messages-scrollable::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+
+    .chat-messages-scrollable::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+    @livewireStyles
 </head>
 
 <body class="index-page">
@@ -126,6 +230,32 @@
         }
     });
     </script>
+    @livewireScripts
+
+
+<script>
+    // Fungsi untuk melakukan scroll ke bagian bawah chat
+    function scrollToBottom() {
+        const element = document.getElementById('scroll-to-bottom');
+        if (element) {
+            // Gunakan scrollIntoView dengan behavior smooth untuk animasi
+            element.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    }
+
+    document.addEventListener('livewire:load', function () {
+        // Panggil scrollToBottom saat komponen Livewire pertama kali dimuat
+        scrollToBottom();
+
+        // Livewire hook untuk auto-scroll setelah setiap pesan diproses
+        Livewire.hook('message.processed', (message, component) => {
+            // Pastikan hanya komponen chat-box yang di-scroll
+            if (component.name === 'chat.chat-box') {
+                scrollToBottom();
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
