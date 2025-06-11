@@ -22,256 +22,140 @@
                                         <a class="nav-link active" id="sudah-dibayar-tab" data-bs-toggle="tab" href="#sudah-dibayar" role="tab" aria-controls="sudah-dibayar" aria-selected="true">Sudah Dibayar ({{ $jmlDibayar }})</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link {{ request('filter') === 'Diproses' ? 'active' : '' }}" id="diproses-tab" data-bs-toggle="tab"
-                                            href="{{ request()->fullUrlWithQuery(['filter' => 'Diproses']) }}" role="tab" aria-controls="diproses"
-                                            aria-selected="{{ request('filter') === 'Diproses' ? 'true' : 'false' }}">Diproses ({{ $jmlDiproses }})</a>
+                                        <a class="nav-link" id="diproses-tab" data-bs-toggle="tab" href="#diproses" role="tab" aria-controls="diproses" aria-selected="true">Diproses ({{ $jmlDiproses }})</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link {{ request('filter') === 'Sudah Dikirim' ? 'active' : '' }}" id="sudah-dikirim-tab" data-bs-toggle="tab"
-                                                href="{{ request()->fullUrlWithQuery(['filter' => 'Sudah Dikirim']) }}" role="tab" aria-controls="sudah-dikirim"
-                                                aria-selected="{{ request('filter') === 'Sudah Dikirim' ? 'true' : 'false' }}">Sudah Dikirim ({{ $jmlDikirim }})</a>
+                                        <a class="nav-link" id="sudah-dikirim-tab" data-bs-toggle="tab" href="#sudah-dikirim" role="tab" aria-controls="sudah-dikirim" aria-selected="true">Sudah Dikirim ({{ $jmlDikirim }})</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link {{ request('filter') === 'Selesai' ? 'active' : '' }}" id="selesai-tab" data-bs-toggle="tab"
-                                                href="{{ request()->fullUrlWithQuery(['filter' => 'Selesai']) }}" role="tab" aria-controls="selesai"
-                                                aria-selected="{{ request('filter') === 'Selesai' ? 'true' : 'false' }}">Selesai ({{ $jmlSelesai }})</a>
+                                        <a class="nav-link" id="selesai-tab" data-bs-toggle="tab" href="#selesai" role="tab" aria-controls="selesai" aria-selected="true">Selesai ({{ $jmlSelesai }})</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="orderStatusTabContent">
+                                @foreach ($pesanan as $pesananId => $items)
+                                    @php
+                                        $first = $items->first(); // Ambil data utama pesanan
+                                    @endphp
 
                                     {{-- Tab: Sudah Dibayar --}}
-                                    @if(request('filter') === 'Sudah Dibayar')
                                     <div class="tab-pane fade show active" id="sudah-dibayar" role="tabpanel"
                                         aria-labelledby="sudah-dibayar-tab">
-                                        <div class="accordion" id="accordionDiproses">
-                                            {{-- Order 1: Diproses --}}
+                                        <div class="accordion" id="accordionDibayar">
+                                        @if ($first->status_pesanan === 'Sudah Dibayar') 
                                             <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingDiprosesOne">
+                                                <h2 class="accordion-header" id="heading{{ $pesananId }}">
                                                     <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderDiproses1"
-                                                        aria-expanded="false" aria-controls="orderDiproses1"
+                                                        data-bs-toggle="collapse" data-bs-target="#orderDibayar{{ $pesananId }}"
+                                                        aria-expanded="false" aria-controls="orderDibayar{{ $pesananId }}"
                                                         style="background-color: whitesmoke;">
-                                                        Pesanan #123458 - Total: Rp. 320.000
+                                                        Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
                                                     </button>
                                                 </h2>
-                                                <div id="orderDiproses1" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingDiprosesOne">
+                                                <div id="orderDibayar{{ $pesananId }}" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingDibayar{{ $pesananId }}">
                                                     <div class="accordion-body">
-                                                        {{-- Product 1 for Order 123458 --}}
+                                                        @foreach ($items as $item)
                                                         <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Gold+Necklace"
-                                                                    alt="Gold Necklace" class="img-fluid"
+                                                            <div class="col-md-4">
+                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
+                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
                                                                     style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
                                                             </div>
-                                                            <div class="col-md-9">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Gold
-                                                                    Necklace</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 200.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
+                                                            <div class="col-md-8">
+                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
+                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
+                                                                <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
+                                                                <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
                                                             </div>
                                                         </div>
-                                                        {{-- Product 2 for Order 123458 --}}
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Silver+Ring"
-                                                                    alt="Silver Ring" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-9">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Silver
-                                                                    Ring</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 120.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
-                                                            </div>
-                                                        </div>
-                                                        <p class="mt-3"><strong>Status Pesanan:</strong> Sedang Diproses</p>
+                                                        <hr>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>
+                                        @endif
                                         </div>
                                     </div>
-                                    @endif
 
                                     {{-- Tab: Diproses --}}
-                                    @if(request('filter') == 'Diproses')
-                                    <div class="tab-pane fade show active" id="diproses" role="tabpanel"
+                                    <div class="tab-pane fade" id="diproses" role="tabpanel"
                                         aria-labelledby="diproses-tab">
                                         <div class="accordion" id="accordionDiproses">
-                                            {{-- Order 1: Diproses --}}
+                                        @if ($first->status_pesanan === 'Diproses') 
                                             <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingDiprosesOne">
+                                                <h2 class="accordion-header" id="heading{{ $pesananId }}">
                                                     <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderDiproses1"
-                                                        aria-expanded="false" aria-controls="orderDiproses1"
+                                                        data-bs-toggle="collapse" data-bs-target="#orderDiproses{{ $pesananId }}"
+                                                        aria-expanded="false" aria-controls="orderDiproses{{ $pesananId }}"
                                                         style="background-color: whitesmoke;">
-                                                        Pesanan #123458 - Total: Rp. 320.000
+                                                        Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
                                                     </button>
                                                 </h2>
-                                                <div id="orderDiproses1" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingDiprosesOne">
+                                                <div id="orderDiproses{{ $pesananId }}" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingDiproses{{ $pesananId }}">
                                                     <div class="accordion-body">
-                                                        {{-- Product 1 for Order 123458 --}}
+                                                        @foreach ($items as $item)
                                                         <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Gold+Necklace"
-                                                                    alt="Gold Necklace" class="img-fluid"
+                                                            <div class="col-md-4">
+                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
+                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
                                                                     style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
                                                             </div>
-                                                            <div class="col-md-9">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Gold
-                                                                    Necklace</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 200.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
+                                                            <div class="col-md-8">
+                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
+                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
+                                                                <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
+                                                                <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
                                                             </div>
                                                         </div>
-                                                        {{-- Product 2 for Order 123458 --}}
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Silver+Ring"
-                                                                    alt="Silver Ring" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-9">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Silver
-                                                                    Ring</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 120.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
-                                                            </div>
-                                                        </div>
-                                                        <p class="mt-3"><strong>Status Pesanan:</strong> Sedang Diproses</p>
+                                                        <hr>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>
+                                        @endif
                                         </div>
                                     </div>
-                                    @endif
 
                                     {{-- Tab: Sudah Dikirim --}}
                                     <div class="tab-pane fade" id="sudah-dikirim" role="tabpanel"
                                         aria-labelledby="sudah-dikirim-tab">
-                                        <div class="accordion" id="accordionSudahDikirim">
-                                            {{-- Order 1: Sudah Dikirim --}}
+                                        <div class="accordion" id="accordionDikirim">
+                                        @if ($first->status_pesanan === 'Sudah Dikirim') 
                                             <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingSudahDikirimOne">
+                                                <h2 class="accordion-header" id="heading{{ $pesananId }}">
                                                     <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderSudahDikirim1"
-                                                        aria-expanded="false" aria-controls="orderSudahDikirim1"
+                                                        data-bs-toggle="collapse" data-bs-target="#orderDikirim{{ $pesananId }}"
+                                                        aria-expanded="false" aria-controls="orderDikirim{{ $pesananId }}"
                                                         style="background-color: whitesmoke;">
-                                                        Pesanan #123459 - Total: Rp. 250.000
+                                                        Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
                                                     </button>
                                                 </h2>
-                                                <div id="orderSudahDikirim1" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingSudahDikirimOne">
+                                                <div id="orderDikirim{{ $pesananId }}" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingDikirim{{ $pesananId }}">
                                                     <div class="accordion-body">
-                                                        {{-- Product 1 for Order 123459 --}}
+                                                        @foreach ($items as $item)
                                                         <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Pearl+Bracelet"
-                                                                    alt="Pearl Bracelet" class="img-fluid"
+                                                            <div class="col-md-4">
+                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
+                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
                                                                     style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
                                                             </div>
-                                                            <div class="col-md-9">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Pearl
-                                                                    Bracelet</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 120.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
+                                                            <div class="col-md-8">
+                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
+                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
+                                                                <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
+                                                                <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
                                                             </div>
                                                         </div>
-                                                        {{-- Product 2 for Order 123459 --}}
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Diamond+Earrings"
-                                                                    alt="Diamond Earrings" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-9">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Diamond
-                                                                    Earrings</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 130.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
-                                                            </div>
-                                                        </div>
-                                                        <p class="mt-3"><strong>Nomor Resi:</strong> JNE123456789</p>
-                                                        <p><strong>Status Pengiriman:</strong> Dalam Perjalanan</p>
-                                                        <div class="text-end mt-3">
-                                                            <button class="btn btn-success">Pesanan Diterima</button>
-                                                        </div>
+                                                        <hr>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{-- Order 2: Sudah Dikirim --}}
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingSudahDikirimTwo">
-                                                    <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderSudahDikirim2"
-                                                        aria-expanded="false" aria-controls="orderSudahDikirim2"
-                                                        style="background-color: whitesmoke;">
-                                                        Pesanan #123460 - Total: Rp. 90.000
-                                                    </button>
-                                                </h2>
-                                                <div id="orderSudahDikirim2" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingSudahDikirimTwo">
-                                                    <div class="accordion-body">
-                                                        {{-- Product 1 for Order 123460 --}}
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Gemstone+Pendant"
-                                                                    alt="Gemstone Pendant" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-9">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Gemstone
-                                                                    Pendant</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 90.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
-                                                            </div>
-                                                        </div>
-                                                        <p class="mt-3"><strong>Nomor Resi:</strong> TIKI987654321</p>
-                                                        <p><strong>Status Pengiriman:</strong> Dalam Perjalanan</p>
-                                                        <div class="text-end mt-3">
-                                                            <button class="btn btn-success">Pesanan Diterima</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- Order 3: Sudah Dikirim --}}
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingSudahDikirimThree">
-                                                    <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderSudahDikirim3"
-                                                        aria-expanded="false" aria-controls="orderSudahDikirim3"
-                                                        style="background-color: whitesmoke;">
-                                                        Pesanan #123461 - Total: Rp. 60.000
-                                                    </button>
-                                                </h2>
-                                                <div id="orderSudahDikirim3" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingSudahDikirimThree">
-                                                    <div class="accordion-body">
-                                                        {{-- Product 1 for Order 123461 --}}
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Charm+Bracelet"
-                                                                    alt="Charm Bracelet" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-9">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Charm
-                                                                    Bracelet</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 60.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
-                                                            </div>
-                                                        </div>
-                                                        <p class="mt-3"><strong>Nomor Resi:</strong> POS000111222</p>
-                                                        <p><strong>Status Pengiriman:</strong> Dalam Perjalanan</p>
-                                                        <div class="text-end mt-3">
-                                                            <button class="btn btn-success">Pesanan Diterima</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        @endif
                                         </div>
                                     </div>
 
@@ -279,111 +163,50 @@
                                     <div class="tab-pane fade" id="selesai" role="tabpanel"
                                         aria-labelledby="selesai-tab">
                                         <div class="accordion" id="accordionSelesai">
-                                            {{-- Order 1: Selesai --}}
+                                        @if ($first->status_pesanan === 'Selesai') 
                                             <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingSelesaiOne">
+                                                <h2 class="accordion-header" id="heading{{ $pesananId }}">
                                                     <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderSelesai1"
-                                                        aria-expanded="false" aria-controls="orderSelesai1"
+                                                        data-bs-toggle="collapse" data-bs-target="#orderSelesai{{ $pesananId }}"
+                                                        aria-expanded="false" aria-controls="orderSelesai{{ $pesananId }}"
                                                         style="background-color: whitesmoke;">
-                                                        Pesanan #123462 - Total: Rp. 400.000
+                                                        Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
                                                     </button>
                                                 </h2>
-                                                <div id="orderSelesai1" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingSelesaiOne">
+                                                <div id="orderSelesai{{ $pesananId }}" class="accordion-collapse collapse"
+                                                    aria-labelledby="headingSelesai{{ $pesananId }}">
                                                     <div class="accordion-body">
-                                                        {{-- Product 1 for Order 123462 --}}
+                                                        @foreach ($items as $item)
                                                         <div class="row mb-3 product-item align-items-center">
                                                             <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Custom+Watch"
-                                                                    alt="Custom Watch" class="img-fluid"
+                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
+                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
                                                                     style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Custom
-                                                                    Watch</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 250.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
+                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
+                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
+                                                                <p class="mb-0"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
                                                             </div>
                                                             <div class="col-md-3 text-end">
                                                                 <button class="btn btn-secondary btn-sm review-button"
                                                                     data-bs-toggle="modal" data-bs-target="#reviewModal"
-                                                                    data-product-id="1" data-product-name="Custom Watch"
-                                                                    data-product-variant="Hitam, Kulit"
-                                                                    data-product-image="https://via.placeholder.com/170x150?text=Custom+Watch">Berikan
+                                                                    data-product-id="1" data-product-name="{{ $item->nama_produk }}"
+                                                                    data-product-image="{{ asset('storage/' . $item->gambar) }}">Berikan
                                                                     Penilaian</button>
                                                             </div>
                                                         </div>
-                                                        {{-- Product 2 for Order 123462 --}}
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Leather+Wallet"
-                                                                    alt="Leather Wallet" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Leather
-                                                                    Wallet</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 150.000</p>
-                                                                <p class="mb-0">
-                                                                <strong>Jumlah:</strong> 1</p>
-                                                            </div>
-                                                            <div class="col-md-3 text-end">
-                                                                <button class="btn btn-secondary btn-sm review-button"
-                                                                    data-bs-toggle="modal" data-bs-target="#reviewModal"
-                                                                    data-product-id="2" data-product-name="Leather Wallet"
-                                                                    data-product-variant="Coklat"
-                                                                    data-product-image="https://via.placeholder.com/170x150?text=Leather+Wallet">Berikan
-                                                                    Penilaian</button>
-                                                            </div>
-                                                        </div>
-                                                        <p class="mt-3"><strong>Status:</strong> Selesai</p>
-                                                        <p><strong>Tanggal Selesai:</strong> 01 Juni 2025</p>
+                                                        <p class="mt-3"><strong>Status:</strong> {{ $item->status_pesanan }}</p>
+                                                        <p><strong>Tanggal Selesai:</strong> {{ $item->updated_at }}</p>
+                                                        <hr>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{-- Order 2: Selesai --}}
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingSelesaiTwo">
-                                                    <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderSelesai2"
-                                                        aria-expanded="false" aria-controls="orderSelesai2"
-                                                        style="background-color: whitesmoke;">
-                                                        Pesanan #123463 - Total: Rp. 180.000
-                                                    </button>
-                                                </h2>
-                                                <div id="orderSelesai2" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingSelesaiTwo">
-                                                    <div class="accordion-body">
-                                                        {{-- Product 1 for Order 123463 --}}
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="https://via.placeholder.com/170x150?text=Gold+Chain"
-                                                                    alt="Gold Chain" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p class="mb-1"><strong>Nama Produk:</strong> Gold
-                                                                    Chain</p>
-                                                                <p class="mb-1"><strong>Harga:</strong> Rp. 180.000</p>
-                                                                <p class="mb-0"><strong>Jumlah:</strong> 1</p>
-                                                            </div>
-                                                            <div class="col-md-3 text-end">
-                                                                <button class="btn btn-secondary btn-sm review-button"
-                                                                    data-bs-toggle="modal" data-bs-target="#reviewModal"
-                                                                    data-product-id="3" data-product-name="Gold Chain"
-                                                                    data-product-variant="Panjang 50cm"
-                                                                    data-product-image="https://via.placeholder.com/170x150?text=Gold+Chain">Berikan
-                                                                    Penilaian</button>
-                                                            </div>
-                                                        </div>
-                                                        <p class="mt-3"><strong>Status:</strong> Selesai</p>
-                                                        <p><strong>Tanggal Selesai:</strong> 05 Mei 2025</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        @endif
                                         </div>
                                     </div>
+                                @endforeach
                                 </div>
                             </div>
                         </div>

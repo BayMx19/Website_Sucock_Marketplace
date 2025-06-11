@@ -302,6 +302,7 @@ public function updateStatuspenjual($id)
                 'pesanan.id',
                 'pesanan.kode_pesanan',
                 'pesanan.total_harga',
+                'pesanan.updated_at',
                 'pesanan.status_pesanan',
                 'produk.nama_produk',
                 'produk.harga',
@@ -310,7 +311,8 @@ public function updateStatuspenjual($id)
                 'keranjang.amount as jumlah_produk'
             )
             ->where('pembeli.id', $pembeli_id)
-            ->get();
+            ->get()
+            ->groupBy('pesanan.id');
 
         // dd($pesanan);
 
