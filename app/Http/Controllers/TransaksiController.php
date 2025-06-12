@@ -196,11 +196,11 @@ class TransaksiController extends Controller
 
         return view('penjual.data_pesanan.detail', compact('pesanan'));
     }
-public function updateStatuspenjual($id)
+    public function updateStatuspenjual($id)
     {
         $pesanan = pesanan::findOrFail($id);
         if ($pesanan->status_pesanan === 'Diproses') {
-            $pesanan->status_pesanan = 'Sedang Dikirim';
+            $pesanan->status_pesanan = 'Sudah Dikirim';
             $pesanan->save();
         }
 
@@ -304,6 +304,7 @@ public function updateStatuspenjual($id)
                 'pesanan.total_harga',
                 'pesanan.updated_at',
                 'pesanan.status_pesanan',
+                'produk.id as produk_id',
                 'produk.nama_produk',
                 'produk.harga',
                 'produk.gambar',
@@ -317,6 +318,14 @@ public function updateStatuspenjual($id)
         // dd($pesanan);
 
         return view('pembeli.riwayat_transaksi.index', compact('pesanan', 'jmlDiproses', 'jmlDikirim', 'jmlDibayar', 'jmlSelesai'));
+    }
+    public function selesaikanPesanan($id)
+    {
+        $pesanan = Pesanan::findOrFail($id);
+        $pesanan->status_pesanan = 'Selesai';
+        $pesanan->save();
+
+        return redirect()->back()->with('success', 'Pesanan telah diselesaikan.');
     }
 
     public function checkoutPesanan()

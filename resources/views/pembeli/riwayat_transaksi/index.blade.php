@@ -5,7 +5,14 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 @endsection
 
+
 @section('content')
+@if (session('success'))
+  <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+@if (session('error'))
+  <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
     <main>
         <div class="popular-items section-padding">
             <div class="container">
@@ -43,7 +50,7 @@
                                     <div class="tab-pane fade show active" id="sudah-dibayar" role="tabpanel"
                                         aria-labelledby="sudah-dibayar-tab">
                                         <div class="accordion" id="accordionDibayar">
-                                        @if ($first->status_pesanan === 'Sudah Dibayar') 
+                                        @if ($first->status_pesanan === 'Sudah Dibayar')
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="heading{{ $pesananId }}">
                                                     <button class="accordion-button collapsed" type="button"
@@ -67,7 +74,7 @@
                                                                 <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
                                                                 <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
                                                                 <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
-                                                                <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
+                                                                <p class="mb-0"><strong>Status Pesanan {{ $first->kode_pesanan }} :</strong> {{ $item->status_pesanan }}</p>
                                                             </div>
                                                         </div>
                                                         <hr>
@@ -83,7 +90,7 @@
                                     <div class="tab-pane fade" id="diproses" role="tabpanel"
                                         aria-labelledby="diproses-tab">
                                         <div class="accordion" id="accordionDiproses">
-                                        @if ($first->status_pesanan === 'Diproses') 
+                                        @if ($first->status_pesanan === 'Diproses')
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="heading{{ $pesananId }}">
                                                     <button class="accordion-button collapsed" type="button"
@@ -107,7 +114,7 @@
                                                                 <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
                                                                 <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
                                                                 <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
-                                                                <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
+                                                                <p class="mb-0"><strong>Status Pesanan {{ $first->kode_pesanan }} :</strong> {{ $item->status_pesanan }}</p>
                                                             </div>
                                                         </div>
                                                         <hr>
@@ -123,7 +130,7 @@
                                     <div class="tab-pane fade" id="sudah-dikirim" role="tabpanel"
                                         aria-labelledby="sudah-dikirim-tab">
                                         <div class="accordion" id="accordionDikirim">
-                                        @if ($first->status_pesanan === 'Sudah Dikirim') 
+                                        @if ($first->status_pesanan === 'Sudah Dikirim')
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="heading{{ $pesananId }}">
                                                     <button class="accordion-button collapsed" type="button"
@@ -152,6 +159,14 @@
                                                         </div>
                                                         <hr>
                                                         @endforeach
+                                                        <div class="d-flex justify-content-end">
+                                                            <form action="{{ route('pesanan.selesai', $first->id) }}" method="POST">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-success">
+                                                                    Selesaikan Pesanan
+                                                                </button>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -163,7 +178,7 @@
                                     <div class="tab-pane fade" id="selesai" role="tabpanel"
                                         aria-labelledby="selesai-tab">
                                         <div class="accordion" id="accordionSelesai">
-                                        @if ($first->status_pesanan === 'Selesai') 
+                                        @if ($first->status_pesanan === 'Selesai')
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="heading{{ $pesananId }}">
                                                     <button class="accordion-button collapsed" type="button"
@@ -189,17 +204,39 @@
                                                                 <p class="mb-0"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
                                                             </div>
                                                             <div class="col-md-3 text-end">
+                                                            @php
+                                                                $review = \App\Models\Review::where('produk_id', $item->produk_id)
+                                                                    ->where('pesanan_id', $first->id)
+                                                                    ->first();
+                                                            @endphp
+
+                                                            @if ($review)
+                                                                <div class="mb-2">
+                                                                    <strong>Penilaian:</strong>
+                                                                    @for ($i = 1; $i <= 5; $i++)
+                                                                        <i class="fas fa-star {{ $i <= $review->bintang ? 'text-warning' : 'text-secondary' }}"></i>
+                                                                    @endfor
+                                                                    @if ($review->review_text)
+                                                                        <p class="mt-1">{{ $review->review_text }}</p>
+                                                                    @endif
+                                                                </div>
+                                                            @else
                                                                 <button class="btn btn-secondary btn-sm review-button"
-                                                                    data-bs-toggle="modal" data-bs-target="#reviewModal"
-                                                                    data-product-id="1" data-product-name="{{ $item->nama_produk }}"
-                                                                    data-product-image="{{ asset('storage/' . $item->gambar) }}">Berikan
-                                                                    Penilaian</button>
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#reviewModal"
+                                                                    data-product-id="{{ $item->produk_id }}"
+                                                                    data-order-id="{{ $first->id }}"
+                                                                    data-product-name="{{ $item->nama_produk }}"
+                                                                    data-product-image="{{ asset('storage/' . $item->gambar) }}">
+                                                                    Berikan Penilaian
+                                                                </button>
+                                                            @endif
                                                             </div>
                                                         </div>
-                                                        <p class="mt-3"><strong>Status:</strong> {{ $item->status_pesanan }}</p>
-                                                        <p><strong>Tanggal Selesai:</strong> {{ $item->updated_at }}</p>
                                                         <hr>
                                                         @endforeach
+                                                        <p class="mt-3"><strong>Status Pesanan {{ $first->kode_pesanan }} :</strong> {{ $item->status_pesanan }}</p>
+                                                        <p><strong>Tanggal Selesai:</strong> {{ $item->updated_at }}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -216,239 +253,125 @@
         </div>
     </main>
 
-    {{-- Single Modal for Product Review --}}
-    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reviewModalLabel"></h5>
-                    {{-- Judul akan diisi JS --}}
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row align-items-center mb-3">
-                        <div class="col-auto text-center">
-                            Custom Watch
-                        </div>
-                        <div class="col">
-                            <p class="mb-0 fw-bold" id="productNameModal"></p>
-                            <small class="text-muted" id="productVariantModal"></small>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center mb-3">
-                        <div class="rating-stars" id="ratingStars">
-                            <i class="fas fa-star star-icon" data-rating="1"></i>
-                            <i class="fas fa-star star-icon" data-rating="2"></i>
-                            <i class="fas fa-star star-icon" data-rating="3"></i>
-                            <i class="fas fa-star star-icon" data-rating="4"></i>
-                            <i class="fas fa-star star-icon" data-rating="5"></i>
-                        </div>
-                        <input type="hidden" id="selectedRating" name="rating" value="0">
-                        {{-- Default value 0 --}}
-                    </div>
-
-
-
-
-                    <p class="fw-bold">Apa yang bikin kamu puas?</p>
-                    <form id="reviewForm">
-                        <input type="hidden" id="modalProductId" name="product_id">
-                        <div class="mb-3">
-                            <textarea class="form-control" id="reviewText" name="review_text" rows="4"
-                                placeholder="Ceritain kepuasanmu tentang kualitas barang dan pelayanan penjual."
-                                required></textarea>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-outline-secondary me-2"
-                                data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Kirim Penilaian</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<!-- Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="reviewForm" action="{{ route('review.store') }}" method="POST">
+      @csrf
+      <div class="modal-content">
+        <div class="modal-header justify-content-center">
+          <h5 class="modal-title text-center" id="reviewModalLabel">Beri Penilaian</h5>
         </div>
-    </div>
+        <div class="modal-body">
+          <div class="text-center mb-3">
+            <img id="reviewProductImage" src="" class="img-fluid rounded" style="max-height: 150px;">
+            <h5 id="reviewProductName" class="mt-2"></h5>
+          </div>
+
+          <input type="hidden" id="produkId" name="produk_id">
+          <input type="hidden" id="pesananId" name="pesanan_id">
+
+          <div class="mb-3 text-center">
+            <label class="form-label d-block">Rating:</label>
+            <div id="starRating">
+              @for ($i = 1; $i <= 5; $i++)
+                <i class="fas fa-star fa-2x star-icon text-secondary" data-value="{{ $i }}" style="cursor: pointer;"></i>
+              @endfor
+            </div>
+            <input type="hidden" name="bintang" id="bintangInput" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Ulasan:</label>
+            <textarea name="review_text" class="form-control" placeholder="Tulis ulasan Anda..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="submit" class="btn btn-primary w-100">Kirim</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+    <style>
+    .star-icon.text-warning {
+        color: #ffc107 !important;
+    }
+    </style>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const stars = document.querySelectorAll('#starRating .star-icon');
+    const bintangInput = document.getElementById('bintangInput');
+
+    stars.forEach(function (star, index) {
+        star.addEventListener('click', function () {
+        const rating = index + 1;
+        bintangInput.value = rating;
+
+        stars.forEach((s, i) => {
+            s.classList.toggle('text-warning', i < rating);
+            s.classList.toggle('text-secondary', i >= rating);
+        });
+        });
+    });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const reviewButtons = document.querySelectorAll('.review-button');
+        reviewButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const productId = button.getAttribute('data-product-id');
+                const orderId = button.getAttribute('data-order-id');
+                const productName = button.getAttribute('data-product-name');
+                const productImage = button.getAttribute('data-product-image');
+                // Isi nilai ke modal
+            document.getElementById('produkId').value = productId;
+                        document.getElementById('pesananId').value = orderId;
+                                    document.getElementById('modalProductName').textContent = productName;
+                        document.getElementById('modalProductImage').src = productImage;
+                    });
+                });
+    document.querySelector('#reviewForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                    const modalEl = document.getElementById('reviewModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+
+                    alert('Review berhasil dikirim!');
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                } else {
+                    alert('Gagal mengirim review!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengirim review.');
+            }
+        });});
+</script>
+
 
 @endsection
 
-@push('styles')
-    <style>
-        /* Tambahkan CSS ini untuk styling bintang */
-        .rating-stars .star-icon {
-            color: #e4e5e9;
-            /* Warna abu-abu default */
-            font-size: 2em;
-            /* Ukuran bintang */
-            cursor: pointer;
-            transition: color 0.2s ease-in-out;
-        }
-
-        /* Warna kuning saat bintang di-hover atau diberi kelas 'hovered' (untuk transisi) */
-        .rating-stars .star-icon.hovered,
-        .rating-stars .star-icon:hover {
-            color: #ffc107;
-            /* Kuning */
-        }
-
-        /* Warna kuning saat bintang 'selected' (diklik) */
-        .rating-stars .star-icon.selected {
-            color: #ffc107 !important;
-            /* Gunakan !important untuk memastikan override */
-        }
-    </style>
-@endpush
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var reviewButtons = document.querySelectorAll('.review-button');
-            var reviewModalElement = document.getElementById('reviewModal');
-            var reviewModal = new bootstrap.Modal(reviewModalElement);
-
-            var productNameModal = document.getElementById('productNameModal');
-            var productVariantModal = document.getElementById('productVariantModal');
-            var productImage = document.getElementById('productImage');
-            var modalProductId = document.getElementById('modalProductId');
-            var selectedRatingInput = document.getElementById('selectedRating');
-            var reviewTextarea = document.getElementById('reviewText');
-            var ratingStarsContainer = document.getElementById('ratingStars');
-            var starIcons = ratingStarsContainer.querySelectorAll('.star-icon');
-
-            // Fungsi untuk mengupdate tampilan bintang berdasarkan rating
-            function updateStarDisplay(ratingValue) {
-                starIcons.forEach(star => {
-                    if (parseInt(star.dataset.rating) <= ratingValue) {
-                        star.classList.add('selected');
-                    } else {
-                        star.classList.remove('selected');
-                    }
-                });
-            }
-
-            // Reset modal saat ditutup
-            reviewModalElement.addEventListener('hidden.bs.modal', function() {
-                document.getElementById('reviewModalLabel').textContent = '';
-                productNameModal.textContent = '';
-                productVariantModal.textContent = '';
-                productImage.src = '';
-                productImage.alt = '';
-                modalProductId.value = '';
-                selectedRatingInput.value = '0'; // Reset rating ke 0
-                reviewTextarea.value = ''; // Clear textarea
-                updateStarDisplay(0); // Reset tampilan bintang
-            });
-
-            // Event listener untuk tombol review (membuka modal)
-            reviewButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    var productId = this.dataset.productId;
-                    var productName = this.dataset.productName;
-                    var productVariant = this.dataset.productVariant;
-                    var productImageUrl = this.dataset.productImage;
-
-                    document.getElementById('reviewModalLabel').textContent = 'Berikan Penilaian untuk ' +
-                        productName;
-                    productNameModal.textContent = productName;
-                    productVariantModal.textContent = 'Varian: ' + productVariant;
-                    productImage.src = productImageUrl;
-                    productImage.alt = productName;
-                    modalProductId.value = productId; // Set product_id ke hidden input
-
-                    // Reset rating saat modal dibuka
-                    selectedRatingInput.value = '0';
-                    updateStarDisplay(0); // Set semua bintang ke abu-abu
-                });
-            });
-
-            // Event listener untuk klik bintang
-            ratingStarsContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('star-icon')) {
-                    let rating = parseInt(e.target.dataset.rating);
-                    selectedRatingInput.value = rating; // Set nilai rating ke hidden input
-                    updateStarDisplay(rating); // Update tampilan bintang
-                }
-            });
-
-            // Event listener untuk hover bintang (memvisualisasikan rating)
-            ratingStarsContainer.addEventListener('mouseover', function(e) {
-                if (e.target.classList.contains('star-icon')) {
-                    let hoverRating = parseInt(e.target.dataset.rating);
-                    starIcons.forEach(star => {
-                        if (parseInt(star.dataset.rating) <= hoverRating) {
-                            star.classList.add('hovered');
-                        } else {
-                            star.classList.remove('hovered');
-                        }
-                    });
-                }
-            });
-
-            // Event listener untuk mouseleave dari area bintang
-            ratingStarsContainer.addEventListener('mouseleave', function() {
-                let currentRating = parseInt(selectedRatingInput.value);
-                starIcons.forEach(star => {
-                    star.classList.remove('hovered'); // Hapus kelas hovered
-                });
-                updateStarDisplay(currentRating); // Kembalikan ke rating yang dipilih
-            });
-
-            // Handle form submission (contoh sederhana, Anda perlu menambahkan AJAX di sini)
-            document.getElementById('reviewForm').addEventListener('submit', function(e) {
-                e.preventDefault(); // Mencegah form dari submit default
-
-                const productId = document.getElementById('modalProductId').value;
-                const rating = document.getElementById('selectedRating').value;
-                const reviewText = document.getElementById('reviewText').value;
-
-                if (rating === '0' || !rating) {
-                    alert('Silakan berikan rating bintang!');
-                    return;
-                }
-                if (!reviewText.trim()) {
-                    alert('Ulasan tidak boleh kosong!');
-                    return;
-                }
-
-
-                console.log('Mengirim review:', {
-                    product_id: productId,
-                    bintang: rating,
-                    review_text: reviewText
-                });
-
-                // TODO: Di sini Anda akan menggunakan AJAX (Fetch API atau Axios) untuk mengirim data ke Laravel backend Anda.
-                // Contoh Fetch API:
-
-                fetch('/api/reviews', { // Ganti dengan endpoint API Anda
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Pastikan token CSRF dikirim jika Anda menggunakan Laravel
-                        },
-                        body: JSON.stringify({
-                            product_id: productId,
-                            bintang: rating,
-                            review_text: reviewText
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Review berhasil dikirim:', data);
-                        reviewModal.hide(); // Sembunyikan modal
-                        alert('Terima kasih atas ulasan Anda!');
-                        // Opsional: perbarui UI (misalnya, ubah tombol "Berikan Penilaian" menjadi "Ulasan Terkirim")
-                    })
-                    .catch(error => {
-                        console.error('Error mengirim review:', error);
-                        alert('Terjadi kesalahan saat mengirim ulasan.');
-                    });
-
-
-                // Untuk demo, langsung sembunyikan modal
-                reviewModal.hide();
-                alert('Ulasan berhasil dikirim (simulasi)!');
-            });
-        });
-    </script>
-@endpush

@@ -135,6 +135,8 @@ Route::middleware(['auth', 'role:Pembeli'])->group(function () {
     Route::put('/profil/update', [ProfilController::class, 'updatepembeli'])->name('pembeli.update.profile');});
     Route::get('/checkout', [TransaksiController::class, 'checkoutPesanan'])->name('pembeli.checkout');
     Route::get('/riwayat-pesanan', [TransaksiController::class, 'riwayatPesanan'])->name('pembeli.riwayat-pesanan');
+    Route::post('/pesanan/{id}/selesai', [TransaksiController::class, 'selesaikanPesanan'])->name('pesanan.selesai');
+    Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
     Route::get('/chat', function () {
         return view('Pembeli.chat.index');
     });
