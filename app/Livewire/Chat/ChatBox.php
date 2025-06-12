@@ -20,7 +20,6 @@ class ChatBox extends Component
         $this->userId = $userId;
         $authId = Auth::id();
 
-        // Ambil user yang pernah terlibat percakapan
         $from = Message::where('to_user_id', $authId)->pluck('from_user_id')->toArray();
         $to = Message::where('from_user_id', $authId)->pluck('to_user_id')->toArray();
         $allUserIds = array_unique(array_merge($from, $to));
@@ -32,17 +31,12 @@ class ChatBox extends Component
             if ($user) {
                 $this->selectedUser = $user;
 
-                // Tambahkan jika belum ada di list users
                 if (!$this->users->contains('id', $user->id)) {
                     $this->users->push($user);
                 }
 
-                // Ambil pesan dari dan ke user ini
                 $this->loadMessages();
             }
-        }
-        if ($this->selectedUser) {
-            Log::info('Selected user:', ['id' => $this->selectedUser->id, 'name' => $this->selectedUser->name]);
         }
 
     }
