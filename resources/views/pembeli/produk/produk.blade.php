@@ -62,9 +62,11 @@
                                 <p class="mb-1"><strong>Stok:</strong> {{ $produk->stok }}</p>
                                 <p class="mb-1"><strong>Penjual:</strong> {{ $produk->user->name }}</p>
                                 <p class="mt-2">{{ $produk->deskripsi }}</p>
-                                <a href="{{ route('chat.send.initial', ['productId' => $produk->id]) }}" class="btn btn-outline-success mt-3">
-                                    Chat Penjual
-                                </a>
+                                @auth
+                                        <a href="{{ route('chat.send.initial', ['productId' => $produk->id]) }}" class="btn btn-success mt-3">
+                                            Chat Penjual
+                                        </a>
+                                @endauth
                                 <hr>
                                 <div class="mt-3">
                                     <label for="jumlah_{{ $produk->id }}" class="form-label"><strong>Jumlah:</strong></label>
