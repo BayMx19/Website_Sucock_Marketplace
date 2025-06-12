@@ -221,7 +221,7 @@
                                                                     @endif
                                                                 </div>
                                                             @else
-                                                                <button class="btn btn-secondary btn-sm review-button"
+                                                                <button class="btn btn-review btn-sm review-button"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#reviewModal"
                                                                     data-product-id="{{ $item->produk_id }}"
@@ -287,7 +287,7 @@
           </div>
         </div>
         <div class="modal-footer justify-content-center">
-          <button type="submit" class="btn btn-primary w-100">Kirim</button>
+          <button type="submit" class="btn btn-review-kirim w-100">Kirim</button>
         </div>
       </div>
     </form>
