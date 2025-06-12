@@ -7,6 +7,7 @@ use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TokoController;
@@ -138,6 +139,8 @@ Route::middleware(['auth', 'role:Pembeli'])->group(function () {
     Route::post('/pesanan/{id}/selesai', [TransaksiController::class, 'selesaikanPesanan'])->name('pesanan.selesai');
     Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
     Route::get('/chat', function () {
-        return view('Pembeli.chat.index');
-    });
+        return view('Pembeli.chat.index', ['userId' => request('userId')]);
+    })->name('chat.with');
+    Route::get('/chat/send-initial/{productId}', [ChatController::class, 'sendInitialMessage'])->name('chat.send.initial');
+
 // --- END Route Pembeli ---

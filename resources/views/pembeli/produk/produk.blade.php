@@ -49,8 +49,8 @@
             <div class="modal fade" id="modalProduk{{ $produk->id }}" tabindex="-1" aria-labelledby="produkModalLabel{{ $produk->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="produkModalLabel{{ $produk->id }}">{{ $produk->nama }}</h5>
+                        <div class="modal-header position-relative">
+                            <h5 class="modal-title  w-100 text-center text-bold" id="produkModalLabel{{ $produk->id }}">{{ $produk->nama_produk }}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                         </div>
                         <div class="modal-body d-flex flex-wrap">
@@ -62,6 +62,9 @@
                                 <p class="mb-1"><strong>Stok:</strong> {{ $produk->stok }}</p>
                                 <p class="mb-1"><strong>Penjual:</strong> {{ $produk->user->name }}</p>
                                 <p class="mt-2">{{ $produk->deskripsi }}</p>
+                                <a href="{{ route('chat.send.initial', ['productId' => $produk->id]) }}" class="btn btn-outline-success mt-3">
+                                    Chat Penjual
+                                </a>
                                 <hr>
                                 <div class="mt-3">
                                     <label for="jumlah_{{ $produk->id }}" class="form-label"><strong>Jumlah:</strong></label>

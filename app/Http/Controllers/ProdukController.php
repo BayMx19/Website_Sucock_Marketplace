@@ -67,7 +67,7 @@ class ProdukController extends Controller
                     $q2->where('nama_produk', 'like', "%{$search}%");
                 });
             });
-        
+
         $produk = $query->paginate($perPage);
 
         return view('penjual.data_produk.index', compact('produk'));
@@ -157,4 +157,9 @@ class ProdukController extends Controller
 
         return redirect()->route('penjual.data_produk.index')->with('success', 'Produk berhasil dihapus.');
     }
+    public function index()
+    {
+        $list_produk = Produk::all(); // Ambil semua data produk
+        return view('pembeli.produk.produk', compact('list_produk')); // Kirim ke view produk/index.blade.php
+}
 }

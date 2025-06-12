@@ -6,18 +6,47 @@ use Livewire\Component;
 use App\Models\User;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ChatBox extends Component
 {
+    public $userId;
     public $users = [];
-    public $selectedUser = null;
+    public $selectedUser;
     public $messages = [];
     public $newMessage = '';
-
-    public function mount()
+    public function mount($userId = null)
     {
-        $this->users = User::where('id', '!=', Auth::id())->get();
+        $this->userId = $userId;
+        $authId = Auth::id();
+
+        // Ambil user yang pernah terlibat percakapan
+        $from = Message::where('to_user_id', $authId)->pluck('from_user_id')->toArray();
+        $to = Message::where('from_user_id', $authId)->pluck('to_user_id')->toArray();
+        $allUserIds = array_unique(array_merge($from, $to));
+
+        $this->users = User::whereIn('id', $allUserIds)->get();
+
+        if ($this->userId) {
+            $user = User::find($this->userId);
+            if ($user) {
+                $this->selectedUser = $user;
+
+                // Tambahkan jika belum ada di list users
+                if (!$this->users->contains('id', $user->id)) {
+                    $this->users->push($user);
+                }
+
+                // Ambil pesan dari dan ke user ini
+                $this->loadMessages();
+            }
+        }
+        if ($this->selectedUser) {
+            Log::info('Selected user:', ['id' => $this->selectedUser->id, 'name' => $this->selectedUser->name]);
+        }
+
     }
+
 
     public function selectUser($userId)
     {
@@ -25,16 +54,24 @@ class ChatBox extends Component
         $this->loadMessages();
     }
 
-    public function loadMessages()
+public function loadMessages()
 {
-    $this->messages = Message::where(function ($q) {
-        $q->where('from_user_id', Auth::id())
-          ->where('to_user_id', $this->selectedUser->id);
-    })->orWhere(function ($q) {
-        $q->where('from_user_id', $this->selectedUser->id)
-          ->where('to_user_id', Auth::id());
-    })->orderBy('created_at')->get()->toArray();
+    if ($this->selectedUser) {
+        $authId = Auth::id();
+        $this->messages = Message::where(function ($query) use ($authId) {
+                $query->where('from_user_id', $authId)
+                      ->orWhere('to_user_id', $authId);
+            })
+            ->where(function ($query) {
+                $query->where('from_user_id', $this->selectedUser->id)
+                      ->orWhere('to_user_id', $this->selectedUser->id);
+            })
+            ->orderBy('created_at')
+            ->get()
+            ->toArray();
+    }
 }
+
 
 
     public function sendMessage()
@@ -51,6 +88,7 @@ class ChatBox extends Component
 
         $this->newMessage = '';
         $this->loadMessages();
+
     }
 
     public function render()

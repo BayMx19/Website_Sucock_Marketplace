@@ -15,8 +15,7 @@
                     <div class="whole-wrap">
                         <div class="container ml-20">
                             <div class="h-screen overflow-hidden">
-                                @livewire('chat.chat-box')
-                            </div>
+                                <livewire:chat.chat-box :userId="$userId ?? null" />                            </div>
                         </div>
                     </div>
                 </div>
