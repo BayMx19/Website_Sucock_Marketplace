@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('jumlahKeranjang', $jumlahKeranjang);
         }
-    });
+        });
+
+
     }
 }
