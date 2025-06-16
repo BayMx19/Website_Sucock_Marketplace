@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('pesanan_id')->unsigned();
             $table->foreign('pesanan_id')->references('id')->on('pesanan')->onDelete('cascade')->onUpdate('cascade');
             $table->string('metode_pengiriman');
-            $table->date('tanggal_pengiriman');
+            $table->date('tanggal_pengiriman')->nullable();
             $table->date('tanggal_diterima')->nullable();
             $table->string('status_pengiriman');
             $table->timestamps();

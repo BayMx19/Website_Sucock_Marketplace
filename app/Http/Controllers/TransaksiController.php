@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Keranjang;
 use App\Models\pesanan;
+use App\Models\pengiriman;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +34,7 @@ class TransaksiController extends Controller
             ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
             ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
             ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+            ->whereIn('pesanan.status_pesanan', ['Sudah Dibayar', 'Diproses', 'Sudah Dikirim', 'Selesai'])
             ->select(
                 'pesanan.id',
                 'pembeli.name AS nama_pembeli',
@@ -131,6 +134,7 @@ class TransaksiController extends Controller
             ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
             ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
             ->where('penjual_id', $penjual_id)
+            ->whereIn('pesanan.status_pesanan', ['Diproses', 'Sudah Dikirim', 'Selesai'])
             ->select(
                 'pesanan.id',
                 'pembeli.name AS nama_pembeli',
@@ -150,7 +154,6 @@ class TransaksiController extends Controller
 
         return view('penjual.data_pesanan.index', compact('pesanan'));
     }
-
 
     public function detailpenjual($id)
     {
@@ -196,6 +199,7 @@ class TransaksiController extends Controller
 
         return view('penjual.data_pesanan.detail', compact('pesanan'));
     }
+    
     public function updateStatuspenjual($id)
     {
         $pesanan = pesanan::findOrFail($id);
@@ -203,20 +207,72 @@ class TransaksiController extends Controller
             $pesanan->status_pesanan = 'Sudah Dikirim';
             $pesanan->save();
         }
+        
+        $pengiriman = pengiriman::findOrFail($id);
+        if ($pengiriman->status_pengiriman === 'Belum Dikirim') {
+            $pengiriman->status_pengiriman = 'Sudah Dikirim';
+            $pengiriman->save();
+        }
 
         return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
     }
+    
     public function keranjang()
     {
-        $keranjang = Keranjang::with(['produk.penjual'])
-            ->where('pembeli_id', auth()->id())
-            ->get();
+        $pembeli_id = auth()->id();
 
-        $grouped = $keranjang->groupBy(function ($item) {
+        $pesanan = DB::table('pesanan')
+            ->where('pembeli_id', $pembeli_id)
+            ->where('status_pesanan', 'Belum Dibayar')
+            ->first();
+     
+        $pesananData = null;
+        $keranjangFinal = collect();
+
+        if ($pesanan) {
+            $keranjangIdsInPesanan = DB::table('keranjang_pesanan')
+                ->where('pesanan_id', $pesanan->id)
+                ->pluck('keranjang_id')
+                ->toArray();
+
+            $keranjangIn = Keranjang::with(['produk.penjual'])
+                ->whereIn('id', $keranjangIdsInPesanan)
+                ->get()
+                ->map(function ($item) {
+                    $item->is_in_pesanan = true;
+                    return $item;
+                });
+
+            $keranjangOut = Keranjang::with(['produk.penjual'])
+                ->where('pembeli_id', $pembeli_id)
+                ->whereNotIn('id', $keranjangIdsInPesanan)
+                ->get()
+                ->map(function ($item) {
+                    $item->is_in_pesanan = false;
+                    return $item;
+                });
+
+            $keranjangFinal = $keranjangIn->where('status', 'Belum Checkout')->merge($keranjangOut);
+
+            $pesananData = $pesanan;
+        } else {
+            $keranjangFinal = Keranjang::with(['produk.penjual'])
+                ->where('pembeli_id', $pembeli_id)
+                ->where('status', 'Belum Checkout')
+                ->get()
+                ->map(function ($item) {
+                    $item->is_in_pesanan = false;
+                    return $item;
+                });
+        }
+
+        $grouped = $keranjangFinal->groupBy(function ($item) {
             return $item->produk->penjual->name ?? 'Toko Tidak Diketahui';
         });
 
-        return view('pembeli.keranjang.index', compact('grouped'));
+        $adaPesananTertunda = Pesanan::where('pembeli_id', auth()->id())->where('status_pesanan', 'Belum Dibayar')->exists();
+
+        return view('pembeli.keranjang.index', compact('grouped', 'pesananData', 'adaPesananTertunda'));
     }
 
     public function tambahKeranjang(Request $request)
@@ -235,6 +291,7 @@ class TransaksiController extends Controller
         }
         $keranjang = Keranjang::where('produk_id', $request->produk_id)
                             ->where('pembeli_id', $user->id)
+                            ->where('status', 'Belum Checkout')
                             ->first();
 
         if ($keranjang) {
@@ -270,6 +327,7 @@ class TransaksiController extends Controller
 
         return redirect()->back()->with('success', 'Item berhasil dihapus dari keranjang.');
     }
+
     public function riwayatPesanan(Request $request)
     {
         $pembeli_id = Auth::id();
@@ -319,6 +377,7 @@ class TransaksiController extends Controller
 
         return view('pembeli.riwayat_transaksi.index', compact('pesanan', 'jmlDiproses', 'jmlDikirim', 'jmlDibayar', 'jmlSelesai'));
     }
+    
     public function selesaikanPesanan($id)
     {
         $pesanan = Pesanan::findOrFail($id);
@@ -330,7 +389,148 @@ class TransaksiController extends Controller
 
     public function checkoutPesanan()
     {
-        return view('pembeli.checkout.index');
+        $dataPesanan = DB::table('pesanan')
+            ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
+            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+            ->join('keranjang_pesanan as kp', 'kp.pesanan_id', '=', 'pesanan.id')
+            ->join('keranjang', 'keranjang.id', '=', 'kp.keranjang_id')
+            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+            ->select('pembeli.name as nama_pembeli', 'pembeli.nohp', 'pesanan.total_harga', 'pesanan.kode_pesanan', 'alamat.*', 'keranjang.amount', 'produk.nama_produk', 'produk.harga', 'produk.gambar')
+            ->where('pesanan.status_pesanan', 'Belum Dibayar')
+            ->get();
+        
+        return view('pembeli.checkout.index', compact('dataPesanan'));
     }
 
+    public function getSnapToken($kode)
+    {
+        $dataPesanan = DB::table('pesanan')
+        ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
+        ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+        ->where('pesanan.kode_pesanan', $kode)
+        ->select('pembeli.name as nama_pembeli', 'pembeli.nohp', 'pesanan.total_harga', 'pesanan.kode_pesanan')
+        ->first();
+
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $dataPesanan->kode_pesanan,
+                'gross_amount' => $dataPesanan->total_harga,
+            ),
+            'customer_details' => array(
+                'first_name' => $dataPesanan->nama_pembeli,
+                'phone' => $dataPesanan->nohp,
+            ),
+        );
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        return response()->json(['snapToken' => $snapToken]);
+    }
+
+    public function updateHarga(Request $request, $kode)
+    {   
+        $pembeli_id = Auth::id();
+
+        DB::table('pesanan')->where('pembeli_id', $pembeli_id)->where('kode_pesanan', $kode)->update([
+            'total_harga' => $request->total_harga,
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function checkoutStore(Request $request) 
+    {
+        $pembeli_id = Auth::id();
+        
+        $alamat = DB::table('alamat')->join('users', 'users.id', '=', 'alamat.user_id')->where('users.id', $pembeli_id)->where('alamat.is_utama', 1)->value('alamat.id');
+
+        $keranjangIds = $request->keranjang_id;
+        
+        $request -> validate([
+            'kode_transaksi' => 'required|string',
+            'total_harga' => 'required|int',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $pesanan_id = DB::table('pesanan')->insertGetId([
+                'kode_pesanan' => $request->kode_transaksi,
+                'alamat_id' => $alamat,
+                'pembeli_id' => $pembeli_id,
+                'total_harga' => $request->total_harga,
+                'status_pesanan' => 'Belum Dibayar',
+                'tanggal_pesanan' => Carbon::now('Asia/Jakarta')->toDateString()
+            ]);
+
+            $dataKeranjangPesanan = [];
+            foreach ($keranjangIds as $keranjangId) {
+                $dataKeranjangPesanan[] = [
+                    'pesanan_id' => $pesanan_id,
+                    'keranjang_id' => $keranjangId,
+                ];
+            }
+
+            DB::table('keranjang_pesanan')->insert($dataKeranjangPesanan);
+
+            DB::commit();
+            
+            return response()->json(['success' => true]);
+
+        } catch (\exception $e){
+            DB::rollback();
+            return response()->json(['success' => false, 'message' => 'Gagal menyimpan data.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function payment(Request $request, $kode) 
+    {
+        $pembeli_id = Auth::id();
+
+        $dataPesan = DB::table('pesanan')->where('pembeli_id', $pembeli_id)->where('kode_pesanan', $kode)->first();
+
+        try {
+            DB::transaction(function () use ($dataPesan, $request, $kode) {
+
+                DB::table('pembayaran')->insert([
+                    'pesanan_id'         => $dataPesan->id,
+                    'metode_pembayaran'  => $request->metode_bayar,
+                    'tanggal_pembayaran' => Carbon::now('Asia/Jakarta')->toDateString(),
+                    'status_pembayaran'  => "Sudah Bayar",
+                ]);
+
+                DB::table('pengiriman')->insert([
+                    'pesanan_id'        => $dataPesan->id,
+                    'metode_pengiriman' => $request->metode_kirim,
+                    'status_pengiriman' => "Belum Dikirim",
+                ]);
+
+                DB::table('pesanan')
+                    ->join('keranjang_pesanan as kp', 'kp.keranjang_id', '=', 'pesanan.id')
+                    ->join('keranjang', 'keranjang.id', '=', 'kp.keranjang_id')
+                    ->where('kode_pesanan', $kode)
+                    ->update([
+                        'pesanan.status_pesanan' => "Sudah Dibayar",
+                        'keranjang.status'       => "Sudah Checkout",
+                    ]);
+            });
+
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan data.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
 }

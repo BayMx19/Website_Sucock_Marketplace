@@ -26,6 +26,8 @@
     <link href="{{ asset('/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
     <!-- Main CSS File -->
     <link href="{{ asset('/assets/css/main.css') }}" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- =======================================================
   * Template Name: Bootslander
   * Template URL: https://bootstrapmade.com/bootslander-free-bootstrap-landing-page-template/

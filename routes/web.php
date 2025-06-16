@@ -132,15 +132,21 @@ Route::middleware(['auth', 'role:Pembeli'])->group(function () {
     Route::get('/profile', [ProfilController::class, 'indexpembeli'])->name('pembeli.profile');
     Route::post('/profil/alamat-utama', [ProfilController::class, 'setAlamatUtama'])->name('pembeli.profil.alamat-utama');
     Route::get('/pembeli/alamat/create', [ProfilController::class, 'createAlamatpembeli'])->name('pembeli.alamat.create');
-    Route::post('/pembeli/alamat/store', [ProfilController::class, 'storeAlamatpembeli'])->name('pembeli.alamat.store');    Route::get('/profile/edit', [ProfilController::class, 'editpembeli'])->name('pembeli.edit.profile');
-    Route::put('/profil/update', [ProfilController::class, 'updatepembeli'])->name('pembeli.update.profile');});
+    Route::post('/pembeli/alamat/store', [ProfilController::class, 'storeAlamatpembeli'])->name('pembeli.alamat.store');    
+    Route::get('/profile/edit', [ProfilController::class, 'editpembeli'])->name('pembeli.edit.profile');
+    Route::put('/profil/update', [ProfilController::class, 'updatepembeli'])->name('pembeli.update.profile');
     Route::get('/checkout', [TransaksiController::class, 'checkoutPesanan'])->name('pembeli.checkout');
+    Route::post('/checkout/store', [TransaksiController::class, 'checkoutStore'])->name('pembeli.checkout.simpan');
+    Route::post('/checkout/payment/{kode}', [TransaksiController::class, 'payment'])->name('pembeli.pembayaran');
+    Route::post('/checkout/updateHarga/{kode}', [TransaksiController::class, 'updateHarga'])->name('pembeli.updateTotalHarga');
+    Route::get('/checkout/getToken/{kode}', [TransaksiController::class, 'getSnapToken']);
     Route::get('/riwayat-pesanan', [TransaksiController::class, 'riwayatPesanan'])->name('pembeli.riwayat-pesanan');
-    Route::post('/pesanan/{id}/selesai', [TransaksiController::class, 'selesaikanPesanan'])->name('pesanan.selesai');
-    Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
-    Route::get('/chat', function () {
-        return view('Pembeli.chat.index', ['userId' => request('userId')]);
-    })->name('chat.with');
-    Route::get('/chat/send-initial/{productId}', [ChatController::class, 'sendInitialMessage'])->name('chat.send.initial');
+});    
+// --- END Route Pembeli ---  
 
-// --- END Route Pembeli ---
+Route::post('/pesanan/{id}/selesai', [TransaksiController::class, 'selesaikanPesanan'])->name('pesanan.selesai');
+Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
+Route::get('/chat', function () {
+    return view('Pembeli.chat.index', ['userId' => request('userId')]);
+})->name('chat.with');
+Route::get('/chat/send-initial/{productId}', [ChatController::class, 'sendInitialMessage'])->name('chat.send.initial');
