@@ -7,6 +7,7 @@ use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
@@ -28,6 +29,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes();
+Route::get('/daftarpenjual', function(){
+    return view('auth.daftar');
+})->name('daftarpenjual');
 Route::get('/home', [DashboardController::class, 'dashboardpembeli'])->name('pembeli.home');
 Route::get('/produk', [ProdukController::class, 'index'])->name('index');
 Route::get('/', function () {
@@ -45,8 +50,6 @@ Route::get('/', function () {
 
     return redirect('/home');
 });
-
-Auth::routes();
 
 // --- Route Admin ---
 
@@ -125,14 +128,14 @@ Route::middleware(['auth', 'role:Penjual'])->group(function () {
 // --- Route Pembeli ---
 
 // Pembeli
-Route::middleware(['auth', 'role:Pembeli'])->group(function () {
+Route::middleware(['auth', 'role:Pembeli',])->group(function () {
     Route::get('/keranjang', [TransaksiController::class, 'keranjang'])->name('pembeli.keranjang');
     Route::delete('/keranjang/{id}', [TransaksiController::class, 'destroyKeranjang'])->name('hapus.keranjang');
     Route::post('/keranjang/tambah', [TransaksiController::class, 'tambahKeranjang'])->name('keranjang.tambah');
     Route::get('/profile', [ProfilController::class, 'indexpembeli'])->name('pembeli.profile');
     Route::post('/profil/alamat-utama', [ProfilController::class, 'setAlamatUtama'])->name('pembeli.profil.alamat-utama');
     Route::get('/pembeli/alamat/create', [ProfilController::class, 'createAlamatpembeli'])->name('pembeli.alamat.create');
-    Route::post('/pembeli/alamat/store', [ProfilController::class, 'storeAlamatpembeli'])->name('pembeli.alamat.store');    
+    Route::post('/pembeli/alamat/store', [ProfilController::class, 'storeAlamatpembeli'])->name('pembeli.alamat.store');
     Route::get('/profile/edit', [ProfilController::class, 'editpembeli'])->name('pembeli.edit.profile');
     Route::put('/profil/update', [ProfilController::class, 'updatepembeli'])->name('pembeli.update.profile');
     Route::get('/checkout', [TransaksiController::class, 'checkoutPesanan'])->name('pembeli.checkout');
@@ -141,8 +144,8 @@ Route::middleware(['auth', 'role:Pembeli'])->group(function () {
     Route::post('/checkout/updateHarga/{kode}', [TransaksiController::class, 'updateHarga'])->name('pembeli.updateTotalHarga');
     Route::get('/checkout/getToken/{kode}', [TransaksiController::class, 'getSnapToken']);
     Route::get('/riwayat-pesanan', [TransaksiController::class, 'riwayatPesanan'])->name('pembeli.riwayat-pesanan');
-});    
-// --- END Route Pembeli ---  
+});
+// --- END Route Pembeli ---
 
 Route::post('/pesanan/{id}/selesai', [TransaksiController::class, 'selesaikanPesanan'])->name('pesanan.selesai');
 Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
