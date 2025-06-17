@@ -1,4 +1,10 @@
 @extends('layout.template') @section('content') <main class="main">
+                    @if(session('success'))
+                    <div class="alert alert-success mt-3">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
     <!-- Hero Section -->
     <section id="hero" class="hero section ">
         <img src="{{ asset('assets') }}/img/hero-bg-2.jpg" alt="" class="hero-bg">
@@ -173,47 +179,43 @@
                         </div>
                     </div><!-- End Info Item -->
                     <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
-                        <i class="bi bi-telephone flex-shrink-0"></i>
+                        <a href="https://wa.me/+6285816353523"><i class="bi bi-telephone flex-shrink-0"></i>
                         <div>
-                            <h3>081 2345 67890</h3>
-                            <p>Senin - Jumat 08:00 - 16:00</p>
+                            <h3>0858 1635 3523</h3>
+                            <p style="color: black !important;">Senin - Jumat 08:00 - 16:00</p></a>
                         </div>
                     </div><!-- End Info Item -->
                     <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
-                        <i class="bi bi-envelope flex-shrink-0"></i>
+                        <a href="mailto:sumengkoshuttlecock@gmail.com"><i class="bi bi-envelope flex-shrink-0"></i>
                         <div>
-                            <h3>Email Us</h3>
-                            <p>admin.sucock@gmailcom</p>
+                            <h3>Our Email</h3>
+                            <p style="color: black !important;">sumengkoshuttlecock@gmail.com</p></a>
                         </div>
                     </div><!-- End Info Item -->
                 </div>
                 <div class="col-lg-8">
-                    <form action="" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-                        <div class="row gy-4">
-                            <div class="col-md-6">
-                                <input type="text" name="name" class="form-control" placeholder="Masukkan Nama Lengkap"
-                                    required="">
-                            </div>
-                            <div class="col-md-6 ">
-                                <input type="email" class="form-control" name="email" placeholder="Masukkan Email"
-                                    required="">
-                            </div>
-                            <div class="col-md-12">
-                                <input type="text" class="form-control" name="subject" placeholder="Masukkan Subyek"
-                                    required="">
-                            </div>
-                            <div class="col-md-12">
-                                <textarea class="form-control" name="message" rows="6" placeholder="Masukkan Pesan"
-                                    required=""></textarea>
-                            </div>
-                            <div class="col-md-12 text-center">
-                                <div class="loading">Loading</div>
-                                <div class="error-message"></div>
-                                <div class="sent-message">Your message has been sent. Thank you!</div>
-                                <button type="submit">Send Message</button>
-                            </div>
+                    <form action="{{ route('send.contact') }}" method="post" class="contact-form" data-aos="fade-up" data-aos-delay="200">
+                    @csrf
+                    <div class="row gy-4">
+                        <div class="col-md-6">
+                            <input type="text" name="name" class="form-control" placeholder="Masukkan Nama Lengkap" required>
                         </div>
-                    </form>
+                        <div class="col-md-6">
+                            <input type="email" class="form-control" name="email" placeholder="Masukkan Email" required>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" name="subject" placeholder="Masukkan Subyek" required>
+                        </div>
+                        <div class="col-md-12">
+                            <textarea class="form-control" name="message" rows="6" placeholder="Masukkan Pesan" required></textarea>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-message-mail" type="submit">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+
+
                 </div><!-- End Contact Form -->
             </div>
         </div>

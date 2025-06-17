@@ -51,6 +51,8 @@ Route::get('/', function () {
 
     return redirect('/home');
 });
+Route::post('/send-contact', [DashboardController::class, 'sendContact'])->name('send.contact');
+
 
 // --- Route Admin ---
 
