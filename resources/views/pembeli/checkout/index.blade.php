@@ -106,6 +106,8 @@
                                             @foreach ($dataPesanan as $index => $items)
                                             <div class="accordion" id="accordionProduk{{ $index }}">
                                                 <div class="accordion-item">
+                                                    <input type="hidden" name="produk_id[]" value="{{ $items->pesanan_id }}">
+                                                    <input type="hidden" name="amount[]" value="{{ $items->amount }}">
                                                     <h2 class="accordion-header" id="heading{{ $index }}">
                                                         <button class="accordion-button collapsed" type="button"
                                                             data-bs-toggle="collapse" data-bs-target="#produk{{ $index }}"
@@ -236,10 +238,36 @@
         payButton.addEventListener('click', function(e) {
             e.preventDefault();
 
-            kodeTransaksi = document.getElementById('kode-transaksi').dataset.kode;
+            const kodeTransaksi = document.getElementById('kode-transaksi').dataset.kode;
             
+            const selectedMetodeBayar = document.querySelector('input[name="pembayaran_id"]:checked');
+            const selectedMetodeKirim = document.querySelector('input[name="ongkir_id"]:checked');
+
+            if (!selectedMetodeBayar || !selectedMetodeKirim) {
+                alert('Pilih metode pembayaran dan pengiriman terlebih dahulu.');
+                return;
+            }
+
+            const bayarId = parseInt(selectedMetodeBayar.value);
+            const kirimId = parseInt(selectedMetodeKirim.value);
+
+            const metodeBayarNama = tipeBayar[bayarId];
+            const metodeKirimNama = tipeOngkir[kirimId];
+
+            let produkData = [];
+
+            const produkIds = document.querySelectorAll('input[name="produk_id[]"]');
+            const amounts = document.querySelectorAll('input[name="amount[]"]');
+
+            produkIds.forEach((input, index) => {
+                produkData.push({
+                    id: input.value,
+                    amount: amounts[index].value
+                });
+            });
+          
             const formData = new FormData();
-            formData.append("total_harga", currentTotal)
+            formData.append("total_harga", currentTotal);
 
             fetch(`/checkout/updateHarga/${kodeTransaksi}`, {
                 method: 'POST',
@@ -252,61 +280,92 @@
                 if (!response.ok) throw new Error('Gagal Mengirim Data');
                 return response.json();
             })
-            .then(data => {
-                return fetch(`/checkout/getToken/${kodeTransaksi}`);
-            })
-            .then(response => response.json())
-            .then(data => {
-                const snapTokenBaru = data.snapToken;
+            .then(() => {
+                const paymentData = new FormData();
+                paymentData.append("metode_bayar", metodeBayarNama);
+                paymentData.append("metode_kirim", metodeKirimNama);
+                paymentData.append("produkData", JSON.stringify(produkData));
 
-                window.snap.pay(snapTokenBaru, {
-                    onSuccess: function(result){
-                        alert("Pembayaran sukses!");
-
-                        const selectedMetodeBayar = document.querySelector('input[name="pembayaran_id"]:checked');
-                        const selectedMetodeKirim = document.querySelector('input[name="ongkir_id"]:checked');
-
-                        const bayarId = selectedMetodeBayar.value;
-                        const kirimId = selectedMetodeKirim.value;
-
-                        const metodeBayarNama = tipeBayar[bayarId];
-                        const metodeKirimNama = tipeOngkir[kirimId];
-
-                        const paymentData = new FormData();
-                        paymentData.append("metode_bayar", metodeBayarNama);
-                        paymentData.append("metode_kirim", metodeKirimNama);
-
-                        fetch(`/checkout/payment/${kodeTransaksi}`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            },
-                            body: paymentData,
-                        })
-                        .then(res => {
-                            if (!res.ok) throw new Error('Gagal menyimpan data pembayaran');
-                            alert("Data pembayaran dan pengiriman berhasil disimpan.");
-                            window.location.href = "/home";
-                        })
-                        .catch(err => {
-                            console.error("Gagal menyimpan pembayaran:", err);
+                if (bayarId === 1) {
+                    return fetch(`/checkout/payment/${kodeTransaksi}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: paymentData,
+                    })
+                    .then(response => {
+                        return response.json().then(data => {
+                            if (!response.ok) {
+                                throw data;
+                            }
+                            return data;
                         });
-                    },
-                    onPending: function(result){
-                        alert("Menunggu pembayaran.");
-                    },
-                    onError: function(result){
-                        alert("Gagal memproses pembayaran.");
-                    },
-                    onClose: function(){
-                        alert("Popup ditutup tanpa pembayaran.");
-                    }
-                });
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Pesanan Anda berhasil dibuat dengan metode pembayaran COD!',
+                            }).then(() => {
+                                window.location.href = "/home";
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            html: `
+                                <p>${error.message || 'Terjadi kesalahan saat memproses permintaan.'}</p>
+                                ${error.error ? `<small class="text-muted">${error.error}</small>` : ''}
+                            `,
+                            confirmButtonText: 'Tutup'
+                        });
+                    });
+                } else {
+                    return fetch(`/checkout/getToken/${kodeTransaksi}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const snapTokenBaru = data.snapToken;
+
+                        window.snap.pay(snapTokenBaru, {
+                            onSuccess: function(result){
+                                alert("Pembayaran sukses!");
+
+                                fetch(`/checkout/payment/${kodeTransaksi}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                    },
+                                    body: paymentData,
+                                })
+                                .then(res => {
+                                    if (!res.ok) throw new Error('Gagal menyimpan data pembayaran');
+                                    alert("Data pembayaran dan pengiriman berhasil disimpan.");
+                                    window.location.href = "/home";
+                                })
+                                .catch(err => {
+                                    console.error("Gagal menyimpan pembayaran:", err);
+                                });
+                            },
+                            onPending: function(result){
+                                alert("Menunggu pembayaran.");
+                            },
+                            onError: function(result){
+                                alert("Gagal memproses pembayaran.");
+                            },
+                            onClose: function(){
+                                alert("Popup ditutup tanpa pembayaran.");
+                            }
+                        });
+                    });
+                }
             })
             .catch(error => {
                 console.error('Terjadi kesalahan:', error);
             });
-
         });
     });
 </script>

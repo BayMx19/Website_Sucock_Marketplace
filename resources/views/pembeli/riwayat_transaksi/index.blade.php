@@ -5,6 +5,9 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 @endsection
 
+@php
+    $statusList = $pesanan->keys();
+@endphp
 
 @section('content')
 @if (session('success'))
@@ -24,226 +27,86 @@
 
                         <div class="card mb-4">
                             <div class="card-header">
-                                <ul class="nav nav-tabs card-header-tabs" id="orderStatusTab" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="sudah-dibayar-tab" data-bs-toggle="tab" href="#sudah-dibayar" role="tab" aria-controls="sudah-dibayar" aria-selected="true">Sudah Dibayar ({{ $jmlDibayar }})</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="diproses-tab" data-bs-toggle="tab" href="#diproses" role="tab" aria-controls="diproses" aria-selected="true">Diproses ({{ $jmlDiproses }})</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="sudah-dikirim-tab" data-bs-toggle="tab" href="#sudah-dikirim" role="tab" aria-controls="sudah-dikirim" aria-selected="true">Sudah Dikirim ({{ $jmlDikirim }})</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="selesai-tab" data-bs-toggle="tab" href="#selesai" role="tab" aria-controls="selesai" aria-selected="true">Selesai ({{ $jmlSelesai }})</a>
-                                    </li>
+                                {{-- Nav Tabs --}}
+                                <ul class="nav nav-tabs" id="statusTabs" role="tablist">
+                                @php
+                                    $statusList = ['Sudah Dibayar', 'Diproses', 'Sudah Dikirim', 'Selesai'];
+                                @endphp
+
+                                    @foreach ($statusList as $index => $status)
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ $index === 0 ? 'active' : '' }}"
+                                                id="tab-{{ Str::slug($status) }}-tab"
+                                                data-bs-toggle="tab"
+                                                href="#tab-{{ Str::slug($status) }}"
+                                                role="tab">
+                                                {{ $status }} 
+                                                @if(isset($pesananCounts[$status]))
+                                                    <span>
+                                                        ({{ $pesananCounts[$status] }})
+                                                    </span>
+                                                @endif
+                                            </a>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="orderStatusTabContent">
-                                @foreach ($pesanan as $pesananId => $items)
-                                    @php
-                                        $first = $items->first(); // Ambil data utama pesanan
-                                    @endphp
+                                    {{-- Tab Content --}}
+                                    <div class="tab-content mt-3" id="statusTabsContent">
+                                        @foreach ($pesanan as $status => $itemsGroupedByKodePesanan)
+                                            @php
+                                                $tabId = 'tab-' . Str::slug($status);
+                                            @endphp
 
-                                    {{-- Tab: Sudah Dibayar --}}
-                                    <div class="tab-pane fade show active" id="sudah-dibayar" role="tabpanel"
-                                        aria-labelledby="sudah-dibayar-tab">
-                                        <div class="accordion" id="accordionDibayar">
-                                        @if ($first->status_pesanan === 'Sudah Dibayar')
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="heading{{ $pesananId }}">
-                                                    <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderDibayar{{ $pesananId }}"
-                                                        aria-expanded="false" aria-controls="orderDibayar{{ $pesananId }}"
-                                                        style="background-color: whitesmoke;">
-                                                        Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
-                                                    </button>
-                                                </h2>
-                                                <div id="orderDibayar{{ $pesananId }}" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingDibayar{{ $pesananId }}">
-                                                    <div class="accordion-body">
-                                                        @foreach ($items as $item)
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-4">
-                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
-                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-8">
-                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
-                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
-                                                                <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
-                                                                <p class="mb-0"><strong>Status Pesanan {{ $first->kode_pesanan }} :</strong> {{ $item->status_pesanan }}</p>
-                                                            </div>
-                                                        </div>
-                                                        <hr>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                        </div>
-                                    </div>
+                                            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="{{ $tabId }}" role="tabpanel">
+                                                <div class="accordion" id="accordion-{{ $tabId }}">
+                                                    @foreach ($itemsGroupedByKodePesanan as $kodePesanan => $items)
+                                                        @php 
+                                                            $first = $items->first(); 
+                                                        @endphp
 
-                                    {{-- Tab: Diproses --}}
-                                    <div class="tab-pane fade" id="diproses" role="tabpanel"
-                                        aria-labelledby="diproses-tab">
-                                        <div class="accordion" id="accordionDiproses">
-                                        @if ($first->status_pesanan === 'Diproses')
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="heading{{ $pesananId }}">
-                                                    <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderDiproses{{ $pesananId }}"
-                                                        aria-expanded="false" aria-controls="orderDiproses{{ $pesananId }}"
-                                                        style="background-color: whitesmoke;">
-                                                        Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
-                                                    </button>
-                                                </h2>
-                                                <div id="orderDiproses{{ $pesananId }}" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingDiproses{{ $pesananId }}">
-                                                    <div class="accordion-body">
-                                                        @foreach ($items as $item)
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-4">
-                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
-                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-8">
-                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
-                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
-                                                                <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
-                                                                <p class="mb-0"><strong>Status Pesanan {{ $first->kode_pesanan }} :</strong> {{ $item->status_pesanan }}</p>
-                                                            </div>
-                                                        </div>
-                                                        <hr>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                        </div>
-                                    </div>
-
-                                    {{-- Tab: Sudah Dikirim --}}
-                                    <div class="tab-pane fade" id="sudah-dikirim" role="tabpanel"
-                                        aria-labelledby="sudah-dikirim-tab">
-                                        <div class="accordion" id="accordionDikirim">
-                                        @if ($first->status_pesanan === 'Sudah Dikirim')
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="heading{{ $pesananId }}">
-                                                    <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderDikirim{{ $pesananId }}"
-                                                        aria-expanded="false" aria-controls="orderDikirim{{ $pesananId }}"
-                                                        style="background-color: whitesmoke;">
-                                                        Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
-                                                    </button>
-                                                </h2>
-                                                <div id="orderDikirim{{ $pesananId }}" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingDikirim{{ $pesananId }}">
-                                                    <div class="accordion-body">
-                                                        @foreach ($items as $item)
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-4">
-                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
-                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-8">
-                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
-                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
-                                                                <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
-                                                                <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
-                                                            </div>
-                                                        </div>
-                                                        <hr>
-                                                        @endforeach
-                                                        <div class="d-flex justify-content-end">
-                                                            <form action="{{ route('pesanan.selesai', $first->id) }}" method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-success">
-                                                                    Selesaikan Pesanan
+                                                        <div class="accordion-item">
+                                                            <h2 class="accordion-header" id="heading{{ $kodePesanan }}">
+                                                                <button class="accordion-button collapsed" type="button"
+                                                                    data-bs-toggle="collapse"
+                                                                    data-bs-target="#collapse{{ $kodePesanan }}"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="collapse{{ $kodePesanan }}"
+                                                                    style="background-color: whitesmoke;">
+                                                                    Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
                                                                 </button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                        </div>
-                                    </div>
-
-                                    {{-- Tab: Selesai --}}
-                                    <div class="tab-pane fade" id="selesai" role="tabpanel"
-                                        aria-labelledby="selesai-tab">
-                                        <div class="accordion" id="accordionSelesai">
-                                        @if ($first->status_pesanan === 'Selesai')
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="heading{{ $pesananId }}">
-                                                    <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#orderSelesai{{ $pesananId }}"
-                                                        aria-expanded="false" aria-controls="orderSelesai{{ $pesananId }}"
-                                                        style="background-color: whitesmoke;">
-                                                        Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
-                                                    </button>
-                                                </h2>
-                                                <div id="orderSelesai{{ $pesananId }}" class="accordion-collapse collapse"
-                                                    aria-labelledby="headingSelesai{{ $pesananId }}">
-                                                    <div class="accordion-body">
-                                                        @foreach ($items as $item)
-                                                        <div class="row mb-3 product-item align-items-center">
-                                                            <div class="col-md-3">
-                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
-                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
-                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
-                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
-                                                                <p class="mb-0"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
-                                                            </div>
-                                                            <div class="col-md-3 text-end">
-                                                            @php
-                                                                $review = \App\Models\Review::where('produk_id', $item->produk_id)
-                                                                    ->where('pesanan_id', $first->id)
-                                                                    ->first();
-                                                            @endphp
-
-                                                            @if ($review)
-                                                                <div class="mb-2">
-                                                                    <strong>Penilaian:</strong>
-                                                                    @for ($i = 1; $i <= 5; $i++)
-                                                                        <i class="fas fa-star {{ $i <= $review->bintang ? 'text-warning' : 'text-secondary' }}"></i>
-                                                                    @endfor
-                                                                    @if ($review->review_text)
-                                                                        <p class="mt-1">{{ $review->review_text }}</p>
-                                                                    @endif
+                                                            </h2>
+                                                            <div id="collapse{{ $kodePesanan }}" class="accordion-collapse collapse"
+                                                                aria-labelledby="heading{{ $kodePesanan }}"
+                                                                data-bs-parent="#accordion-{{ $tabId }}">
+                                                                <div class="accordion-body">
+                                                                    @foreach ($items as $item)
+                                                                        <div class="row mb-3 product-item align-items-center">
+                                                                            <div class="col-md-4">
+                                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
+                                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
+                                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
+                                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
+                                                                                <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
+                                                                                <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr>
+                                                                    @endforeach
                                                                 </div>
-                                                            @else
-                                                                <button class="btn btn-review btn-sm review-button"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#reviewModal"
-                                                                    data-product-id="{{ $item->produk_id }}"
-                                                                    data-order-id="{{ $first->id }}"
-                                                                    data-product-name="{{ $item->nama_produk }}"
-                                                                    data-product-image="{{ asset('storage/' . $item->gambar) }}">
-                                                                    Berikan Penilaian
-                                                                </button>
-                                                            @endif
                                                             </div>
                                                         </div>
-                                                        <hr>
-                                                        @endforeach
-                                                        <p class="mt-3"><strong>Status Pesanan {{ $first->kode_pesanan }} :</strong> {{ $item->status_pesanan }}</p>
-                                                        <p><strong>Tanggal Selesai:</strong> {{ $item->updated_at }}</p>
-                                                    </div>
+
+                                                    @endforeach
                                                 </div>
                                             </div>
-                                        @endif
-                                        </div>
+                                        @endforeach
                                     </div>
-                                @endforeach
                                 </div>
                             </div>
                         </div>

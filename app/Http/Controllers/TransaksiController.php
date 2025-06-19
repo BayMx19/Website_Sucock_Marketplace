@@ -236,6 +236,7 @@ class TransaksiController extends Controller
                 ->toArray();
 
             $keranjangIn = Keranjang::with(['produk.penjual'])
+                ->where('status', 'Belum Checkout')
                 ->whereIn('id', $keranjangIdsInPesanan)
                 ->get()
                 ->map(function ($item) {
@@ -244,6 +245,7 @@ class TransaksiController extends Controller
                 });
 
             $keranjangOut = Keranjang::with(['produk.penjual'])
+                ->where('status', 'Belum Checkout')
                 ->where('pembeli_id', $pembeli_id)
                 ->whereNotIn('id', $keranjangIdsInPesanan)
                 ->get()
@@ -269,6 +271,8 @@ class TransaksiController extends Controller
         $grouped = $keranjangFinal->groupBy(function ($item) {
             return $item->produk->penjual->name ?? 'Toko Tidak Diketahui';
         });
+
+        // dd($grouped);
 
         $adaPesananTertunda = Pesanan::where('pembeli_id', auth()->id())->where('status_pesanan', 'Belum Dibayar')->exists();
 
@@ -338,12 +342,7 @@ class TransaksiController extends Controller
             ->select('status_pesanan', DB::raw('count(*) as jumlah'))
             ->groupBy('status_pesanan')
             ->pluck('jumlah', 'status_pesanan');
-
-        $jmlDiproses = $pesananCounts['Diproses'] ?? 0;
-        $jmlDibayar = $pesananCounts['Sudah Dibayar'] ?? 0;
-        $jmlDikirim = $pesananCounts['Sudah Dikirim'] ?? 0;
-        $jmlSelesai = $pesananCounts['Selesai'] ?? 0;
-
+        
         $subKeranjang = DB::table('keranjang_pesanan as kp')
             ->select('kp.pesanan_id', 'kp.keranjang_id')
             ->groupBy('kp.pesanan_id', 'kp.keranjang_id');
@@ -356,6 +355,7 @@ class TransaksiController extends Controller
             ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
             ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
             ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+            ->where('pembeli.id', $pembeli_id)
             ->select(
                 'pesanan.id',
                 'pesanan.kode_pesanan',
@@ -369,13 +369,15 @@ class TransaksiController extends Controller
                 'penjual.name as nama_penjual',
                 'keranjang.amount as jumlah_produk'
             )
-            ->where('pembeli.id', $pembeli_id)
             ->get()
-            ->groupBy('pesanan.id');
+            ->groupBy('status_pesanan')
+            ->map(function ($grouped) {
+                    return $grouped->groupBy('kode_pesanan'); // <--- untuk isi accordion-nya
+                });
 
-        // dd($pesanan);
+            // dd($pesanan);
 
-        return view('pembeli.riwayat_transaksi.index', compact('pesanan', 'jmlDiproses', 'jmlDikirim', 'jmlDibayar', 'jmlSelesai'));
+        return view('pembeli.riwayat_transaksi.index', compact('pesanan', 'pesananCounts'));
     }
     
     public function selesaikanPesanan($id)
@@ -395,7 +397,7 @@ class TransaksiController extends Controller
             ->join('keranjang_pesanan as kp', 'kp.pesanan_id', '=', 'pesanan.id')
             ->join('keranjang', 'keranjang.id', '=', 'kp.keranjang_id')
             ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
-            ->select('pembeli.name as nama_pembeli', 'pembeli.nohp', 'pesanan.total_harga', 'pesanan.kode_pesanan', 'alamat.*', 'keranjang.amount', 'produk.nama_produk', 'produk.harga', 'produk.gambar')
+            ->select('pembeli.name as nama_pembeli', 'pembeli.nohp', 'pesanan.total_harga', 'pesanan.kode_pesanan', 'alamat.*', 'keranjang.amount', 'produk.nama_produk', 'produk.harga', 'produk.gambar', 'produk.id as pesanan_id')
             ->where('pesanan.status_pesanan', 'Belum Dibayar')
             ->get();
         
@@ -495,10 +497,12 @@ class TransaksiController extends Controller
     {
         $pembeli_id = Auth::id();
 
+        $produkData = json_decode($request->input('produkData'), true);
+
         $dataPesan = DB::table('pesanan')->where('pembeli_id', $pembeli_id)->where('kode_pesanan', $kode)->first();
 
         try {
-            DB::transaction(function () use ($dataPesan, $request, $kode) {
+            DB::transaction(function () use ($dataPesan, $request, $kode, $produkData) {
 
                 DB::table('pembayaran')->insert([
                     'pesanan_id'         => $dataPesan->id,
@@ -513,14 +517,40 @@ class TransaksiController extends Controller
                     'status_pengiriman' => "Belum Dikirim",
                 ]);
 
+                $statusPesanan = ($request->metode_bayar == 'COD') ? 'Diproses' : 'Sudah Dibayar';
+
                 DB::table('pesanan')
-                    ->join('keranjang_pesanan as kp', 'kp.keranjang_id', '=', 'pesanan.id')
+                    ->join('keranjang_pesanan as kp', 'pesanan.id', '=', 'kp.pesanan_id')
                     ->join('keranjang', 'keranjang.id', '=', 'kp.keranjang_id')
                     ->where('kode_pesanan', $kode)
                     ->update([
-                        'pesanan.status_pesanan' => "Sudah Dibayar",
+                        'pesanan.status_pesanan' => $statusPesanan,
                         'keranjang.status'       => "Sudah Checkout",
                     ]);
+
+                foreach ($produkData as $produk) {
+                    $produkId = $produk['id'];
+                    $amount   = $produk['amount'];
+
+                    $produk = DB::table('produk')->where('id', $produkId)->first();
+
+                    $stokSekarang = $produk->stok;
+                    $namaProduk = $produk->nama_produk;
+
+                    if ($stokSekarang === null) {
+                        throw new \Exception("Produk {$namaProduk} tidak ditemukan.");
+                    }
+
+                    if ((int)$stokSekarang < (int)$amount) {
+                        throw new \Exception("Stok tidak cukup untuk produk {$namaProduk}.");
+                    }
+
+                    DB::table('produk')
+                        ->where('id', $produkId)
+                        ->update([
+                            'stok' => $stokSekarang - $amount,
+                        ]);
+                }
             });
 
             return response()->json(['success' => true]);
