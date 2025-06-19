@@ -29,9 +29,8 @@
 
       @foreach($grouped as $namaToko => $items)
       <div class="cart-toko" style="background: #f9fafd; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-        @foreach($grouped as $penjual => $items)
         <h5 style="font-weight: 600; color: #333;">Toko: {{ $namaToko }}</h5>
-
+        
           @php $totalPerToko = 0; @endphp
 
           @foreach($items as $item)
@@ -66,7 +65,6 @@
               </div>
             </div>
           @endforeach
-        @endforeach
         <!-- <div class="d-flex justify-content-end align-items-center" style="font-weight: 700; font-size: 16px; color: #0f8c56;">
           Total : Rp. {{ number_format($totalPerToko, 0, ',', '.') }}
         </div> -->
