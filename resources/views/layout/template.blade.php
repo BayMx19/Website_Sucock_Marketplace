@@ -48,7 +48,15 @@
                 <img src="{{ asset('assets') }}/img/logo_WEB.png" alt="Logo" style="height: 40px;">
             </a> @include('layout.navbar') <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </div>
-    </header> @yield('content') <footer id="footer" class="footer dark-background">
+    </header> @yield('content')
+        @if(session('warning_alamat'))
+        <script>
+            alert("{{ session('warning_alamat') }}");
+        </script>
+        @endif
+
+
+    <footer id="footer" class="footer dark-background">
         <div class="container copyright text-center mt-4">
             <p><span>Copyright ©2025 Sucock (SumengkoShuttlecock), All rights reserved.</span></p>
             <div class="credits">

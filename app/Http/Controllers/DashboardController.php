@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactMail;
 use App\Models\User;
 use App\Models\review;
 use App\Models\pesanan;
@@ -10,6 +11,7 @@ use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class DashboardController extends Controller
 {
@@ -131,4 +133,18 @@ class DashboardController extends Controller
 
         return view ('pembeli.home', compact('list_toko', 'list_produk'));
     }
+
+    public function sendContact(Request $request)
+{
+    $contactData = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'subject' => $request->subject,
+        'message' => $request->message,
+    ];
+
+    Mail::to('sumengkoshuttlecock@gmail.com')->send(new ContactMail($contactData));
+
+    return back()->with('success', 'Pesan berhasil dikirim!');
+}
 }
