@@ -378,10 +378,8 @@ class TransaksiController extends Controller
             ->get()
             ->groupBy('status_pesanan')
             ->map(function ($grouped) {
-                    return $grouped->groupBy('kode_pesanan'); // <--- untuk isi accordion-nya
+                    return $grouped->groupBy('kode_pesanan'); 
                 });
-
-            // dd($pesanan);
 
         return view('pembeli.riwayat_transaksi.index', compact('pesanan', 'pesananCounts'));
     }

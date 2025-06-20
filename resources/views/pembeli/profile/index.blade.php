@@ -114,7 +114,7 @@
                                             <div style="margin-top: 4px;">
                                                 {{ $alamat->alamat ?? '' }} <br>
                                                 Provinsi {{ $alamat->provinsi ?? ''}} <br>
-                                                Kota {{ $alamat->kota ?? '' }} <br>
+                                                Kabupaten/Kota {{ $alamat->kota ?? '' }} <br>
                                                 Kecamatan {{ $alamat->kecamatan ?? ''}} <br>
                                                 Kelurahan {{ $alamat->kelurahan ?? '' }} <br>
                                                 RT {{ $alamat->RT ?? '-' }} / RW {{ $alamat->RW ?? '-' }} <br>

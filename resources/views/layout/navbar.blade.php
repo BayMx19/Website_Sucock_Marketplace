@@ -56,9 +56,30 @@
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
         </form>
-        <a href="#" class="nav-link"
-            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                class="fa-solid fa-power-off"></i></a>
+        <a href="#" class="nav-link" id="logout-btn">
+            <i class="fa-solid fa-power-off"></i>
+        </a>
     </li>
     @endauth
 </ul>
+
+<script>
+    document.getElementById('logout-btn').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Keluar dari Akun?',
+            text: "Anda akan keluar.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Logout',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('logout-form').submit();
+            }
+        });
+    });
+</script>

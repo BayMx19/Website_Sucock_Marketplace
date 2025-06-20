@@ -27,20 +27,10 @@
                                 <div class="col-md-12 form-group p_star mt-5">
                                     <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
                                         placeholder="Masukkan Email Anda">
-                                    @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>Harap Periksa Kembali Email dan Password anda</strong>
-                                    </span>
-                                    @enderror
                                 </div>
                                 <div class="col-md-12 form-group p_star mt-3">
                                     <input type="password" class="form-control @error('password') is-invalid @enderror"
                                         id="password" name="password" placeholder="Masukkan Password Anda">
-                                    @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>Harap Periksa Kembali Email dan Password anda</strong>
-                                    </span>
-                                    @enderror
                                 </div>
                                 <div class="col-md-12 form-group p_star mt-3">
                                     <div class="form-check">
@@ -68,4 +58,27 @@
         </div>
     </section>
 </main>
+
+@if ($errors->has('email'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Email dan Password salah',
+            text: 'Harap Periksa kembali Email dan Password anda',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+
+@if ($errors->has('password'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Email dan Password salah',
+            text: 'Harap Periksa kembali Email dan Password anda',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+
 @endsection

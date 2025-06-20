@@ -76,15 +76,15 @@
                                             <div class="col-md-2 pl-4 d-flex flex-column justify-content-center">
                                                 <h6 class="mb-4 font-weight-bold text-left text-bold">Metode Pembayaran</h6>
                                                 @php
-                                                    $pembayaran = $pesanan[0]->metode_pembayaran ?? 'Self Pickup';
+                                                    $pembayaran = $pesanan[0]->metode_pembayaran ?? 'COD';
                                                 @endphp
                                                 <div class="form-check mb-4 d-flex align-items-center">
-                                                    <input class="form-check-input mr-3" type="radio" name="pembayaran_id" value="1" {{ $pembayaran == 'Self Pickup' ? 'checked' : '' }} disabled>
+                                                    <input class="form-check-input mr-3" type="radio" name="pembayaran_id" value="1" {{ $pembayaran == 'COD' ? 'checked' : '' }} disabled>
                                                     <i class="fa-solid fa-hand-holding-dollar fa-lg mr-3"></i>
-                                                    <div class="font-weight-bold">Self Pickup</div>
+                                                    <div class="font-weight-bold">COD</div>
                                                 </div>
                                                 <div class="form-check d-flex align-items-center">
-                                                    <input class="form-check-input mr-3" type="radio" name="pembayaran_id" value="2" {{ $pembayaran != 'Self Pickup' ? 'checked' : '' }} disabled>
+                                                    <input class="form-check-input mr-3" type="radio" name="pembayaran_id" value="2" {{ $pembayaran != 'COD' ? 'checked' : '' }} disabled>
                                                     <i class="fa-solid fa-wallet fa-lg mr-3"></i>
                                                     <div class="font-weight-bold">E-Wallet / VA</div>
                                                 </div>
@@ -152,7 +152,7 @@
 
                                                 $ongkir = ($pesanan[0]->metode_pengiriman ?? 'Reguler') == 'Reguler' ? 10000 : 5000;
 
-                                                $biayaLayanan = ($pesanan[0]->metode_pembayaran ?? 'Self Pickup') == 'Self Pickup' ? 0 : 4000;
+                                                $biayaLayanan = ($pesanan[0]->metode_pembayaran ?? 'E-Wallet / VA') == 'E-Wallet / VA' ? 5000 : 0;
 
                                                 $totalTagihan = $totalHargaProduk + $ongkir + $biayaLayanan;
                                             @endphp

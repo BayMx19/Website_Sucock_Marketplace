@@ -38,8 +38,11 @@
                                                 <div class="col-12 mt-10 mb-10">
                                                     <label><h2>Jenis Kelamin</h2></label>
                                                     <select name="jenis_kelamin" class="single-input">
-                                                        <option value="L" {{ $user->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                                                        <option value="P" {{ $user->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
+                                                        @if (empty($user->jenis_kelamin))
+                                                            <option value="" selected>-- Pilih --</option>
+                                                        @endif
+                                                        <option value="Laki-laki" {{ $user->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                                        <option value="Perempuan" {{ $user->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
                                                     </select>
                                                 </div>
 

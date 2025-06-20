@@ -87,7 +87,7 @@ class ProfilController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'nohp' => 'nullable|string|max:13',
-            'jenis_kelamin' => 'nullable|in:L,P',
+            'jenis_kelamin' => 'nullable|in:Laki-laki,Perempuan',
             'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -126,56 +126,52 @@ class ProfilController extends Controller
         return view('/penjual/profile/edit', compact('profilPenjual'));
     }
     /*
-    /**
-     * Update the specified resource in storage.
      */
-public function updatepenjual(Request $request, $id)
-{
-    $profilPenjual = User::findOrFail($id);
+    public function updatepenjual(Request $request, $id)
+    {
+        $profilPenjual = User::findOrFail($id);
 
-    // Data untuk tabel users
-    $dataUser = [
-        'name' => $request->name,
-        'nohp' => $request->nohp,
-        'jenis_kelamin' => $request->jenis_kelamin,
-        'status' => $request->status,
-    ];
+        // Data untuk tabel users
+        $dataUser = [
+            'name' => $request->name,
+            'nohp' => $request->nohp,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'status' => $request->status,
+        ];
 
-    // Cek & upload foto profil jika ada
-    if ($request->hasFile('foto_profil')) {
-        $file = $request->file('foto_profil');
-        $path = $file->store('foto_profil', 'public');
-        $dataUser['foto_profil'] = $path;
+        // Cek & upload foto profil jika ada
+        if ($request->hasFile('foto_profil')) {
+            $file = $request->file('foto_profil');
+            $path = $file->store('foto_profil', 'public');
+            $dataUser['foto_profil'] = $path;
+        }
+
+        // Update tabel users
+        $profilPenjual->update($dataUser);
+
+        // Data untuk tabel alamat
+        $dataAlamat = [
+            'alamat' => $request->alamat,
+            'provinsi' => $request->provinsi,
+            'kota' => $request->kota,
+            'kecamatan' => $request->kecamatan,
+            'kelurahan' => $request->kelurahan,
+            'RT' => $request->RT,
+            'RW' => $request->RW,
+            'kode_pos' => $request->kode_pos,
+        ];
+
+        $alamat = $profilPenjual->dataAlamat()->first();
+
+        if ($alamat) {
+            $alamat->update($dataAlamat);
+        } else {
+            $profilPenjual->dataAlamat()->create($dataAlamat);
+        }
+        
+        return redirect('/penjual/profile/')->with('success', 'Data berhasil diperbarui!');
     }
 
-    // Update tabel users
-    $profilPenjual->update($dataUser);
-
-    // Data untuk tabel alamat
-    $dataAlamat = [
-        'alamat' => $request->alamat,
-        'provinsi' => $request->provinsi,
-        'kota' => $request->kota,
-        'kecamatan' => $request->kecamatan,
-        'kelurahan' => $request->kelurahan,
-        'RT' => $request->RT,
-        'RW' => $request->RW,
-        'kode_pos' => $request->kode_pos,
-    ];
-
-    // Update atau insert alamat (jika belum ada)
-    if ($profilPenjual->dataAlamat) {
-        $profilPenjual->dataAlamat()->update($dataAlamat);
-    } else {
-        $profilPenjual->dataAlamat()->create($dataAlamat);
-    }
-
-    return redirect('/penjual/profile/')->with('success', 'Data berhasil diperbarui!');
-}
-
-        /**
-     * Display a listing of the resource.
-     */
     public function indexadmin()
     {
         $profilAdmin = Auth::user();

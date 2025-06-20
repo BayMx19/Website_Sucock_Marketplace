@@ -59,4 +59,148 @@
     </section>
     <!--================login_part end =================-->
 </main>
+
+@if ($errors->any())
+    @php
+        $nameErrors = $errors->get('name');
+        $emailErrors = $errors->get('email');
+        $passwordErrors = $errors->get('password');
+    @endphp
+
+    @if ($nameErrors)
+        @foreach ($nameErrors as $msg)
+            @if (str_contains($msg, 'required'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Nama Harus Diisi',
+                        text: 'Silakan isi nama terlebih dahulu.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @elseif (str_contains($msg, 'may only contain letters and spaces'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Format Nama Kurang Tepat',
+                        text: 'Harap isikan nama anda dengan sesuai.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @elseif (str_contains($msg, 'may not be greater than'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Nama Terlalu Panjang',
+                        text: 'Harap isikan nama anda dengan sesuai.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @else
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan Nama',
+                        text: '{{ $msg }}',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @endif
+        @endforeach
+    @endif
+
+    @if ($emailErrors)
+        @foreach ($emailErrors as $msg)
+            @if (str_contains($msg, 'has already been taken'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Email Terpakai',
+                        text: 'Email telah digunakan. Silakan gunakan email lain.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @elseif (str_contains($msg, 'must be a valid email'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Format Email Salah',
+                        text: 'Silakan masukkan email yang benar.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @elseif (str_contains($msg, 'required'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Email Wajib Diisi',
+                        text: 'Silakan masukkan email terlebih dahulu.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @else
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan Email',
+                        text: '{{ $msg }}',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @endif
+        @endforeach
+    @endif
+
+    @if ($passwordErrors)
+        @foreach ($passwordErrors as $msg)
+            @if (str_contains($msg, 'required'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Password Wajib Diisi',
+                        text: 'Silakan masukkan password terlebih dahulu.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @elseif (str_contains($msg, 'at least 8 characters'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Password Terlalu Pendek',
+                        text: 'Password minimal harus 8 karakter.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @elseif (str_contains($msg, 'confirmation does not match'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Konfirmasi Password Tidak Cocok',
+                        text: 'Ulangi password dan pastikan cocok dengan konfirmasi.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @elseif (str_contains($msg, 'format is invalid'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Format Password Salah',
+                        text: 'Password paling tidak harus terdiri dari huruf kecil dan angka.',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @else
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan Password',
+                        text: '{{ $msg }}',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            @endif
+        @endforeach
+    @endif
+@endif
+
 @endsection

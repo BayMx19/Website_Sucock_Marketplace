@@ -36,7 +36,7 @@ class CheckAlamatLengkap
     // Cek apakah user punya alamat utama
     $alamatUtama = $user->dataAlamat()->where('is_utama', true)->first();
 
-    if (!$alamatUtama) {
+    if (!$alamatUtama && $request->routeIs('pembeli.keranjang')) {
         return redirect()->route('pembeli.profile')
             ->with('warning_alamat', 'Silakan lengkapi alamat dan pilih alamat utama terlebih dahulu.');
     }
