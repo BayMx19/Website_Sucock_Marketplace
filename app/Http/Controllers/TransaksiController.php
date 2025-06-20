@@ -199,7 +199,7 @@ class TransaksiController extends Controller
 
         return view('penjual.data_pesanan.detail', compact('pesanan'));
     }
-    
+
     public function updateStatuspenjual($id)
     {
         $pesanan = pesanan::findOrFail($id);
@@ -207,7 +207,7 @@ class TransaksiController extends Controller
             $pesanan->status_pesanan = 'Sudah Dikirim';
             $pesanan->save();
         }
-        
+
         $pengiriman = pengiriman::findOrFail($id);
         if ($pengiriman->status_pengiriman === 'Belum Dikirim') {
             $pengiriman->status_pengiriman = 'Sudah Dikirim';
@@ -216,7 +216,7 @@ class TransaksiController extends Controller
 
         return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
     }
-    
+
     public function keranjang()
     {
         $pembeli_id = auth()->id();
@@ -225,7 +225,7 @@ class TransaksiController extends Controller
             ->where('pembeli_id', $pembeli_id)
             ->where('status_pesanan', 'Belum Dibayar')
             ->first();
-     
+
         $pesananData = null;
         $keranjangFinal = collect();
 
@@ -342,7 +342,7 @@ class TransaksiController extends Controller
             ->select('status_pesanan', DB::raw('count(*) as jumlah'))
             ->groupBy('status_pesanan')
             ->pluck('jumlah', 'status_pesanan');
-        
+
         $subKeranjang = DB::table('keranjang_pesanan as kp')
             ->select('kp.pesanan_id', 'kp.keranjang_id')
             ->groupBy('kp.pesanan_id', 'kp.keranjang_id');
@@ -355,6 +355,10 @@ class TransaksiController extends Controller
             ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
             ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
             ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+            ->leftJoin('review', function($join) {
+                $join->on('review.produk_id', '=', 'produk.id')
+                    ->on('review.pesanan_id', '=', 'pesanan.id');
+            })
             ->where('pembeli.id', $pembeli_id)
             ->select(
                 'pesanan.id',
@@ -367,7 +371,9 @@ class TransaksiController extends Controller
                 'produk.harga',
                 'produk.gambar',
                 'penjual.name as nama_penjual',
-                'keranjang.amount as jumlah_produk'
+                'keranjang.amount as jumlah_produk',
+                'review.bintang',
+                'review.review_text'
             )
             ->get()
             ->groupBy('status_pesanan')
@@ -379,7 +385,7 @@ class TransaksiController extends Controller
 
         return view('pembeli.riwayat_transaksi.index', compact('pesanan', 'pesananCounts'));
     }
-    
+
     public function selesaikanPesanan($id)
     {
         $pesanan = Pesanan::findOrFail($id);
@@ -400,7 +406,7 @@ class TransaksiController extends Controller
             ->select('pembeli.name as nama_pembeli', 'pembeli.nohp', 'pesanan.total_harga', 'pesanan.kode_pesanan', 'alamat.*', 'keranjang.amount', 'produk.nama_produk', 'produk.harga', 'produk.gambar', 'produk.id as pesanan_id')
             ->where('pesanan.status_pesanan', 'Belum Dibayar')
             ->get();
-        
+
         return view('pembeli.checkout.index', compact('dataPesanan'));
     }
 
@@ -439,7 +445,7 @@ class TransaksiController extends Controller
     }
 
     public function updateHarga(Request $request, $kode)
-    {   
+    {
         $pembeli_id = Auth::id();
 
         DB::table('pesanan')->where('pembeli_id', $pembeli_id)->where('kode_pesanan', $kode)->update([
@@ -449,14 +455,14 @@ class TransaksiController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function checkoutStore(Request $request) 
+    public function checkoutStore(Request $request)
     {
         $pembeli_id = Auth::id();
-        
+
         $alamat = DB::table('alamat')->join('users', 'users.id', '=', 'alamat.user_id')->where('users.id', $pembeli_id)->where('alamat.is_utama', 1)->value('alamat.id');
 
         $keranjangIds = $request->keranjang_id;
-        
+
         $request -> validate([
             'kode_transaksi' => 'required|string',
             'total_harga' => 'required|int',
@@ -484,7 +490,7 @@ class TransaksiController extends Controller
             DB::table('keranjang_pesanan')->insert($dataKeranjangPesanan);
 
             DB::commit();
-            
+
             return response()->json(['success' => true]);
 
         } catch (\exception $e){
@@ -493,7 +499,7 @@ class TransaksiController extends Controller
         }
     }
 
-    public function payment(Request $request, $kode) 
+    public function payment(Request $request, $kode)
     {
         $pembeli_id = Auth::id();
 

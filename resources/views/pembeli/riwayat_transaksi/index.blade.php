@@ -40,7 +40,7 @@
                                                 data-bs-toggle="tab"
                                                 href="#tab-{{ Str::slug($status) }}"
                                                 role="tab">
-                                                {{ $status }} 
+                                                {{ $status }}
                                                 @if(isset($pesananCounts[$status]))
                                                     <span>
                                                         ({{ $pesananCounts[$status] }})
@@ -63,8 +63,8 @@
                                             <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="{{ $tabId }}" role="tabpanel">
                                                 <div class="accordion" id="accordion-{{ $tabId }}">
                                                     @foreach ($itemsGroupedByKodePesanan as $kodePesanan => $items)
-                                                        @php 
-                                                            $first = $items->first(); 
+                                                        @php
+                                                            $first = $items->first();
                                                         @endphp
 
                                                         <div class="accordion-item">
@@ -82,23 +82,68 @@
                                                                 aria-labelledby="heading{{ $kodePesanan }}"
                                                                 data-bs-parent="#accordion-{{ $tabId }}">
                                                                 <div class="accordion-body">
-                                                                    @foreach ($items as $item)
-                                                                        <div class="row mb-3 product-item align-items-center">
-                                                                            <div class="col-md-4">
-                                                                                <img src="{{ asset('storage/' . $item->gambar) }}"
-                                                                                    alt="{{ $item->nama_produk }}" class="img-fluid"
-                                                                                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
-                                                                            </div>
-                                                                            <div class="col-md-8">
-                                                                                <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
-                                                                                <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
-                                                                                <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
-                                                                                <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <hr>
-                                                                    @endforeach
-                                                                </div>
+    @foreach ($items as $item)
+        <div class="row mb-3 product-item align-items-center">
+            <div class="col-md-4">
+                <img src="{{ asset('storage/' . $item->gambar) }}"
+                    alt="{{ $item->nama_produk }}" class="img-fluid"
+                    style="width: 100%; max-width: 170px; height: 150px; object-fit: cover;">
+            </div>
+
+            <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
+                        <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
+                        <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
+                        <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
+                    </div>
+
+                    <div class="text-end">
+                        @if ($item->bintang)
+                            <div>
+                                <strong>Rating:</strong>
+                                <div>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $item->bintang)
+                                            <i class="fas fa-star text-warning"></i>
+                                        @else
+                                            <i class="far fa-star text-warning"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <p class="mt-1"><strong>Ulasan:</strong> {{ $item->review_text }}</p>
+                            </div>
+                        @elseif ($item->status_pesanan === 'Selesai')
+                            <button type="button"
+                                class="btn btn-review review-button mt-1"
+                                data-product-id="{{ $item->produk_id }}"
+                                data-order-id="{{ $item->id }}"
+                                data-product-name="{{ $item->nama_produk }}"
+                                data-product-image="{{ asset('storage/' . $item->gambar) }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#reviewModal">
+                                Beri Penilaian
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    @endforeach
+
+    @if ($first->status_pesanan === 'Sudah Dikirim')
+        <form action="{{ route('pesanan.selesai', $first->id) }}" method="POST" class="mt-3 text-center">
+            @csrf
+            <button type="submit" class="btn btn-success">
+                Selesaikan Pesanan
+            </button>
+        </form>
+    @endif
+</div>
+
+
                                                             </div>
                                                         </div>
 

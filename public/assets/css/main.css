@@ -2342,7 +2342,7 @@ h6 {
     background-color: #548c9a !important;
     color: white !important;
     border: 2px solid #548c9a !important;
-    width: 60%;
+    min-width: 120px !important;
 }
 
 .btn-review:hover{
