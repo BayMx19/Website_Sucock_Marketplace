@@ -208,8 +208,9 @@ class TransaksiController extends Controller
             $pesanan->save();
         }
 
-        $pengiriman = pengiriman::findOrFail($id);
-        if ($pengiriman->status_pengiriman === 'Belum Dikirim') {
+         $pengiriman = pengiriman::where('pesanan_id', $id)->first();
+
+        if ($pengiriman && $pengiriman->status_pengiriman === 'Belum Dikirim') {
             $pengiriman->status_pengiriman = 'Sudah Dikirim';
             $pengiriman->save();
         }
@@ -378,7 +379,7 @@ class TransaksiController extends Controller
             ->get()
             ->groupBy('status_pesanan')
             ->map(function ($grouped) {
-                    return $grouped->groupBy('kode_pesanan'); 
+                    return $grouped->groupBy('kode_pesanan');
                 });
 
         return view('pembeli.riwayat_transaksi.index', compact('pesanan', 'pesananCounts'));
@@ -403,6 +404,7 @@ class TransaksiController extends Controller
             ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
             ->select('pembeli.name as nama_pembeli', 'pembeli.nohp', 'pesanan.total_harga', 'pesanan.kode_pesanan', 'alamat.*', 'keranjang.amount', 'produk.nama_produk', 'produk.harga', 'produk.gambar', 'produk.id as pesanan_id')
             ->where('pesanan.status_pesanan', 'Belum Dibayar')
+            ->where('pesanan.pembeli_id', auth()->id())
             ->get();
 
         return view('pembeli.checkout.index', compact('dataPesanan'));
