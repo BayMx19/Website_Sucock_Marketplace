@@ -185,7 +185,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Format Password Salah',
-                        text: 'Password paling tidak harus terdiri dari huruf kecil dan angka.',
+                        text: 'Password paling tidak harus terdiri dari huruf kecil, huruf besar, simbol, dan angka.',
                         confirmButtonText: 'OK'
                     });
                 </script>
