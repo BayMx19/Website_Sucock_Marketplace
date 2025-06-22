@@ -1,5 +1,5 @@
-@extends('layout.template') 
-@section('content') 
+@extends('layout.template')
+@section('content')
 
 @php
   $dataDiriPembeli = $dataPesanan->first();
@@ -8,8 +8,9 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <script type="text/javascript"
-      src="https://app.sandbox.midtrans.com/snap/snap.js"
-      data-client-key="{{ config('midtrans.client_key') }}">
+      src="https://app.midtrans.com/snap/snap.js"
+      data-client-key="{{ config('midtrans.client_key') }}" >
+
 </script>
 
 <main>
@@ -84,13 +85,13 @@
                                             <div class="col-md-3 alamat-block mb-3 p-3"
                                                 style="background-color: white !important; border: 1px solid #ddd; border-radius: 5px; position: relative; max-width: 400px;">
                                                 <div style="font-weight: bold;"> Alamat Pengiriman </div>
-                                                <div style="margin-top: 4px; font-size: 14px; line-height: 1.4;" id="nama-pembeli" data-nama="{{ $dataDiriPembeli->nama_pembeli }}"> 
-                                                    {{ $dataDiriPembeli->nama_pembeli }} 
-                                                    <br>{{ $dataDiriPembeli->alamat }} 
-                                                    <br> Provinsi {{ $dataDiriPembeli->provinsi }} 
+                                                <div style="margin-top: 4px; font-size: 14px; line-height: 1.4;" id="nama-pembeli" data-nama="{{ $dataDiriPembeli->nama_pembeli }}">
+                                                    {{ $dataDiriPembeli->nama_pembeli }}
+                                                    <br>{{ $dataDiriPembeli->alamat }}
+                                                    <br> Provinsi {{ $dataDiriPembeli->provinsi }}
                                                     <br> Kota {{ $dataDiriPembeli->kota }}
-                                                    <br> Kecamatan {{ $dataDiriPembeli->kecamatan }} 
-                                                    <br> Kelurahan {{ $dataDiriPembeli->kelurahan }} 
+                                                    <br> Kecamatan {{ $dataDiriPembeli->kecamatan }}
+                                                    <br> Kelurahan {{ $dataDiriPembeli->kelurahan }}
                                                     <br> RT {{ $dataDiriPembeli->RT }} / RW {{ $dataDiriPembeli->RW }}
                                                     <br> Kode Pos {{ $dataDiriPembeli->kode_pos }} <br>
                                                     <br>
@@ -160,7 +161,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </main>
 
 <script>
@@ -181,7 +182,7 @@
             1: 'Reguler',
             2: 'Hemat'
         };
-        
+
         const tipeBayar = {
             1: 'COD',
             2: 'E-Wallet / VA'
@@ -239,7 +240,7 @@
             e.preventDefault();
 
             const kodeTransaksi = document.getElementById('kode-transaksi').dataset.kode;
-            
+
             const selectedMetodeBayar = document.querySelector('input[name="pembayaran_id"]:checked');
             const selectedMetodeKirim = document.querySelector('input[name="ongkir_id"]:checked');
 
@@ -265,7 +266,7 @@
                     amount: amounts[index].value
                 });
             });
-          
+
             const formData = new FormData();
             formData.append("total_harga", currentTotal);
 
