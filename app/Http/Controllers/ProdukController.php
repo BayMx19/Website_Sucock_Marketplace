@@ -157,9 +157,26 @@ class ProdukController extends Controller
 
         return redirect()->route('penjual.data_produk.index')->with('success', 'Produk berhasil dihapus.');
     }
-    public function index()
+    public function index(Request $request)
     {
-        $list_produk = Produk::all(); // Ambil semua data produk
+        // $list_produk = Produk::all(); // Ambil semua data produk
+        // dd($list_produk);
+         $validated = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'per_page' => 'nullable|integer|min:1|max:100'
+        ]);
+
+        $perPage = $validated['per_page'] ?? 10;
+        $query = DB::table('produk')
+            ->join('users', 'users.id', '=', 'produk.penjual_id')
+            ->select('produk.*', 'users.name', )
+            ->when($validated['search'] ?? null, function ($q, $search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('produk.nama_produk', 'like', "%{$search}%");
+                });
+            });
+
+        $list_produk = $query->paginate($perPage);
         return view('pembeli.produk.produk', compact('list_produk')); // Kirim ke view produk/index.blade.php
 }
 }

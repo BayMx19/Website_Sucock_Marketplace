@@ -9,12 +9,14 @@
                 <form action="" method="get">
                     <div class="form-group">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Cari..." name="keyword"
+                            <form role="search" method="GET" action="" style="display: flex; align-items: center; gap: 8px;">
+                            <input type="text" class="form-control" placeholder="Cari..." name="search"
                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'Cari...'"
-                                value="{{ request('keyword') }}">
+                                value="{{ request('search') }}">
                             <button class="btn btn-search-bar" type="submit">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
+                            </form>
                         </div>
                     </div>
                 </form>
@@ -37,7 +39,7 @@
                         </div>
                     </div>
                     <div class="popular-caption">
-                        <h3><a href="/produk/detail/{{ $produk->id }}">{{ $produk->nama }}</a></h3>
+                        <h3><a href="/produk/detail/{{ $produk->id }}">{{ $produk->nama_produk }}</a></h3>
                         <h4 style="font-weight: 800; color: #548c9a;">
                             Rp. {{ number_format($produk->harga, 0, ',', '.') }}
                         </h4>
@@ -60,7 +62,7 @@
                             <div class="col-md-6 ps-md-4 pt-3 pt-md-0">
                                 <h4 style="font-weight: bold;">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</h4>
                                 <p class="mb-1"><strong>Stok:</strong> {{ $produk->stok }}</p>
-                                <p class="mb-1"><strong>Penjual:</strong> {{ $produk->user->name }}</p>
+                                <p class="mb-1"><strong>Penjual:</strong> {{ $produk->name }}</p>
                                 <p class="mt-2">{{ $produk->deskripsi }}</p>
                                 @auth
                                         <a href="{{ route('chat.send.initial', ['productId' => $produk->id]) }}" class="btn btn-success mt-3">

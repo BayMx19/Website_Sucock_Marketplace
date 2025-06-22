@@ -76,7 +76,7 @@
                                         </div>
                                     </div>
                                     <div class="popular-caption">
-                                        <h3><a href="/produk/detail/{{ $produk->id }}">{{ $produk->nama }}</a></h3>
+                                        <h3><a href="/produk/detail/{{ $produk->id }}">{{ $produk->nama_produk }}</a></h3>
                                         <h4 style="font-weight: 800; color: #548c9a;"> Rp.
                                             {{ number_format($produk->harga, 0, ',', '.') }} </h4>
                                     </div>
