@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 
 class DashboardController extends Controller
 {
+    // Function untuk menampilkan Dashboard di Role Admin
     public function dashboardadmin() {
         $pengguna = User::get();
         $review = review::get();
@@ -46,6 +47,7 @@ class DashboardController extends Controller
         return view('admin.home', compact('total_pengguna', 'total_review', 'total_toko', 'total_produk', 'jml_rerata_review', 'jml_pendapatan'));
     }
 
+    // Function untuk menampilkan Dashboard di Role Penjual
     public function dashboardpenjual(){
         $subKeranjang = DB::table('keranjang_pesanan as kp')
         ->select('kp.pesanan_id', DB::raw('MIN(kp.keranjang_id) as keranjang_id'))
@@ -127,6 +129,8 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    // Function untuk menampilkan Dashboard di Role Pembeli
     public function dashboardpembeli(){
         $list_produk = produk::with('user')->limit(5)->get();
         $list_toko = Toko::where('role', 'Penjual')->get();

@@ -10,6 +10,7 @@ class TokoController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // Function untuk menampilkan Data Toko di role Admin
     public function index(Request $request)
     {
         $search = $request->query('search');
@@ -28,24 +29,11 @@ class TokoController extends Controller
 
         return view('admin.data_toko.index', compact('toko', 'search'));
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin_datatokotambah');
-    }
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
+    
     /**
      * Display the specified resource.
      */
+    // Function untuk melihat detail Data Toko di role Admin
     public function detail($id)
     {
         $toko = Toko::with('alamat')->findOrFail($id);
@@ -57,23 +45,24 @@ class TokoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
-    //(string $id)
-    {
-        return view('admin_datatokoedit');
-    }
+    // public function edit()
+    // //(string $id)
+    // {
+    //     return view('admin_datatokoedit');
+    // }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    // public function update(Request $request, string $id)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
      */
+    // Function untuk menghapus Data Toko di role Admin
     public function destroy($id)
     {
         $toko = Toko::findOrFail($id);

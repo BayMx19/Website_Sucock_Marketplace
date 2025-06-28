@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
+    // Function untuk  mengirim Pesan Awal ke Penjual
     public function sendInitialMessage($productId)
     {
         $produk = Produk::with('user')->findOrFail($productId);

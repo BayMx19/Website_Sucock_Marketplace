@@ -13,12 +13,14 @@ class ProfilController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // Function untuk menampilkan profil pembeli
+
     public function indexpembeli()
     {
         $user = User::with('dataAlamat')->find(auth()->id());
         return view('pembeli.profile.index', compact('user'));
     }
-
+    // Function untuk Set Alamat Utama di role Pembeli
     public function setAlamatUtama(Request $request)
     {
         $user = auth()->user();
@@ -34,13 +36,14 @@ class ProfilController extends Controller
         }
 
         return back()->with('success', 'Alamat utama berhasil diubah.');
-    }
+    }   
 
-        public function createAlamatpembeli()
+    // Function untuk menampilkan form tambah alamat di role Pembeli
+    public function createAlamatpembeli()
     {
         return view('pembeli.alamat.create');
     }
-
+    // Function untuk menyimpan alamat di role pembeli
     public function storeAlamatpembeli(Request $request)
     {
         $request->validate([
@@ -72,13 +75,14 @@ class ProfilController extends Controller
      /**
      * Show the form for editing the specified resource.
      */
+    // Function untuk menampilkan form edit profil di role Pembeli
     public function editpembeli()
     //(string $id)
     {
         $user = auth()->user();
         return view('pembeli.profile.edit', compact('user'));
     }
-
+    // Function untuk memperbarui profil di role Pembeli
     public function updatePembeli(Request $request)
     {
         $user = auth()->user();
@@ -109,6 +113,7 @@ class ProfilController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // Function untuk menampilkan profil penjual
     public function indexpenjual()
     {
         $profilPenjual = Auth::user()->load('dataAlamat');
@@ -118,6 +123,7 @@ class ProfilController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    // Function untuk menampilkan form edit profil di role Penjual
     public function editpenjual($id)
     //(string $id)
     {
@@ -127,6 +133,7 @@ class ProfilController extends Controller
     }
     /*
      */
+    // Function untuk memperbarui profil di role Penjual
     public function updatepenjual(Request $request, $id)
     {
         $profilPenjual = User::findOrFail($id);
@@ -171,7 +178,7 @@ class ProfilController extends Controller
         
         return redirect('/penjual/profile/')->with('success', 'Data berhasil diperbarui!');
     }
-
+    // Function untuk menampilkan profil admin
     public function indexadmin()
     {
         $profilAdmin = Auth::user();
@@ -180,19 +187,13 @@ class ProfilController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    // Function untuk menampilkan form edit profil di role Admin
     public function editadmin($id)
     //(string $id)
     {
         return view('admin_editdata');
     }
-    /*
-    /**
-     * Update the specified resource in storage.
-     */
-    public function updateadmin(Request $request, $id)
-    {
-        //
-    }
+
 
 
 

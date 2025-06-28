@@ -9,7 +9,7 @@
                     <div class="section-tittle text-center mt-100">
                         <div class="section-tittle mt-100">
                             <div class="judul-wrapper">
-                                <a href="{{route('admin.data_pesanan.index')}}"><button class="back-button">
+                                <a href="{{route('penjual.data_pesanan.index')}}"><button class="back-button">
                                     <i class="fa fa-arrow-left"></i>
                                 </button></a>
                                 <h1 class="judul-produk"><span>Detail Pesanan</span></h1>

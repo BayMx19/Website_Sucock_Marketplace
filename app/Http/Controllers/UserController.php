@@ -13,6 +13,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // Function untuk menampilkan Data User di role Admin
     public function index(Request $request)
     {
         $search = $request->query('search');
@@ -35,6 +36,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    // Function untuk menampilkan form tambah Data User di role Admin
     public function create()
     {
         return view('admin.data_users.create');
@@ -44,6 +46,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // Function untuk menyimpan Data User di role Admin
     public function store(Request $request)
     {
         // dd($request);
@@ -88,6 +91,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
+    // Function untuk melihat detail Data User di role Admin
     public function detail($id)
     {
         $user = User::with('dataAlamat')->findOrFail($id);
@@ -99,6 +103,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    // Function untuk menampilkan form edit Data User di role Admin
     public function edit($id)
     {
         $user = User::with('dataAlamat')->findOrFail($id);
@@ -109,6 +114,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // Function untuk memperbarui Data User di role Admin
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -154,6 +160,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // Function untuk menghapus Data User di role Admin
     public function destroy($id)
     {
         $user = User::findOrFail($id);

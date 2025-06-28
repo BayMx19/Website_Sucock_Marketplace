@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
+    // Function untuk menampilkan list data produk di Role Admin
     public function dataproduk(Request $request)
     {
         $validated = $request->validate([
@@ -36,13 +37,14 @@ class ProdukController extends Controller
 
         return view('admin.data_produk.index', compact('produk'));
     }
+    // Function untuk melihat detail produk di Role Admin
     public function dataprodukdetail($id)
     {
         $produk = Produk::with('user')->findOrFail($id);
         // dd($produk);
         return view('admin.data_produk.detail', compact('produk'));
     }
-
+    // Function untuk menampilkan list data produk di Role Penjual
     public function indexpenjual(Request $request){
         $penjual_id = Auth::id();
 
@@ -72,10 +74,12 @@ class ProdukController extends Controller
 
         return view('penjual.data_produk.index', compact('produk'));
     }
+    // Function untuk menampilkan form tambah produk di Role Penjual
     public function createpenjual()
     {
         return view('penjual.data_produk.create');
     }
+    // Function untuk menyimpan data produk di Role Penjual
     public function storepenjual(Request $request)
     {
         try{
@@ -100,12 +104,13 @@ class ProdukController extends Controller
             return redirect('/penjual/data_produk/')->with('error', 'Gagal menambahkan User: Coba Lagi' );
         }
     }
-
+    // Function untuk menampilkan form edit produk di Role Penjual
     public function editpenjual($id){
         $produk = Produk::find($id);
         // dd($produk);
         return view('penjual.data_produk.edit', compact('produk'));
     }
+    // Function untuk memperbarui data produk di Role Penjual
     public function updatepenjual(Request $request, $id)
     {
         $produk = Produk::findOrFail($id);
@@ -138,13 +143,14 @@ class ProdukController extends Controller
 
         return redirect()->route('penjual.data_produk.index')->with('success', 'Data produk berhasil diperbarui.');
     }
+    // Function untuk melihat detail produk di Role Penjual
     public function detailpenjual($id)
     {
         $produk = Produk::find($id);
         // dd($produk);
         return view('penjual.data_produk.detail', compact('produk'));
     }
-
+    // Function untuk menghapus produk di Role Penjual
     public function destroypenjual($id)
     {
         $produk = Produk::findOrFail($id);
@@ -157,6 +163,7 @@ class ProdukController extends Controller
 
         return redirect()->route('penjual.data_produk.index')->with('success', 'Produk berhasil dihapus.');
     }
+    // Function untuk menampilkan list data produk di Role Pembeli
     public function index(Request $request)
     {
         // $list_produk = Produk::all(); // Ambil semua data produk

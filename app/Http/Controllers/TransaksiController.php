@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class TransaksiController extends Controller
 {
+    // Function untuk menampilkan list data pesanan di Role Admin
     public function indexadmin(Request $request)
     {
         $validated = $request->validate([
@@ -56,7 +57,7 @@ class TransaksiController extends Controller
 
         return view('admin.data_pesanan.index', compact('pesanan'));
     }
-
+    // Function untuk melihat detail pesanan di Role Admin
     public function detailadmin($id)
     {
         $subKeranjang = DB::table('keranjang_pesanan as kp')
@@ -98,7 +99,7 @@ class TransaksiController extends Controller
 
         return view('admin.data_pesanan.detail', compact('pesanan'));
     }
-
+    // Function untuk mengupdate status pesanan di Role Admin
         public function updateStatusadmin($id)
     {
         $pesanan = pesanan::findOrFail($id);
@@ -109,7 +110,7 @@ class TransaksiController extends Controller
 
         return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
     }
-
+    // Function untuk menampilkan list data pesanan di Role Penjual
     public function indexpenjual(Request $request)
     {
         $penjual_id = Auth::id();
@@ -154,7 +155,7 @@ class TransaksiController extends Controller
 
         return view('penjual.data_pesanan.index', compact('pesanan'));
     }
-
+    // Function untuk melihat detail pesanan di Role Penjual
     public function detailpenjual($id)
     {
         $penjual = Auth::id();
@@ -199,7 +200,7 @@ class TransaksiController extends Controller
 
         return view('penjual.data_pesanan.detail', compact('pesanan'));
     }
-
+    // Function untuk mengupdate status pesanan di Role Penjual
     public function updateStatuspenjual($id)
     {
         $pesanan = pesanan::findOrFail($id);
@@ -217,7 +218,7 @@ class TransaksiController extends Controller
 
         return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui.');
     }
-
+    // Function untuk menampilkan keranjang pembeli
     public function keranjang()
     {
         $pembeli_id = auth()->id();
@@ -279,7 +280,7 @@ class TransaksiController extends Controller
 
         return view('pembeli.keranjang.index', compact('grouped', 'pesananData', 'adaPesananTertunda'));
     }
-
+    // Function untuk menambahkan produk ke keranjang di Role Pembeli
     public function tambahKeranjang(Request $request)
     {
         $request->validate([
@@ -319,7 +320,7 @@ class TransaksiController extends Controller
                                    ->count()
         ]);
     }
-
+    // Function untuk menghapus item dari keranjang di Role Pembeli
     public function destroyKeranjang($id)
     {
         $keranjang = Keranjang::findOrFail($id);
@@ -332,7 +333,7 @@ class TransaksiController extends Controller
 
         return redirect()->back()->with('success', 'Item berhasil dihapus dari keranjang.');
     }
-
+    // Function untuk menampilkan riwayat pesanan di Role Pembeli
     public function riwayatPesanan(Request $request)
     {
         $pembeli_id = Auth::id();
@@ -384,7 +385,7 @@ class TransaksiController extends Controller
 
         return view('pembeli.riwayat_transaksi.index', compact('pesanan', 'pesananCounts'));
     }
-
+    // Function untuk menyelesaikan pesanan di Role Pembeli
     public function selesaikanPesanan($id)
     {
         $pesanan = Pesanan::findOrFail($id);
@@ -393,7 +394,7 @@ class TransaksiController extends Controller
 
         return redirect()->back()->with('success', 'Pesanan telah diselesaikan.');
     }
-
+    // Function untuk menampilkan checkout pesanan di Role Pembeli
     public function checkoutPesanan()
     {
         $dataPesanan = DB::table('pesanan')
@@ -409,7 +410,7 @@ class TransaksiController extends Controller
 
         return view('pembeli.checkout.index', compact('dataPesanan'));
     }
-
+    // Function untuk mendapatkan Snap Token dari Midtrans
     public function getSnapToken($kode)
     {
         $dataPesanan = DB::table('pesanan')
@@ -443,7 +444,7 @@ class TransaksiController extends Controller
 
         return response()->json(['snapToken' => $snapToken]);
     }
-
+    // Function untuk mengupdate harga total pesanan di Role Pembeli
     public function updateHarga(Request $request, $kode)
     {
         $pembeli_id = Auth::id();
@@ -454,7 +455,7 @@ class TransaksiController extends Controller
 
         return response()->json(['success' => true]);
     }
-
+    // Function untuk menyimpan data checkout pesanan di Role Pembeli
     public function checkoutStore(Request $request)
     {
         $pembeli_id = Auth::id();
@@ -498,7 +499,7 @@ class TransaksiController extends Controller
             return response()->json(['success' => false, 'message' => 'Gagal menyimpan data.', 'error' => $e->getMessage()], 500);
         }
     }
-
+    // Function untuk melakukan pembayaran pesanan di Role Pembeli
     public function payment(Request $request, $kode)
     {
         $pembeli_id = Auth::id();

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class ReviewController extends Controller
 {
+    // Function untuk menampilkan list data review di Role Admin
     public function indexadmin(Request $request)
     {
         $validated = $request->validate([
@@ -45,7 +46,7 @@ class ReviewController extends Controller
 
         return view('admin.data_review.index', compact('review'));
     }
-
+    // Function untuk melihat detail review di Role Admin
     public function detailadmin($id)
     {
         $review = DB::table('review')
@@ -66,7 +67,7 @@ class ReviewController extends Controller
 
         return view('admin.data_review.detail', compact('review'));
     }
-
+    // Function untuk menampilkan list data review di Role Penjual
     public function indexpenjual(Request $request)
     {
         $penjual_id = Auth::id();
@@ -104,7 +105,7 @@ class ReviewController extends Controller
 
         return view('penjual.data_review.index', compact('review'));
     }
-
+    // Function untuk melihat detail review di Role Penjual
     public function detailpenjual($id)
     {
         $penjual_id = Auth::id();
@@ -130,7 +131,7 @@ class ReviewController extends Controller
 
         return view('penjual.data_review.detail', compact('review'));
     }
-
+    // Function untuk menyimpan atau memperbarui review di ROle Pembeli
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -151,7 +152,7 @@ class ReviewController extends Controller
             ]
         );
 
-return response()->json(['success' => true]);
+        return response()->json(['success' => true]);
     }
 
 
