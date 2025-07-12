@@ -121,7 +121,7 @@ Route::middleware(['auth', 'role:Penjual'])->group(function () {
     Route::get('/penjual/profile/{id}/edit', [ProfilController::class, 'editpenjual'])->name('penjual.profile.edit');
     Route::put('/penjual/profile/{id}', [ProfilController::class, 'updatepenjual'])->name('penjual.profile.update');
     Route::get('/penjual/chat', function () {
-        return view('Penjual.chat.index');
+        return view('penjual.chat.index');
     });
 });
 
@@ -150,7 +150,7 @@ Route::middleware(['auth', 'role:Pembeli', 'cek.alamat.lengkap'])->group(functio
     Route::post('/pesanan/{id}/selesai', [TransaksiController::class, 'selesaikanPesanan'])->name('pesanan.selesai');
     Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
     Route::get('/chat', function () {
-        return view('Pembeli.chat.index', ['userId' => request('userId')]);
+        return view('pembeli.chat.index', ['userId' => request('userId')]);
     })->name('chat.with');
     Route::get('/chat/send-initial/{productId}', [ChatController::class, 'sendInitialMessage'])->name('chat.send.initial');
 });

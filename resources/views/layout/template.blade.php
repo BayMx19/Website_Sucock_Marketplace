@@ -46,9 +46,24 @@
             <!-- Logo (Kiri) -->
             <a href="{{''}}" class="logo d-flex align-items-center me-3">
                 <img src="{{ asset('assets') }}/img/logo_WEB.png" alt="Logo" style="height: 40px;">
-            </a> @include('layout.navbar') <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="d-none d-xl-flex align-items-center">
+                @include('layout.navbar')
+            </div>
+
+            <!-- Mobile Toggle Icon -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </div>
-    </header> @yield('content')
+
+        <!-- Mobile Menu -->
+        <div class="mobile-nav d-xl-none d-none">
+            @include('layout.navbar')
+        </div>
+    </header>
+
+    @yield('content')
         @if(session('warning_alamat'))
         <script>
             alert("{{ session('warning_alamat') }}");
@@ -137,6 +152,19 @@
         }
     });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.querySelector('.mobile-nav-toggle');
+            const mobileNav = document.querySelector('.mobile-nav');
+
+            toggleBtn.addEventListener('click', function () {
+                mobileNav.classList.toggle('active');
+                toggleBtn.classList.toggle('bi-x');
+                toggleBtn.classList.toggle('bi-list');
+            });
+        });
+    </script>
+
     @livewireScripts
 </body>
 

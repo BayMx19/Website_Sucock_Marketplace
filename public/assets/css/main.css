@@ -2377,3 +2377,30 @@ h6 {
     border: 2px solid #548c9a !important;
 
 }
+.mobile-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    padding: 20px;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-nav.active {
+    display: block !important;
+}
+
+.mobile-nav-toggle {
+    font-size: 28px;
+    cursor: pointer;
+    color: #19253f;
+    z-index: 10001;
+}
+
+@media (max-width: 1199px) {
+    .mobile-nav {
+        display: none;
+    }
+}
