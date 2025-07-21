@@ -36,7 +36,7 @@ class TokoController extends Controller
     // Function untuk melihat detail Data Toko di role Admin
     public function detail($id)
     {
-        $toko = Toko::with('alamat')->findOrFail($id);
+        $toko = Toko::with('dataAlamat')->findOrFail($id);
         // dd($toko);
          return view('admin.data_toko.detail', compact('toko'));
 

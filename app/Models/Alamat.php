@@ -19,6 +19,7 @@ class Alamat extends Model
         'RT',
         'RW',
         'kode_pos',
+        'is_utama'
     ];
 
     public function user()

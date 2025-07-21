@@ -19,7 +19,7 @@ class ReviewController extends Controller
             'per_page' => 'nullable|integer|min:1|max:100'
         ]);
 
-        $perPage = $validated['per_page'] ?? 10;
+        $perPage = $validated['per_page'] ?? 10000;
 
         $query = DB::table('review')
             ->join('pesanan', 'pesanan.id', '=', 'review.pesanan_id')
@@ -77,7 +77,7 @@ class ReviewController extends Controller
             'per_page' => 'nullable|integer|min:1|max:100'
         ]);
 
-        $perPage = $validated['per_page'] ?? 10;
+        $perPage = $validated['per_page'] ?? 10000;
 
         $query = DB::table('review')
             ->join('pesanan', 'pesanan.id', '=', 'review.pesanan_id')

@@ -21,7 +21,7 @@ class ProdukController extends Controller
             'per_page' => 'nullable|integer|min:1|max:100'
         ]);
 
-        $perPage = $validated['per_page'] ?? 10;
+        $perPage = $validated['per_page'] ?? 10000;
 
         $query = DB::table('produk')
             ->join('users', 'users.id', '=', 'produk.penjual_id')
@@ -53,7 +53,7 @@ class ProdukController extends Controller
             'per_page' => 'nullable|integer|min:1|max:100'
         ]);
 
-        $perPage = $validated['per_page'] ?? 10;
+        $perPage = $validated['per_page'] ?? 10000;
 
         $query = DB::table('produk')
             ->where('penjual_id', $penjual_id)
@@ -173,7 +173,7 @@ class ProdukController extends Controller
             'per_page' => 'nullable|integer|min:1|max:100'
         ]);
 
-        $perPage = $validated['per_page'] ?? 10;
+        $perPage = $validated['per_page'] ?? 10000;
         $query = DB::table('produk')
             ->join('users', 'users.id', '=', 'produk.penjual_id')
             ->select('produk.*', 'users.name', )

@@ -26,7 +26,7 @@
                             <td>{{ $toko->name }}</td>
                             <td>{{ $toko->email }}</td>
                             <td>{{ $toko->nohp }}</td>
-                            <td>{{ $toko->alamat }}</td>
+                            <td>{{ $toko->alamat->alamat ?? '-' }}</td>
                             <td>{{ $toko->status }}</td>
                             <td>
                                 <span

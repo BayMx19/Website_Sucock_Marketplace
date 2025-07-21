@@ -36,7 +36,7 @@ class ProfilController extends Controller
         }
 
         return back()->with('success', 'Alamat utama berhasil diubah.');
-    }   
+    }  
 
     // Function untuk menampilkan form tambah alamat di role Pembeli
     public function createAlamatpembeli()
@@ -166,6 +166,7 @@ class ProfilController extends Controller
             'RT' => $request->RT,
             'RW' => $request->RW,
             'kode_pos' => $request->kode_pos,
+            'is_utama' => true,
         ];
 
         $alamat = $profilPenjual->dataAlamat()->first();

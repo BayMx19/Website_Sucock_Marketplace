@@ -62,8 +62,7 @@
             @include('layout.navbar')
         </div>
     </header>
-
-    @yield('content')
+     @yield('content')
         @if(session('warning_alamat'))
         <script>
             alert("{{ session('warning_alamat') }}");
@@ -152,7 +151,7 @@
         }
     });
     </script>
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function () {
             const toggleBtn = document.querySelector('.mobile-nav-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
@@ -164,7 +163,6 @@
             });
         });
     </script>
-
     @livewireScripts
 </body>
 

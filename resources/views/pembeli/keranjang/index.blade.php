@@ -55,7 +55,7 @@
                 Rp. {{ number_format($subtotal, 0, ',', '.') }}
               </div>
               <div style="width: 50px; text-align: center;">
-                @if(!$pesananData)
+                @if(!$item->is_in_pesanan)
                   <form action="{{ route('hapus.keranjang', $item->id) }}" method="POST">
                     @csrf
                     @method('DELETE')

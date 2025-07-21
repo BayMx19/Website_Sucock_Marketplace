@@ -40,5 +40,15 @@ class Toko extends Model
     {
         return $this->hasMany(Alamat::class, 'user_id');
     }
+    public function dataAlamat()
+    {
+        return $this->hasMany(Alamat::class, 'user_id');
+    }
+
+    // hanya alamat utama (is_utama = true)
+    public function getAlamatAttribute()
+    {
+        return $this->dataAlamat->where('is_utama', true)->first();
+    }
 
 }

@@ -6,14 +6,7 @@
             <div class="row">
                 <div class="col-sm-12 table_inside">
                     <h4 style="margin-left: 15px;">Data Review</h4>
-                    <div class="breadcomb-report">
-                        <a href="laporan/laporandatareview.php">
-                            <button data-toggle="tooltip" title="Download Report" class="btn btn-add"
-                                style="color: white;">
-                                <i class="fa-solid fa-download" style="color: #ffffff;"></i> Unduh Pdf
-                            </button>
-                        </a>
-                    </div>
+                    
 
                     <table>
                         <tr>

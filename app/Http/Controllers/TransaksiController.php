@@ -21,7 +21,7 @@ class TransaksiController extends Controller
             'per_page' => 'nullable|integer|min:1|max:100'
         ]);
 
-        $perPage = $validated['per_page'] ?? 10;
+        $perPage = $validated['per_page'] ?? 10000;
 
         $subKeranjang = DB::table('keranjang_pesanan as kp')
         ->select('kp.pesanan_id', DB::raw('MIN(kp.keranjang_id) as keranjang_id'))
@@ -120,7 +120,7 @@ class TransaksiController extends Controller
             'per_page' => 'nullable|integer|min:1|max:100'
         ]);
 
-        $perPage = $validated['per_page'] ?? 10;
+        $perPage = $validated['per_page'] ?? 10000;
 
         $subKeranjang = DB::table('keranjang_pesanan as kp')
         ->select('kp.pesanan_id', DB::raw('MIN(kp.keranjang_id) as keranjang_id'))
@@ -323,9 +323,10 @@ class TransaksiController extends Controller
     // Function untuk menghapus item dari keranjang di Role Pembeli
     public function destroyKeranjang($id)
     {
+        
         $keranjang = Keranjang::findOrFail($id);
 
-        if ($keranjang->pembeli_id !== auth()->id()) {
+        if ($keranjang->pembeli_id != auth()->id()) {
             return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk menghapus item ini.');
         }
 
