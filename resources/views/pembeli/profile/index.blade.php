@@ -140,11 +140,11 @@
 
 
                         <aside class="single_sidebar_widget newsletter_widget" style="background-color: whitesmoke;">
-                            <h4 class="widget_title">Logout</h4>
+                            <h4 class="widget_title">Keluar</h4>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="w-100 btn_1">
-                                    <i class="fa fa-power-off"></i> Logout
+                                    <i class="fa fa-power-off"></i> Keluar
                                 </button>
                             </form>
                         </aside>

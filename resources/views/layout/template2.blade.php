@@ -116,7 +116,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="footer-copy-right">
-                            <p>Copyright ©2025 Sucock (SumengkoShuttlecock), All rights reserved.</p>
+                            <p>Copyright ©2025 Sucock (SumengkoShuttlecock).</p>
                         </div>
                     </div>
                 </div>

@@ -114,7 +114,7 @@
                                                                                 <span class="input-group-addon"><i
                                                                                         class="fa-solid fa-pencil"
                                                                                         style="color: #ffffff;"></i>
-                                                                                    Review
+                                                                                    Ulasan
                                                                                 </span>
                                                                                 <input type="text" id="review_text"
                                                                                     name="review_text"

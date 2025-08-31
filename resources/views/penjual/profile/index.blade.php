@@ -47,7 +47,7 @@
                                                     <h4 style="margin-top: 15px;">No. HP : {{$profilPenjual->nohp}}</h4>
                                                     <h4 style="margin-top: 15px;">Jenis Kelamin :
                                                         {{$profilPenjual->jenis_kelamin}}</h4>
-                                                    <h4 style="margin-top: 15px;">Status Akun : {{$profilPenjual->status}}
+                                                    <h4 style="margin-top: 15px;">Status Akun : {{ $profilPenjual->status == 'ACTIVE' ? 'Aktif' : ($profilPenjual->status == 'INACTIVE' ? 'Tidak Aktif' : $profilPenjual->status) }}
                                                     </h4>
                                                     <h2 style="margin-top: 20px !important">Informasi Alamat</h2>
                                                     @php

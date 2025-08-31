@@ -21,7 +21,7 @@
             <div class="row justify-content-center">
                 <div class="col-xl-7 col-lg-8 col-md-10">
                     <div class="section-tittle text-center mt-100">
-                        <h1 class="judul-produk"> <span>Checkout Pesanan</span></h1>
+                        <h1 class="judul-produk"> <span>Pemesanan Produk</span></h1>
                     </div>
                 </div>
             </div>
@@ -152,7 +152,7 @@
                                         <!-- Tombol Checkout -->
                                         <button class="btn btn-checkout" name="checkout" id="pay-button" type="button"
                                             style="font-size: 1.1rem; padding: 12px 30px; font-weight: bold; border-radius: 8px;">
-                                            Checkout </button>
+                                            Proses Pesanan</button>
                                     </div>
                                 </div>
                             </form>

@@ -23,7 +23,7 @@
             <a href="{{ route('register') }}" class="btn-daftar me-2">Daftar</a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('login') }}" class="btn_3 me-3">Login</a>
+            <a href="{{ route('login') }}" class="btn_3 me-3">Masuk</a>
         </li>
         @endguest
 
@@ -76,7 +76,7 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Logout',
+            confirmButtonText: 'Ya, Keluar',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {

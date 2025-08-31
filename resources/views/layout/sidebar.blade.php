@@ -17,29 +17,29 @@
             <li>
                 <a href="/admin/home">
                     <i class="fa-solid fa-house" style="color: #ffffff;"></i>
-                    <span class="mini-click-non">Dashboard</span>
+                    <span class="mini-click-non">Beranda</span>
                 </a>
             </li>
             <li>
                 <a class="has-arrow" href="#" aria-expanded="false"><i class="fa-solid fa-folder-open"
                         style="color: #ffffff;"></i> <span class="mini-click-non">Data</span></a>
                 <ul class="submenu-angle" aria-expanded="false">
-                    <li><a title="Data Users" href="{{ route('admin.data_users.index') }}"><span
-                                class="mini-sub-pro">Data Users</span></a></li>
+                    <li><a title="Data Pelanggan" href="{{ route('admin.data_users.index') }}"><span
+                                class="mini-sub-pro">Data Pelanggan</span></a></li>
                     <li><a title="Data Toko" href="{{ route('admin.data_toko.index') }}"><span class="mini-sub-pro">Data
                                 Toko</span></a></li>
                     <li><a title="Data Produk" href="{{ route('admin.data_produk.index') }}"><span
                                 class="mini-sub-pro">Data Produk</span></a></li>
                     <li><a title="Data Pesanan" href="{{ route('admin.data_pesanan.index') }}"><span
                                 class="mini-sub-pro">Data Pesanan</span></a></li>
-                    <li><a title="Data Review" href="{{ route('admin.data_review.index') }}"><span
-                                class="mini-sub-pro">Data Review</span></a></li>
+                    <li><a title="Data Ulasan" href="{{ route('admin.data_review.index') }}"><span
+                                class="mini-sub-pro">Data Ulasan</span></a></li>
                 </ul>
             </li>
             <li>
                 <a href="/admin/profile">
                     <i class="fa-solid fa-user" style="color: #ffffff;"></i>
-                    <span class="mini-click-non">Profile</span>
+                    <span class="mini-click-non">Profil</span>
                 </a>
             </li>
             <!-- <li style="color: #ffffff;">
@@ -58,7 +58,7 @@
                 </form>
                 <a class="nav-link" href="#"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fa-solid fa-power-off" style="color: #ffffff;"></i> Log Out
+                    <i class="fa-solid fa-power-off" style="color: #ffffff;"></i> Keluar
                 </a>
             </li>
         </ul>
@@ -83,7 +83,7 @@
             <li>
                 <a href="/penjual/home">
                     <i class="fa-solid fa-house" style="color: #ffffff;"></i>
-                    <span class="mini-click-non">Dashboard</span>
+                    <span class="mini-click-non">Beranda</span>
                 </a>
             </li>
             <li>
@@ -96,23 +96,23 @@
                                 class="mini-sub-pro">Data Produk</span></a></li>
                     <li><a title="Data Pesanan" href="{{ route('penjual.data_pesanan.index') }}"><span
                                 class="mini-sub-pro">Data Pesanan</span></a></li>
-                    <li><a title="Data Review" href="{{route('penjual.data_review.index') }}"><span
-                                class="mini-sub-pro">Data Review</span></a></li>
+                    <li><a title="Data Ulasan" href="{{route('penjual.data_review.index') }}"><span
+                                class="mini-sub-pro">Data Ulasan</span></a></li>
                 </ul>
             </li>
             <li style="color: #ffffff;">
                 <a class="has-arrow" href="#" aria-expanded="false"><i class="fa-solid fa-envelope"
-                        style="color: #fefefe;"></i> <span class="mini-click-non" style=" color: #fff;">Chat</span></a>
+                        style="color: #fefefe;"></i> <span class="mini-click-non" style=" color: #fff;">Pesan</span></a>
                 <ul class="submenu-angle" aria-expanded="false">
                     <li><a title="Semua Pesan" href="/penjual/chat"><span class="mini-sub-pro"
-                                style=" color: #fff;">Semua Chat
+                                style=" color: #fff;">Semua Pesan
                             </span></a></li>
                 </ul>
             </li>
             <li>
                 <a href="/penjual/profile">
                     <i class="fa-solid fa-user" style="color: #ffffff;"></i>
-                    <span class="mini-click-non">Profile</span>
+                    <span class="mini-click-non">Profil</span>
                 </a>
             </li>
             <li>
@@ -122,7 +122,7 @@
                 </form>
                 <a class="nav-link" href="#"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fa-solid fa-power-off" style="color: #ffffff;"></i> Log Out
+                    <i class="fa-solid fa-power-off" style="color: #ffffff;"></i> Keluar
                 </a>
             </li>
         </ul>

@@ -265,7 +265,7 @@
                                                                                 <input type="text" id="status"
                                                                                     name="status" class="form-control"
                                                                                     placeholder="Masukkan Status Toko Anda"
-                                                                                    value="{{$toko->status}}" readonly>
+                                                                                    value="{{ $toko->status == 'ACTIVE' ? 'Aktif' : ($toko->status == 'INACTIVE' ? 'Tidak Aktif' : $toko->status) }}" readonly>
                                                                             </div>
                                                                         </div>
                                                                     </div>

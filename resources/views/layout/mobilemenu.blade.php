@@ -4,13 +4,13 @@
             <div class="mobile-menu">
                 <nav id="dropdown">
                     <ul class="mobile-menu-nav">
-                        <li><a data-toggle="collapse" href="index.php">Dashboard <span class="admin-project-icon nalika-icon nalika-down-arrow"></span></a>
+                        <li><a data-toggle="collapse" href="index.php"> Beranda <span class="admin-project-icon nalika-icon nalika-down-arrow"></span></a>
                         </li>
                         <li><a data-toggle="collapse" data-target="#data" href="#">Data<span class="admin-project-icon nalika-icon nalika-down-arrow"></span></a>
                             <ul id="demo" class="collapse dropdown-header-top">
-                                <li><a href="datausers.php">Data Users</a>
+                                <li><a href="datausers.php">Data Pelanggan</a>
                                 </li>
-                                <li><a href="datareview.php">Data Review</a>
+                                <li><a href="datareview.php">Data Ulasan</a>
                                 </li>
                                 <li><a href="datatoko.php">Data Toko</a>
                                 </li>

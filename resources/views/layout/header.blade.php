@@ -7,7 +7,7 @@
                         <div class="header-top-menu tabl-d-n hd-search-rp">
                             <div class="breadcome-heading">
                                 <form role="search" method="GET" action="" style="display: flex; align-items: center; gap: 8px;">
-                                    <input type="text" placeholder="Search..." class="form-control" name="search" value="{{ request('search') }}" style="max-width: 180px;">
+                                    <input type="text" placeholder="Cari..." class="form-control" name="search" value="{{ request('search') }}" style="max-width: 180px;">
                                     <button type="submit" class="btn btn-md" style="background-color: transparent; border: none;">
                                         <i class="fa fa-search"></i>
                                     </button>
@@ -29,9 +29,9 @@
                                         style="margin-left: -120px ; background-color:#000000;">
                                         <li>
                                             @if(Auth::user()->role === 'Admin')
-                                            <a href="/admin/profile"><i class="fa-solid fa-user" style="color: #f6f6f6;"></i> Profile</a>
+                                            <a href="/admin/profile"><i class="fa-solid fa-user" style="color: #f6f6f6;"></i> Profil</a>
                                             @elseif(Auth::user()->role === 'Penjual')
-                                            <a href="/penjual/profile"><i class="fa-solid fa-user" style="color: #f6f6f6;"></i> Profile</a>
+                                            <a href="/penjual/profile"><i class="fa-solid fa-user" style="color: #f6f6f6;"></i> Profil</a>
                                             @endif
                                         </li>
                                         <li>
@@ -62,7 +62,7 @@ document.getElementById('logout-link').addEventListener('click', function(e) {
     e.preventDefault();
 
     Swal.fire({
-        title: 'Konfirmasi Logout',
+        title: 'Konfirmasi Keluar',
         text: 'Apakah Anda yakin ingin keluar dari akun?',
         icon: 'warning',
         showCancelButton: true,

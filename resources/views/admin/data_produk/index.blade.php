@@ -34,7 +34,7 @@
                             <td>
                                 <span
                                     style="color: {{ $produk->status == 'ACTIVE' ? 'green' : ($produk->status == 'INACTIVE' ? 'red' : 'black') }}; font-weight: bold;">
-                                    {{ $produk->status }}
+                                    {{ $produk->status == 'ACTIVE' ? 'Aktif' : ($produk->status == 'INACTIVE' ? 'Tidak Aktif' : $produk->status) }}
                                 </span>
                             </td>
 

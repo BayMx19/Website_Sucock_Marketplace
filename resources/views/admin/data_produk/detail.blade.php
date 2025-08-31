@@ -169,7 +169,7 @@
                                                                                 <input type="text" id="status"
                                                                                     name="status" class="form-control"
                                                                                     placeholder="Masukkan Status Anda"
-                                                                                    value="{{$produk->status}}"
+                                                                                    value="{{ $produk->status == 'ACTIVE' ? 'Aktif' : ($produk->status == 'INACTIVE' ? 'Tidak Aktif' : $produk->status) }}"
                                                                                     readonly>
                                                                             </div>
                                                                         </div>

@@ -118,7 +118,7 @@
                                         <p class="mt-2">{{ $produk->deskripsi }}</p>
                                         @auth
                                         <a href="{{ route('chat.send.initial', ['productId' => $produk->id]) }}" class="btn btn-success mt-3">
-                                            Chat Penjual
+                                            Kirim Pesan ke Penjual
                                         </a>
                                         @endauth
 
@@ -165,8 +165,8 @@
     <section id="contact" class="contact section">
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-            <h2>Contact</h2>
-            <div><span>Check Our</span> <span class="description-title">Contact</span></div>
+            <h2>Kontak Kami</h2>
+            <div><span>Hubungi Kami</span> <span class="description-title">Disini.</span></div>
         </div><!-- End Section Title -->
         <div class="container" data-aos="fade" data-aos-delay="100">
             <div class="row gy-4">
@@ -188,7 +188,7 @@
                     <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
                         <a href="mailto:sumengkoshuttlecock@gmail.com"><i class="bi bi-envelope flex-shrink-0"></i>
                         <div>
-                            <h3>Our Email</h3>
+                            <h3>Email Kami</h3>
                             <p style="color: black !important;">sumengkoshuttlecock@gmail.com</p></a>
                         </div>
                     </div><!-- End Info Item -->
@@ -210,7 +210,7 @@
                             <textarea class="form-control" name="message" rows="6" placeholder="Masukkan Pesan" required></textarea>
                         </div>
                         <div class="col-md-12 text-center">
-                            <button class="btn btn-message-mail" type="submit">Send Message</button>
+                            <button class="btn btn-message-mail" type="submit">Kirim Pesan</button>
                         </div>
                     </div>
                 </form>

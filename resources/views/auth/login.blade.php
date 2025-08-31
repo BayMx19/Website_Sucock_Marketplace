@@ -14,7 +14,7 @@
 
                         <div class="login_part_form_iner">
                             <div class="login_part_text_iner w-100 text-center">
-                                <h1 class="text-bold">Login</h1>
+                                <h1 class="text-bold">Masuk</h1>
                             </div>
                             @if (session('error'))
                                 <div class="alert alert-danger mt-3">
@@ -38,13 +38,13 @@
                                             {{ old('remember') ? 'checked' : '' }}>
 
                                         <label class="form-check-label" for="remember">
-                                            {{ __('Remember Me') }}
+                                            Ingat Saya
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-md-12 form-group mt-5">
                                     <button type="submit" class="btn_3">
-                                        Login
+                                        Masuk
                                     </button>
                                     <p class="lost_pass text-center" style="font-weight: 500;">Belum Punya Akun?<a
                                             href="{{ route('register') }}" style="color: rgb(117, 26, 202);"> Daftar

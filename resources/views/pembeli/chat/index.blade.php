@@ -6,7 +6,7 @@
             <div class="row justify-content-center">
                 <div class="col-xl-7 col-lg-8 col-md-10">
                     <div class="section-tittle text-center mt-100 mb-50">
-                        <h1 class="judul-produk"> <span>Chat</span></h1>
+                        <h1 class="judul-produk"> <span>Pesan</span></h1>
                     </div>
                 </div>
             </div>

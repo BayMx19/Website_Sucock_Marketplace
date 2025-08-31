@@ -66,7 +66,7 @@
                                 <p class="mt-2">{{ $produk->deskripsi }}</p>
                                 @auth
                                         <a href="{{ route('chat.send.initial', ['productId' => $produk->id]) }}" class="btn btn-success mt-3">
-                                            Chat Penjual
+                                            Kirim Pesan ke Penjual
                                         </a>
                                 @endauth
                                 <hr>

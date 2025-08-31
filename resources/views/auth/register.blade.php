@@ -42,7 +42,7 @@
                                         Daftar
                                     </button>
                                     <p class="lost_pass" style="font-weight: 500;">Sudah Punya Akun?
-                                        <a href="{{ route('login') }}" style="color: rgb(117, 26, 202);">Login
+                                        <a href="{{ route('login') }}" style="color: rgb(117, 26, 202);">Masuk
                                             Disini</a>
                                     </p>
                                     <p class="lost_pass" style="font-weight: 500;">Bergabung Sebagai Mitra Kami?

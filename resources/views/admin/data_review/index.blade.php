@@ -14,8 +14,8 @@
                             <th>Nama Pembeli</th>
                             <th>Nama Toko</th>
                             <th>Produk</th>
-                            <th>Review</th>
-                            <th>Rating</th>
+                            <th>Ulasan</th>
+                            <th>Bintang</th>
                             <th colspan="2">Pengaturan</th>
                         </tr>
 

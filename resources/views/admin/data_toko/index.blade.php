@@ -27,11 +27,11 @@
                             <td>{{ $toko->email }}</td>
                             <td>{{ $toko->nohp }}</td>
                             <td>{{ $toko->alamat->alamat ?? '-' }}</td>
-                            <td>{{ $toko->status }}</td>
+                            
                             <td>
                                 <span
                                     style="color: {{ $toko->status == 'ACTIVE' ? 'green' : ($toko->status == 'INACTIVE' ? 'red' : 'black') }}; font-weight: bold;">
-                                    {{ $toko->status }}
+                                    {{ $toko->status == 'ACTIVE' ? 'Aktif' : ($toko->status == 'INACTIVE' ? 'Tidak Aktif' : $toko->status) }}
                                 </span>
                             </td>
 

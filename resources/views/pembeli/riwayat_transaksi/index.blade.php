@@ -102,7 +102,7 @@
                                                                                 <div class="text-end">
                                                                                     @if ($item->bintang)
                                                                                         <div>
-                                                                                            <strong>Rating:</strong>
+                                                                                            <strong>Bintang:</strong>
                                                                                             <div>
                                                                                                 @for ($i = 1; $i <= 5; $i++)
                                                                                                     @if ($i <= $item->bintang)
@@ -180,7 +180,7 @@
           <input type="hidden" id="pesananId" name="pesanan_id">
 
           <div class="mb-3 text-center">
-            <label class="form-label d-block">Rating:</label>
+            <label class="form-label d-block">Bintang:</label>
             <div id="starRating">
               @for ($i = 1; $i <= 5; $i++)
                 <i class="fas fa-star fa-2x star-icon text-secondary" data-value="{{ $i }}" style="cursor: pointer;"></i>
@@ -265,17 +265,17 @@
                     const modal = bootstrap.Modal.getInstance(modalEl);
                     modal.hide();
 
-                    alert('Review berhasil dikirim!');
+                    alert('Ulasan berhasil dikirim!');
 
                     setTimeout(() => {
                         location.reload();
                     }, 500);
                 } else {
-                    alert('Gagal mengirim review!');
+                    alert('Gagal mengirim Ulasan!');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Terjadi kesalahan saat mengirim review.');
+                alert('Terjadi kesalahan saat mengirim Ulasan.');
             }
         });});
 </script>

@@ -154,8 +154,8 @@
       }
 
       Swal.fire({
-        title: 'Konfirmasi Checkout',
-        text: 'Anda harus menyelesaikan pembayaran sebelum bisa menambahkan produk baru ke checkout. Lanjutkan?',
+        title: 'Konfirmasi Pemesanan',
+        text: 'Anda harus menyelesaikan pembayaran terlebih dahulu sebelum pesanan diproses oleh sistem. Lanjutkan?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Ya, lanjutkan',
