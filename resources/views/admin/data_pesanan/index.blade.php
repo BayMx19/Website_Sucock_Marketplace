@@ -6,7 +6,20 @@
             <div class="row">
                 <div class="col-sm-12 table_inside">
                     <h4 style="margin-left: 15px;">Data Pesanan</h4>
-
+                    <button type="button" 
+                            class="btn btn-success floating-btn" 
+                            data-toggle="modal" 
+                            data-target="#downloadLaporanModal" style="
+                        position: fixed;
+                        bottom: 20px;   /* jarak dari bawah */
+                        right: 20px;    /* jarak dari kanan */
+                        z-index: 1050;  /* biar ga ketutupan */
+                        border-radius: 50px;
+                        padding: 12px 20px;
+                        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+                    ">
+                        <i class="fas fa-download"></i> Download Laporan
+                    </button>
                     <table>
                         <thead>
                             <tr>
@@ -53,16 +66,33 @@
         </div>
     </div>
 </div>
-
-    <!-- <div class="custom-pagination">
-                        <ul class="pagination">
-                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                        </ul>
-                    </div> -->
+<div class="modal fade" id="downloadLaporanModal" tabindex="-1" aria-labelledby="downloadLaporanLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="downloadLaporanLabel">Download Laporan Pesanan</h5>
+       
+      </div>
+      <form action="{{ route('admin.data_pesanan.download') }}" method="GET" target="_blank">
+        <div class="modal-body">
+            <div class="mb-3">
+                <label for="dari" class="form-label">Dari Tanggal</label>
+                <input type="date" id="dari" name="dari" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="ke" class="form-label">Sampai Tanggal</label>
+                <input type="date" id="ke" name="ke" class="form-control" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success">Download</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+    
 </div>
 </div>
 </div>

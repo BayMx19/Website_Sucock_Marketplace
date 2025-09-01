@@ -57,6 +57,39 @@ class TransaksiController extends Controller
 
         return view('admin.data_pesanan.index', compact('pesanan'));
     }
+    // Function untuk mendownload laporan data pesanan di Role Admin
+    public function downloadPDFAdmin(Request $request)
+    {
+        $request->validate([
+            'dari' => 'required|date',
+            'ke'   => 'required|date|after_or_equal:dari',
+        ]);
+
+        $pesanan = DB::table('pesanan')
+            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+            ->join('keranjang_pesanan as kp', 'kp.pesanan_id', '=', 'pesanan.id')
+            ->join('keranjang', 'keranjang.id', '=', 'kp.keranjang_id')
+            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+            ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+            ->whereBetween('pesanan.tanggal_pesanan', [$request->dari, $request->ke])
+            ->select(
+                'pesanan.id',
+                'pembeli.name AS nama_pembeli',
+                'pesanan.kode_pesanan',
+                'pesanan.tanggal_pesanan',
+                'pesanan.status_pesanan',
+                'pesanan.total_harga',
+                'penjual.name AS nama_penjual'
+            )
+            ->orderBy('pesanan.tanggal_pesanan', 'asc')
+            ->get();
+
+        return view('admin.data_pesanan.laporan', [
+            'pesanan' => $pesanan,
+            'dari' => $request->dari,
+            'ke'   => $request->ke
+        ]);
+    }
     // Function untuk melihat detail pesanan di Role Admin
     public function detailadmin($id)
     {
@@ -154,6 +187,46 @@ class TransaksiController extends Controller
         $pesanan = $query->paginate($perPage);
 
         return view('penjual.data_pesanan.index', compact('pesanan'));
+    }
+     // Function untuk mendownload laporan data pesanan di Role Penjual
+    public function downloadPDFPenjual(Request $request)
+    {
+        $penjual_id = Auth::id();
+
+        $request->validate([
+            'dari' => 'required|date',
+            'ke' => 'required|date|after_or_equal:dari',
+        ]);
+
+        $dari = $request->dari;
+        $ke = $request->ke;
+
+        $pesanan = DB::table('pesanan')
+            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+            ->join('keranjang_pesanan as kp', 'kp.pesanan_id', '=', 'pesanan.id')
+            ->join('keranjang', 'keranjang.id', '=', 'kp.keranjang_id')
+            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+            ->where('produk.penjual_id', $penjual_id)
+            ->whereBetween('pesanan.tanggal_pesanan', [$dari, $ke])
+            ->select(
+                'pesanan.id',
+                'pembeli.name AS nama_pembeli',
+                'pesanan.kode_pesanan',
+                'pesanan.tanggal_pesanan',
+                'pesanan.status_pesanan',
+                'pesanan.total_harga'
+            )
+            ->groupBy(
+                'pesanan.id',
+                'pembeli.name',
+                'pesanan.kode_pesanan',
+                'pesanan.tanggal_pesanan',
+                'pesanan.status_pesanan',
+                'pesanan.total_harga'
+            )
+            ->get();
+
+        return view('penjual.data_pesanan.laporan', compact('pesanan', 'dari', 'ke'));
     }
     // Function untuk melihat detail pesanan di Role Penjual
     public function detailpenjual($id)
