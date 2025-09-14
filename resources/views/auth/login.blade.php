@@ -80,5 +80,24 @@
         });
     </script>
 @endif
-
+@if (session('verified'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Akun Berhasil Diverifikasi',
+            text: 'Silakan login menggunakan akun Anda.',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+@if (session('unverified'))
+    <script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Akun Belum Terverifikasi',
+            text: 'Silakan cek email Anda untuk verifikasi akun terlebih dahulu.',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
 @endsection

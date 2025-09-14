@@ -8,6 +8,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\VerifyOtpController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
@@ -34,6 +35,11 @@ Auth::routes();
 Route::get('/daftarpenjual', function(){
     return view('auth.daftar');
 })->name('daftarpenjual');
+Route::get('/verify-otp-link/{user}/{code}', [VerifyOtpController::class, 'verifyOtpLink'])
+    ->name('verify.otp.link');
+Route::post('/verify-otp', [VerifyOtpController::class, 'verifyOtp'])
+    ->name('verify.otp');
+
 Route::get('/home', [DashboardController::class, 'dashboardpembeli'])->middleware('cek.alamat.lengkap')->name('pembeli.home');
 Route::get('/produk', [ProdukController::class, 'index'])->middleware('cek.alamat.lengkap')->name('index');
 Route::get('/', function () {

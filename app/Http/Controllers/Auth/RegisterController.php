@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OtpMail;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -65,24 +70,33 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        // Log::info('CREATE DIPANGGIL', $data);
-        return User::create([
+        $otp = random_int(100000, 999999);
+
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'] ?? 'Pembeli',
+            'otp_code' => $otp,
+            'otp_expires_at' => Carbon::now()->addMinutes(10),
+            'email_verified_at' => null,
         ]);
+
+        Mail::to($user->email)->send(new OtpMail($otp, $user));
+
+        return $user;
     }
 
-    protected function redirectTo()
+    public function register(Request $request)
     {
-        $role = Auth::user()->role;
+        $this->validator($request->all())->validate();
 
-        if ($role === 'Penjual') {
-            return route('penjual.home');
-        } else {
-            return route('pembeli.home');
-        }
+        $user = $this->create($request->all());
+        event(new Registered($user));
+
+        session(['pending_user_id' => $user->id]);
+
+        return redirect()->route('register')->with('show_otp_modal', true);
     }
 
 }

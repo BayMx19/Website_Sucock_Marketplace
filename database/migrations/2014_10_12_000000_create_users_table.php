@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('role');
             $table->string('foto_profil')->nullable();
             $table->string('jenis_kelamin')->nullable();
+            $table->string('otp_code')->nullable();
+            $table->timestamp('otp_expires_at')->nullable();
             $table->string('status')->default('ACTIVE')->nullable();
             $table->rememberToken();
             $table->timestamps();

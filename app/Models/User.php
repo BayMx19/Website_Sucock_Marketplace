@@ -28,6 +28,9 @@ class User extends Authenticatable
         'foto_profil',
         'jenis_kelamin',
         'status',
+        'otp_code',
+        'otp_expires_at',
+        'email_verified_at',
     ];
 
     /**

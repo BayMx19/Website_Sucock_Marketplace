@@ -53,6 +53,38 @@
     </section>
     <!--================login_part end =================-->
 </main>
+<!-- Modal OTP -->
+<div id="otpModal" style="
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.6);
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+">
+    <div style="
+        background:#fff;
+        padding:30px 20px;
+        border-radius:12px;
+        width:350px;
+        max-width:90%;
+        text-align:center;
+        box-shadow:0 5px 15px rgba(0,0,0,0.3);
+    ">
+        <h3>Verifikasi OTP</h3>
+        <form method="POST" action="{{ route('verify.otp') }}">
+            @csrf
+            <input type="text" name="otp" maxlength="6" required
+                   style="margin-top:15px; padding:10px; width:100%; text-align:center; font-size:18px;">
+            <button type="submit" class="btn_3" style="margin-top:20px; width:100%;">
+                Verifikasi
+            </button>
+        </form>
+    </div>
+</div>
+
 @if ($errors->any())
     @php
         $nameErrors = $errors->get('name');
