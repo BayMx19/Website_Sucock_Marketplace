@@ -145,6 +145,24 @@
                                                                                     placeholder="Masukkan Role Anda"
                                                                                     value="{{$profilPenjual->role}}" readonly>
                                                                             </div>
+                                                                            <div class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
+                                                                                <span class="input-group-addon">
+                                                                                    <i class="fa-solid fa-lock" style="color: #ffffff;"></i>
+                                                                                    Password Baru
+                                                                                </span>
+                                                                                <input type="password" id="password" name="password" class="form-control"
+                                                                                    placeholder="Kosongkan jika tidak ingin mengganti password">
+                                                                            </div>
+
+                                                                            <div class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
+                                                                                <span class="input-group-addon">
+                                                                                    <i class="fa-solid fa-lock" style="color: #ffffff;"></i>
+                                                                                    Konfirmasi Password Baru
+                                                                                </span>
+                                                                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control"
+                                                                                    placeholder="Ulangi password baru">
+                                                                            </div>
+
                                                                             <div
                                                                                 class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
                                                                                 <span class="input-group-addon"><i

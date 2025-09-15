@@ -7,6 +7,7 @@ use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class ProfilController extends Controller
 {
@@ -93,6 +94,7 @@ class ProfilController extends Controller
             'nohp' => 'nullable|string|max:13',
             'jenis_kelamin' => 'nullable|in:Laki-laki,Perempuan',
             'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'password' => 'nullable|confirmed|min:8',
         ]);
 
         $user->name = $request->name;
@@ -104,6 +106,9 @@ class ProfilController extends Controller
             $foto = $request->file('foto_profil')->store('foto_profil', 'public');
             $user->foto_profil = $foto;
         }
+        if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
+    }
 
         $user->save();
 
@@ -138,6 +143,14 @@ class ProfilController extends Controller
     {
         $profilPenjual = User::findOrFail($id);
 
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nohp' => 'nullable|string|max:13',
+            'jenis_kelamin' => 'nullable|in:Laki-Laki,Perempuan',
+            'status' => 'nullable|in:ACTIVE,INACTIVE',
+            'password' => 'nullable|confirmed|min:8', // validasi opsional password
+        ]);
+
         // Data untuk tabel users
         $dataUser = [
             'name' => $request->name,
@@ -151,6 +164,11 @@ class ProfilController extends Controller
             $file = $request->file('foto_profil');
             $path = $file->store('foto_profil', 'public');
             $dataUser['foto_profil'] = $path;
+        }
+
+        // Jika password diisi, update password
+        if ($request->filled('password')) {
+            $dataUser['password'] = Hash::make($request->password);
         }
 
         // Update tabel users
@@ -176,9 +194,10 @@ class ProfilController extends Controller
         } else {
             $profilPenjual->dataAlamat()->create($dataAlamat);
         }
-        
+
         return redirect('/penjual/profile/')->with('success', 'Data berhasil diperbarui!');
     }
+
     // Function untuk menampilkan profil admin
     public function indexadmin()
     {

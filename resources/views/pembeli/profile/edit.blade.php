@@ -55,6 +55,15 @@
                                                     <label><h2>Foto Profil</h2></label>
                                                     <input type="file" name="foto_profil" class="single-input">
                                                 </div>
+                                                <div class="col-12 mt-10 mb-10">
+                                                    <label><h2>Password Baru</h2></label>
+                                                    <input type="password" name="password" class="single-input" placeholder="Kosongkan jika tidak ingin mengganti">
+                                                </div>
+
+                                                <div class="col-12 mt-10 mb-10">
+                                                    <label><h2>Konfirmasi Password Baru</h2></label>
+                                                    <input type="password" name="password_confirmation" class="single-input" placeholder="Ulangi password baru">
+                                                </div>
 
                                                 <div class="col-12 mt-4">
                                                     <button type="submit" class="btn_1">Simpan Perubahan</button>

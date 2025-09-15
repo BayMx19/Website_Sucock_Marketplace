@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ class UsersSeeder extends Seeder
         'role' => "Penjual",
         'foto_profil' => "",
         'jenis_kelamin' => "Perempuan",
+        'email_verified_at' => Carbon::now(),
         'status' => "ACTIVE",
         ]);
 
@@ -33,6 +35,7 @@ class UsersSeeder extends Seeder
         'role' => "Pembeli",
         'foto_profil' => "",
         'jenis_kelamin' => "Laki-Laki",
+        'email_verified_at' => Carbon::now(),
         'status' => "ACTIVE",
         ]);
 
@@ -41,6 +44,7 @@ class UsersSeeder extends Seeder
         'nohp' => "082191927762",
         'email' => "admin@gmail.com",
         'password' => Hash::make('Admin123'),
+        'email_verified_at' => Carbon::now(),
         'role' => "Admin",
         'foto_profil' => "",
         'jenis_kelamin' => "Perempuan",
