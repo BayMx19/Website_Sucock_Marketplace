@@ -32,15 +32,18 @@
                                     <input type="password" class="form-control @error('password') is-invalid @enderror"
                                         id="password" name="password" placeholder="Masukkan Password Anda">
                                 </div>
-                                <div class="col-md-12 form-group p_star mt-3">
+                                <div class="col-md-12 form-group p_star mt-3 d-flex justify-content-between align-items-center">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="remember" id="remember"
                                             {{ old('remember') ? 'checked' : '' }}>
-
                                         <label class="form-check-label" for="remember">
                                             Ingat Saya
                                         </label>
                                     </div>
+
+                                    <a href="{{ route('password.request') }}" style="color: rgb(117, 26, 202); font-weight: 500;">
+                                        Lupa Password?
+                                    </a>
                                 </div>
                                 <div class="col-md-12 form-group mt-5">
                                     <button type="submit" class="btn_3">
