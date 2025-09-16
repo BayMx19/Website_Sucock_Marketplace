@@ -6,7 +6,7 @@ use App\Mail\ContactMail;
 use App\Models\User;
 use App\Models\review;
 use App\Models\pesanan;
-use App\Models\produk;
+use App\Models\Produk;
 use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -131,24 +131,29 @@ class DashboardController extends Controller
      */
 
     // Function untuk menampilkan Dashboard di Role Pembeli
-    public function dashboardpembeli(){
-        $list_produk = produk::with('user')->limit(5)->get();
-        $list_toko = Toko::where('role', 'Penjual')->get();
+public function dashboardpembeli()
+{
+    $list_produk = Produk::with(['penjual', 'promo'])
+        ->latest()
+        ->limit(5)
+        ->get();
 
-        return view ('pembeli.home', compact('list_toko', 'list_produk'));
-    }
+    $list_toko = Toko::where('role', 'Penjual')->get();
+
+    return view('pembeli.home', compact('list_produk', 'list_toko'));
+}
 
     public function sendContact(Request $request)
-{
-    $contactData = [
-        'name' => $request->name,
-        'email' => $request->email,
-        'subject' => $request->subject,
-        'message' => $request->message,
-    ];
+    {
+        $contactData = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'subject' => $request->subject,
+            'message' => $request->message,
+        ];
 
-    Mail::to('sumengkoshuttlecock@gmail.com')->send(new ContactMail($contactData));
+        Mail::to('sumengkoshuttlecock@gmail.com')->send(new ContactMail($contactData));
 
-    return back()->with('success', 'Pesan berhasil dikirim!');
-}
+        return back()->with('success', 'Pesan berhasil dikirim!');
+    }
 }

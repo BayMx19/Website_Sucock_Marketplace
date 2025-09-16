@@ -79,4 +79,8 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+    public function promos()
+    {
+        return $this->hasMany(Promo::class, 'penjual_id');
+    }
 }

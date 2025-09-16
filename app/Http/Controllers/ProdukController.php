@@ -23,16 +23,12 @@ class ProdukController extends Controller
 
         $perPage = $validated['per_page'] ?? 10000;
 
-        $query = DB::table('produk')
-            ->join('users', 'users.id', '=', 'produk.penjual_id')
-            ->select('produk.id', 'produk.nama_produk', 'produk.harga', 'produk.status', 'produk.stok', 'users.name')
-            ->when($validated['search'] ?? null, function ($q, $search) {
-                $q->where(function ($q2) use ($search) {
-                    $q2->where('users.name', 'like', "%{$search}%")
-                        ->orWhere('produk.nama_produk', 'like', "%{$search}%");
-                });
-            });
-
+        $query = Produk::with('promo', 'penjual')
+    ->when($validated['search'] ?? null, function($q, $search) {
+        $q->whereHas('penjual', function($q2) use ($search) {
+            $q2->where('name', 'like', "%{$search}%");
+        })->orWhere('nama_produk', 'like', "%{$search}%");
+    });
         $produk = $query->paginate($perPage);
 
         return view('admin.data_produk.index', compact('produk'));
@@ -40,7 +36,7 @@ class ProdukController extends Controller
     // Function untuk melihat detail produk di Role Admin
     public function dataprodukdetail($id)
     {
-        $produk = Produk::with('user')->findOrFail($id);
+        $produk = Produk::with('user', 'promo')->findOrFail($id);
         // dd($produk);
         return view('admin.data_produk.detail', compact('produk'));
     }
@@ -56,19 +52,22 @@ class ProdukController extends Controller
         $perPage = $validated['per_page'] ?? 10000;
 
         $query = DB::table('produk')
-            ->where('penjual_id', $penjual_id)
-            ->select(
-                'nama_produk',
-                'harga',
-                'status',
-                'stok',
-                'id'
-            )
-            ->when($validated['search'] ?? null, function ($q, $search) {
-                $q->where(function ($q2) use ($search) {
-                    $q2->where('nama_produk', 'like', "%{$search}%");
-                });
+        ->leftJoin('promos', 'produk.promo_id', '=', 'promos.id')
+        ->where('produk.penjual_id', $penjual_id)
+        ->select(
+            'produk.id',
+            'produk.nama_produk',
+            'produk.harga',
+            'produk.status',
+            'produk.stok',
+            'promos.nama as nama_promo',
+            'promos.diskon_persen'
+        )
+        ->when($validated['search'] ?? null, function ($q, $search) {
+            $q->where(function ($q2) use ($search) {
+                $q2->where('produk.nama_produk', 'like', "%{$search}%");
             });
+        });
 
         $produk = $query->paginate($perPage);
 
@@ -77,7 +76,13 @@ class ProdukController extends Controller
     // Function untuk menampilkan form tambah produk di Role Penjual
     public function createpenjual()
     {
-        return view('penjual.data_produk.create');
+        $penjual_id = Auth::id();
+        $promos = DB::table('promos')
+            ->where('penjual_id', $penjual_id)
+            ->select('id', 'nama', 'diskon_persen') 
+            ->get();
+
+        return view('penjual.data_produk.create', compact('promos'));
     }
     // Function untuk menyimpan data produk di Role Penjual
     public function storepenjual(Request $request)
@@ -98,6 +103,7 @@ class ProdukController extends Controller
                 'stok' => $request->stok,
                 'deskripsi' => $request->deskripsi,
                 'status' => $request->status,
+                'promo_id' => $request->promo_id,
             ]);
             return redirect('/penjual/data_produk/')->with('success', 'User berhasil ditambahkan.');
         } catch (QueryException $e) {
@@ -108,7 +114,12 @@ class ProdukController extends Controller
     public function editpenjual($id){
         $produk = Produk::find($id);
         // dd($produk);
-        return view('penjual.data_produk.edit', compact('produk'));
+        $penjual_id = Auth::id();
+        $promos = DB::table('promos')
+            ->where('penjual_id', $penjual_id)
+            ->select('id', 'nama', 'diskon_persen')
+            ->get();
+        return view('penjual.data_produk.edit', compact('produk','promos'));
     }
     // Function untuk memperbarui data produk di Role Penjual
     public function updatepenjual(Request $request, $id)
@@ -122,6 +133,7 @@ class ProdukController extends Controller
             'deskripsi' => 'nullable|string',
             'status' => 'required|in:ACTIVE,INACTIVE',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'promo_id' => 'nullable|exists:promos,id',
         ]);
 
         $produk->nama_produk = $request->nama_produk;
@@ -129,6 +141,7 @@ class ProdukController extends Controller
         $produk->stok = $request->stok;
         $produk->deskripsi = $request->deskripsi;
         $produk->status = $request->status;
+        $produk->promo_id = $request->promo_id;
 
         if ($request->hasFile('gambar')) {
             if ($produk->gambar && Storage::exists('public/' . $produk->gambar)) {
@@ -146,8 +159,10 @@ class ProdukController extends Controller
     // Function untuk melihat detail produk di Role Penjual
     public function detailpenjual($id)
     {
-        $produk = Produk::find($id);
-        // dd($produk);
+        $produk = Produk::with('promo') 
+                    ->where('penjual_id', Auth::id()) 
+                    ->findOrFail($id);
+
         return view('penjual.data_produk.detail', compact('produk'));
     }
     // Function untuk menghapus produk di Role Penjual
@@ -166,24 +181,29 @@ class ProdukController extends Controller
     // Function untuk menampilkan list data produk di Role Pembeli
     public function index(Request $request)
     {
-        // $list_produk = Produk::all(); // Ambil semua data produk
-        // dd($list_produk);
-         $validated = $request->validate([
+        $validated = $request->validate([
             'search' => 'nullable|string|max:255',
             'per_page' => 'nullable|integer|min:1|max:100'
         ]);
 
         $perPage = $validated['per_page'] ?? 10000;
+
         $query = DB::table('produk')
+            ->leftJoin('promos', 'promos.id', '=', 'produk.promo_id')
             ->join('users', 'users.id', '=', 'produk.penjual_id')
-            ->select('produk.*', 'users.name', )
+            ->select(
+                'produk.*',
+                'users.name',
+                'promos.nama as promo_nama',
+                'promos.diskon_persen'
+            )
             ->when($validated['search'] ?? null, function ($q, $search) {
-                $q->where(function ($q2) use ($search) {
-                    $q2->where('produk.nama_produk', 'like', "%{$search}%");
-                });
+                $q->where('produk.nama_produk', 'like', "%{$search}%");
             });
 
         $list_produk = $query->paginate($perPage);
-        return view('pembeli.produk.produk', compact('list_produk')); // Kirim ke view produk/index.blade.php
-}
+
+        return view('pembeli.produk.produk', compact('list_produk'));
+    }
+
 }

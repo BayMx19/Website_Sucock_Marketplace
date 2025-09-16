@@ -35,4 +35,8 @@ class Produk extends Model
     {
         return $this->belongsTo(User::class, 'penjual_id');
     }
+    public function promo()
+    {
+        return $this->belongsTo(Promo::class, 'promo_id');
+    }
 }

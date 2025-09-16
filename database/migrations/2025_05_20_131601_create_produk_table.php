@@ -21,6 +21,8 @@ return new class extends Migration
             $table->longtext('deskripsi');
             $table->string('gambar');
             $table->string('status')->default('ACTIVE');
+            $table->unsignedBigInteger('promo_id')->nullable();
+            $table->foreign('promo_id')->references('id')->on('promos')->onDelete('set null')->onUpdate('cascade');
             $table->timestamps();
         });
         }

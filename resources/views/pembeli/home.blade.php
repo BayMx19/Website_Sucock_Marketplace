@@ -57,14 +57,14 @@
                 </div>
             </section>
         </div>
-        <div class="row gy-5">
+        <div class="row">
             <div class="col-xl-12 content">
                 <h1 class="judul-produk"><span>Produk Populer</span></h1>
             </div>
-            <section class="popular-items w-100">
-                <div class="container-fluid px-5">
+            <section class="popular-items w-100" style="height: 100% !important">
+                
                     <!-- Swiper -->
-                    <div class="swiper mySwiper" style="height: 400px;">
+                    <div class="swiper mySwiper" style="height: auto;">
                         <div class="swiper-wrapper"> @foreach($list_produk as $produk) <div class="swiper-slide">
                                 <div class="single-popular-items mb-50 text-center">
                                     <div class="popular-img">
@@ -77,8 +77,29 @@
                                     </div>
                                     <div class="popular-caption">
                                         <h3><a href="/produk/detail/{{ $produk->id }}">{{ $produk->nama_produk }}</a></h3>
-                                        <h4 style="font-weight: 800; color: #548c9a;"> Rp.
-                                            {{ number_format($produk->harga, 0, ',', '.') }} </h4>
+
+                                        @if($produk->promo && $produk->promo->diskon_persen)
+                                            <p style="display: flex; justify-content: center; align-items: center; gap: 8px; margin: 0;">
+                                                <span style="text-decoration: line-through; color: #888;">
+                                                    Rp. {{ number_format($produk->harga, 0, ',', '.') }}
+                                                </span>
+                                                <span style="color: red; font-weight: bold;">
+                                                    -{{ $produk->promo->diskon_persen }}%
+                                                </span>
+                                            </p>
+                                            <h4 style="font-weight: 800; color: #548c9a;"
+                                                class="harga-produk"
+                                                data-harga="{{ $produk->harga }}"
+                                                data-diskon="{{ $produk->promo->diskon_persen }}">
+                                            </h4>
+                                        @else
+                                            <h4 style="font-weight: 800; color: #548c9a;"
+                                                class="harga-produk"
+                                                data-harga="{{ $produk->harga }}"
+                                                data-diskon="0">
+                                                Rp. {{ number_format($produk->harga, 0, ',', '.') }}
+                                            </h4>
+                                        @endif
                                     </div>
                                 </div>
                             </div> @endforeach <div
@@ -111,10 +132,31 @@
                                             alt="Gambar Produk">
                                     </div>
                                     <div class="col-md-6 ps-md-4 pt-3 pt-md-0">
-                                        <h4 style="font-weight: bold;">Rp.
-                                            {{ number_format($produk->harga, 0, ',', '.') }}</h4>
+                                    @if($produk->promo && $produk->promo->diskon_persen)
+                                        <p style="display: flex; gap: 8px; margin: 0;">
+                                            <span style="text-decoration: line-through; color: #888;">
+                                                Rp. {{ number_format($produk->harga, 0, ',', '.') }}
+                                            </span>
+                                            <span style="color: red; font-weight: bold;">
+                                                -{{ $produk->promo->diskon_persen }}%
+                                            </span>
+                                        </p>
+                                        <h4 style="font-weight: bold; color: #548c9a; margin-top: 4px;"
+                                            class="harga-produk"
+                                            data-harga="{{ $produk->harga }}"
+                                            data-diskon="{{ $produk->promo->diskon_persen }}">
+                                            Rp. {{ number_format($produk->harga - ($produk->harga * $produk->promo->diskon_persen / 100), 0, ',', '.') }}
+                                        </h4>
+                                    @else
+                                        <h4 style="font-weight: bold; color: #548c9a;"
+                                            class="harga-produk"
+                                            data-harga="{{ $produk->harga }}"
+                                            data-diskon="0">
+                                            Rp. {{ number_format($produk->harga, 0, ',', '.') }}
+                                        </h4>
+                                    @endif
                                         <p class="mb-1"><strong>Stok:</strong> {{ $produk->stok }}</p>
-                                        <p class="mb-1"><strong>Penjual:</strong> {{ $produk->user->name }}</p>
+                                        <p class="mb-1"><strong>Penjual:</strong> {{ $produk->penjual->name }}</p>
                                         <p class="mt-2">{{ $produk->deskripsi }}</p>
                                         @auth
                                         <a href="{{ route('chat.send.initial', ['productId' => $produk->id]) }}" class="btn btn-success mt-3">
@@ -142,7 +184,7 @@
                             </div>
                         </div>
                     </div> @endforeach
-                </div>
+                
             </section>
         </div>
     </div>
@@ -294,4 +336,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-</script> @endsection
+</script> 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.harga-produk').forEach(el => {
+        const harga = parseFloat(el.dataset.harga);
+        const diskon = parseFloat(el.dataset.diskon) || 0;
+
+        if (diskon > 0) {
+            const hargaDiskon = harga - (harga * (diskon / 100));
+            el.textContent = 'Rp. ' + hargaDiskon.toLocaleString('id-ID');
+        }
+    });
+});
+</script>
+@endsection

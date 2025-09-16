@@ -152,7 +152,7 @@
 
                                                 $ongkir = ($pesanan[0]->metode_pengiriman ?? 'Reguler') == 'Reguler' ? 10000 : 5000;
 
-                                                $biayaLayanan = ($pesanan[0]->metode_pembayaran ?? 'Self Pickup') == 'Self Pickup' ? 0 : 4000;
+                                                $biayaLayanan = ($pesanan[0]->metode_pembayaran ?? 'Self Pickup') == 'Self Pickup' ? 0 : 5000;
 
                                                 $totalTagihan = $totalHargaProduk + $ongkir + $biayaLayanan;
                                             @endphp

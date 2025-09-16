@@ -13,6 +13,11 @@
 
 </script>
 
+{{-- <script type="text/javascript"
+      src="https://app.sandbox.midtrans.com/snap/snap.js"
+      data-client-key="{{ config('midtrans.client_key') }}" >
+
+</script> --}}
 <main>
     <!-- Hero Area Start-->
     <div class="popular-items section-padding">
@@ -107,13 +112,13 @@
                                             @foreach ($dataPesanan as $index => $items)
                                             <div class="accordion" id="accordionProduk{{ $index }}">
                                                 <div class="accordion-item">
-                                                    <input type="hidden" name="produk_id[]" value="{{ $items->pesanan_id }}">
-                                                    <input type="hidden" name="amount[]" value="{{ $items->amount }}">
+                                                    <input type="hidden" name="produk_id[]" value="{{ $items->produk_id }}">
+                                                    <input type="hidden" name="jumlah[]" value="{{ $items->jumlah }}">
                                                     <h2 class="accordion-header" id="heading{{ $index }}">
                                                         <button class="accordion-button collapsed" type="button"
                                                             data-bs-toggle="collapse" data-bs-target="#produk{{ $index }}"
                                                             aria-expanded="false" aria-controls="produk{{ $index }}"
-                                                            style="background-color: whitesmoke;"> {{ $items->nama_produk }} - Rp. {{ number_format($items->harga * $items->amount, 0, ',', '.') }}
+                                                            style="background-color: whitesmoke;"> {{ $items->nama_produk }} - Rp. {{ number_format($items->harga_satuan * $items->jumlah, 0, ',', '.') }}
                                                         </button>
                                                     </h2>
                                                     <div id="produk{{ $index }}" class="accordion-collapse collapse"
@@ -127,8 +132,8 @@
                                                                 </div>
                                                                 <div class="col-md-9">
                                                                     <p ><strong>Nama :</strong> {{ $items->nama_produk }}</p>
-                                                                    <p><strong>Harga :</strong> Rp. {{ number_format($items->harga, 0, ',', '.') }}</p>
-                                                                    <p><strong>Jumlah :</strong> {{ $items->amount }}</p>
+                                                                    <p><strong>Harga :</strong> Rp. {{ number_format($items->harga_satuan, 0, ',', '.') }}</p>
+                                                                    <p><strong>Jumlah :</strong> {{ $items->jumlah }}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -258,7 +263,7 @@
             let produkData = [];
 
             const produkIds = document.querySelectorAll('input[name="produk_id[]"]');
-            const amounts = document.querySelectorAll('input[name="amount[]"]');
+            const amounts = document.querySelectorAll('input[name="jumlah[]"]');
 
             produkIds.forEach((input, index) => {
                 produkData.push({

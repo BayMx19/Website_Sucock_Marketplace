@@ -75,7 +75,7 @@
                                                                     aria-expanded="false"
                                                                     aria-controls="collapse{{ $kodePesanan }}"
                                                                     style="background-color: whitesmoke;">
-                                                                    Pesanan #{{ $first->kode_pesanan }} - Total: Rp. {{ number_format($first->total_harga) }}
+                                                                    Pesanan #{{ $first->kode_pesanan }} - Total Harga: Rp. {{ number_format($first->total_harga) }}
                                                                 </button>
                                                             </h2>
                                                             <div id="collapse{{ $kodePesanan }}" class="accordion-collapse collapse"
@@ -94,8 +94,9 @@
                                                                             <div class="d-flex justify-content-between align-items-start">
                                                                                 <div>
                                                                                     <p class="mb-1"><strong>Nama Produk :</strong> {{ $item->nama_produk }}</p>
-                                                                                    <p class="mb-1"><strong>Harga :</strong> Rp. {{ number_format($item->harga) }}</p>
+                                                                                    <p class="mb-1"><strong>Harga Satuan:</strong> Rp. {{ number_format($item->harga) }}</p>
                                                                                     <p class="mb-1"><strong>Jumlah :</strong> {{ $item->jumlah_produk }}</p>
+                                                                                    <p class="mb-1"><strong>Sub Total :</strong>  Rp. {{ number_format($item->jumlah_produk * $item->harga, 0, ',', '.') }}</p>
                                                                                     <p class="mb-0"><strong>Status :</strong> {{ $item->status_pesanan }}</p>
                                                                                 </div>
 

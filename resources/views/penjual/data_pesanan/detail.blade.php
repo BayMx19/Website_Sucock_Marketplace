@@ -121,7 +121,7 @@
                                                                 data-bs-toggle="collapse" data-bs-target="#produk{{ $index }}"
                                                                 aria-expanded="false" aria-controls="produk{{ $index }}"
                                                                 style="background-color: whitesmoke;">
-                                                                {{ $item->nama_produk }} - Rp. {{ number_format($item->harga, 0, ',', '.') }}
+                                                                {{ $item->nama_produk }} - Rp. {{ number_format($item->harga_satuan, 0, ',', '.') }}
                                                             </button>
                                                         </h2>
                                                         <div id="produk{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}">
@@ -132,7 +132,7 @@
                                                                     </div>
                                                                     <div class="col-md-9">
                                                                         <p><strong>Nama:</strong> {{ $item->nama_produk }}</p>
-                                                                        <p><strong>Harga:</strong> Rp. {{ number_format($item->harga, 0, ',', '.') }}</p>
+                                                                        <p><strong>Harga:</strong> Rp. {{ number_format($item->harga_satuan, 0, ',', '.') }}</p>
                                                                         <p><strong>Jumlah:</strong> {{ $item->jumlah_produk }}</p>
                                                                     </div>
                                                                 </div>
@@ -147,7 +147,7 @@
                                     <hr>
                                         @php
                                                 $totalHargaProduk = $pesanan->sum(function($p) {
-                                                    return $p->harga * $p->jumlah_produk;
+                                                    return $p->harga_satuan * $p->jumlah_produk;
                                                 });
 
                                                 $ongkir = ($pesanan[0]->metode_pengiriman ?? 'Reguler') == 'Reguler' ? 10000 : 5000;

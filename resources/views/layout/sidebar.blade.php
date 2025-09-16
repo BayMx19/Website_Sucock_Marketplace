@@ -91,7 +91,8 @@
                         style="color: #ffffff;"></i> <span class="mini-click-non">Data</span></a>
                 <ul class="submenu-angle" aria-expanded="false">
 
-
+                    <li><a title="Data Promo" href="{{ route('penjual.data_promo.index') }}"><span
+                                class="mini-sub-pro">Data Promo</span></a></li>
                     <li><a title="Data Produk" href="{{ route('penjual.data_produk.index') }}"><span
                                 class="mini-sub-pro">Data Produk</span></a></li>
                     <li><a title="Data Pesanan" href="{{ route('penjual.data_pesanan.index') }}"><span

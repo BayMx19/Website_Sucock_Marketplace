@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('keranjang_id')->constrained('keranjang')->onDelete('cascade');
             $table->foreignId('pesanan_id')->constrained('pesanan')->onDelete('cascade');
+            $table->integer('jumlah');
+            $table->integer('harga_satuan'); 
+            $table->integer('subtotal');
             $table->timestamps();
         });
     }

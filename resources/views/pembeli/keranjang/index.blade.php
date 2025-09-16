@@ -37,16 +37,43 @@
             @php
               $keranjang_id = $item->id;
               $produk = $item->produk;
-              $subtotal = $produk->harga * $item->amount;
+              $diskon = $produk->promo->diskon_persen ?? 0;
+              $hargaSetelahDiskon = $produk->harga - ($produk->harga * $diskon / 100);
+              $subtotal = $hargaSetelahDiskon * $item->amount;
               $totalPerToko += $subtotal;
             @endphp
 
             <div class="produk-item d-flex align-items-center bg-white rounded shadow-sm p-3 mb-3">
-              <input type="checkbox" class="form-check-input me-3 checkbox-produk" data-harga="{{ $subtotal }}" data-keranjang="{{ $keranjang_id }}" style="width: 20px; height: 20px;" {{ !$item->is_in_pesanan && $adaPesananTertunda ? 'disabled' : '' }} {{ $item->is_in_pesanan === true ? 'checked' : '' }}>
+              <input type="checkbox"
+                class="form-check-input me-3 checkbox-produk"
+                data-harga="{{ $subtotal }}"
+                data-keranjang="{{ $keranjang_id }}"
+                style="width: 20px; height: 20px;"
+                {{ !$item->is_in_pesanan && $adaPesananTertunda ? 'disabled' : '' }}
+                {{ $item->is_in_pesanan === true ? 'checked' : '' }}>
+
               <img src="{{ asset('storage/' . $produk->gambar) }}" alt="Produk" style="width: 120px; height: 100px; object-fit: cover; border-radius: 8px;">
               <div class="ms-3 flex-grow-1">
-                <h6 style="font-weight: 600; margin-bottom: 5px; font-size: 24px;">{{ $produk->nama_produk }}</h6>
-                <p style="font-weight: 700; color: #548c9a;">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</p>
+                <h6 style="font-weight: 600; margin-bottom: 5px; font-size: 24px;">
+                  {{ $produk->nama_produk }}
+                </h6>
+
+                @if($diskon > 0)
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                    <span style="text-decoration: line-through; color: #999; font-size: 14px;">
+                      Rp. {{ number_format($produk->harga, 0, ',', '.') }}
+                    </span>
+                    <span style="color: red; font-weight: 600; font-size: 14px;">
+                      -{{ $diskon }}%
+                    </span>
+                  </div>
+                @endif
+
+                <div>
+                  <span style="font-weight: 700; color: #548c9a; font-size: 18px;">
+                    Rp. {{ number_format($hargaSetelahDiskon, 0, ',', '.') }}
+                  </span>
+                </div>
               </div>
               <div style="width: 80px; text-align: center;">
                 <input type="number" value="{{ $item->amount }}" min="1" style="width: 60px; text-align: center;" readonly>
@@ -54,6 +81,7 @@
               <div style="width: 120px; text-align: right; font-weight: 700; color: #333;">
                 Rp. {{ number_format($subtotal, 0, ',', '.') }}
               </div>
+
               <div style="width: 50px; text-align: center;">
                 @if(!$item->is_in_pesanan)
                   <form action="{{ route('hapus.keranjang', $item->id) }}" method="POST">

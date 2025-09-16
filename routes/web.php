@@ -16,6 +16,7 @@ use App\Http\Controllers\TokoController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\PromoController;
 use App\Http\Middleware\CheckAlamatLengkap;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -104,6 +105,16 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 
 Route::middleware(['auth', 'role:Penjual'])->group(function () {
     Route::get('/penjual/home/', [DashboardController::class, 'dashboardpenjual'])->name('penjual.home');
+
+    // Route Data Promo
+    Route::get('/penjual/data_promo/', [PromoController::class, 'indexpenjual'])->name('penjual.data_promo.index');
+    Route::get('/penjual/data_promo/create', [PromoController::class, 'createpenjual'])->name('penjual.data_promo.create');
+    Route::post('/penjual/data_promo/store', [PromoController::class, 'storepenjual'])->name('penjual.data_promo.store');
+    Route::get('/penjual/data_promo/{id}/detail', [PromoController::class, 'detailpenjual'])->name('penjual.data_promo.detail');
+    Route::get('/penjual/data_promo/{id}/edit', [PromoController::class, 'editpenjual'])->name('penjual.data_promo.edit');
+    Route::put('/penjual/data_promo/{id}', [PromoController::class, 'updatepenjual'])->name('penjual.data_promo.update');
+    Route::delete('/penjual/data_promo/{id}', [PromoController::class, 'destroypenjual'])->name('penjual.data_promo.destroy');
+
 
     // Route Data Produk
     Route::get('/penjual/data_produk/', [ProdukController::class, 'indexpenjual'])->name('penjual.data_produk.index');

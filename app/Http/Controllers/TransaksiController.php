@@ -59,37 +59,43 @@ class TransaksiController extends Controller
     }
     // Function untuk mendownload laporan data pesanan di Role Admin
     public function downloadPDFAdmin(Request $request)
-    {
-        $request->validate([
-            'dari' => 'required|date',
-            'ke'   => 'required|date|after_or_equal:dari',
-        ]);
+{
+    $request->validate([
+        'dari' => 'required|date',
+        'ke'   => 'required|date|after_or_equal:dari',
+    ]);
 
-        $pesanan = DB::table('pesanan')
-            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
-            ->join('keranjang_pesanan as kp', 'kp.pesanan_id', '=', 'pesanan.id')
-            ->join('keranjang', 'keranjang.id', '=', 'kp.keranjang_id')
-            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
-            ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
-            ->whereBetween('pesanan.tanggal_pesanan', [$request->dari, $request->ke])
-            ->select(
-                'pesanan.id',
-                'pembeli.name AS nama_pembeli',
-                'pesanan.kode_pesanan',
-                'pesanan.tanggal_pesanan',
-                'pesanan.status_pesanan',
-                'pesanan.total_harga',
-                'penjual.name AS nama_penjual'
-            )
-            ->orderBy('pesanan.tanggal_pesanan', 'asc')
-            ->get();
+    // subquery ambil satu nama penjual per pesanan (pakai MIN untuk kompatibilitas)
+    $penjualSub = "(SELECT kp.pesanan_id, MIN(u.name) AS nama_penjual
+                    FROM keranjang_pesanan kp
+                    JOIN keranjang k ON k.id = kp.keranjang_id
+                    JOIN produk p ON p.id = k.produk_id
+                    JOIN users u ON u.id = p.penjual_id
+                    GROUP BY kp.pesanan_id
+                   ) AS penjual_data";
 
-        return view('admin.data_pesanan.laporan', [
-            'pesanan' => $pesanan,
-            'dari' => $request->dari,
-            'ke'   => $request->ke
-        ]);
-    }
+    $pesanan = DB::table('pesanan')
+        ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+        ->leftJoin(DB::raw($penjualSub), 'penjual_data.pesanan_id', '=', 'pesanan.id')
+        ->whereBetween('pesanan.tanggal_pesanan', [$request->dari, $request->ke])
+        ->select(
+            'pesanan.id',
+            'pembeli.name AS nama_pembeli',
+            'pesanan.kode_pesanan',
+            'pesanan.tanggal_pesanan',
+            'pesanan.status_pesanan',
+            'pesanan.total_harga',
+            'penjual_data.nama_penjual'
+        )
+        ->orderBy('pesanan.tanggal_pesanan', 'asc')
+        ->get();
+
+    return view('admin.data_pesanan.laporan', [
+        'pesanan' => $pesanan,
+        'dari' => $request->dari,
+        'ke'   => $request->ke
+    ]);
+}
     // Function untuk melihat detail pesanan di Role Admin
     public function detailadmin($id)
     {
@@ -108,18 +114,19 @@ class TransaksiController extends Controller
                 'pembeli.name as nama_pembeli',
                 'pembeli.nohp',
                 'produk.nama_produk',
-                'produk.harga',
                 'produk.gambar',
                 'penjual.name as nama_penjual',
                 'pengiriman.metode_pengiriman',
                 'pembayaran.metode_pembayaran',
-                'keranjang.amount as jumlah_produk'
+                'keranjang.amount as jumlah_produk',
+                'kp.harga_satuan as harga' 
             )
             ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
             ->joinSub($subKeranjang, 'sub_kp', function ($join) {
                 $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
             })
             ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
+            ->join('keranjang_pesanan as kp', 'kp.keranjang_id', '=', 'keranjang.id')
             ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
             ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
             ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
@@ -128,10 +135,9 @@ class TransaksiController extends Controller
             ->where('pesanan.id', $id)
             ->get();
 
-        // dd($pesanan);
-
         return view('admin.data_pesanan.detail', compact('pesanan'));
     }
+
     // Function untuk mengupdate status pesanan di Role Admin
         public function updateStatusadmin($id)
     {
@@ -230,49 +236,52 @@ class TransaksiController extends Controller
     }
     // Function untuk melihat detail pesanan di Role Penjual
     public function detailpenjual($id)
-    {
-        $penjual = Auth::id();
+{
+    $penjual = Auth::id();
 
-        $subKeranjang = DB::table('keranjang_pesanan as kp')
-            ->select('kp.pesanan_id', 'kp.keranjang_id')
-            ->groupBy('kp.pesanan_id', 'kp.keranjang_id');
+    $subKeranjang = DB::table('keranjang_pesanan as kp')
+        ->select('kp.pesanan_id', 'kp.keranjang_id')
+        ->groupBy('kp.pesanan_id', 'kp.keranjang_id');
 
-        $pesanan = DB::table('pesanan')
-            ->select(
-                'alamat.*',
-                'pesanan.id',
-                'pesanan.kode_pesanan',
-                'pesanan.tanggal_pesanan',
-                'pesanan.total_harga',
-                'pesanan.status_pesanan',
-                'pembeli.name as nama_pembeli',
-                'pembeli.nohp',
-                'produk.nama_produk',
-                'produk.harga',
-                'produk.gambar',
-                'penjual.name as nama_penjual',
-                'pengiriman.metode_pengiriman',
-                'pembayaran.metode_pembayaran',
-                'keranjang.amount as jumlah_produk'
-            )
-            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
-            ->joinSub($subKeranjang, 'sub_kp', function ($join) {
-                $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
-            })
-            ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
-            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
-            ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
-            ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
-            ->leftJoin('pembayaran', 'pembayaran.pesanan_id', '=', 'pesanan.id')
-            ->leftJoin('pengiriman', 'pengiriman.pesanan_id', '=', 'pesanan.id')
-            ->where('penjual.id', $penjual)
-            ->where('pesanan.id', $id)
-            ->get();
+    $pesanan = DB::table('pesanan')
+        ->select(
+            'alamat.*',
+            'pesanan.id',
+            'pesanan.kode_pesanan',
+            'pesanan.tanggal_pesanan',
+            'pesanan.total_harga',
+            'pesanan.status_pesanan',
+            'pembeli.name as nama_pembeli',
+            'pembeli.nohp',
+            'produk.nama_produk',
+            'produk.gambar',
+            'keranjang.amount as jumlah_produk',
+            'keranjang_pesanan.harga_satuan', 
+            'penjual.name as nama_penjual',
+            'pengiriman.metode_pengiriman',
+            'pembayaran.metode_pembayaran'
+        )
+        ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+        ->joinSub($subKeranjang, 'sub_kp', function ($join) {
+            $join->on('sub_kp.pesanan_id', '=', 'pesanan.id');
+        })
+        ->join('keranjang', 'keranjang.id', '=', 'sub_kp.keranjang_id')
+        ->join('keranjang_pesanan', function ($join) {
+            $join->on('keranjang_pesanan.keranjang_id', '=', 'keranjang.id')
+                 ->on('keranjang_pesanan.pesanan_id', '=', 'pesanan.id');
+        })
+        ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+        ->join('users as penjual', 'penjual.id', '=', 'produk.penjual_id')
+        ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
+        ->leftJoin('pembayaran', 'pembayaran.pesanan_id', '=', 'pesanan.id')
+        ->leftJoin('pengiriman', 'pengiriman.pesanan_id', '=', 'pesanan.id')
+        ->where('penjual.id', $penjual)
+        ->where('pesanan.id', $id)
+        ->get();
 
-        // dd($pesanan);
+    return view('penjual.data_pesanan.detail', compact('pesanan'));
+}
 
-        return view('penjual.data_pesanan.detail', compact('pesanan'));
-    }
     // Function untuk mengupdate status pesanan di Role Penjual
     public function updateStatuspenjual($id)
     {
@@ -411,18 +420,14 @@ class TransaksiController extends Controller
     public function riwayatPesanan(Request $request)
     {
         $pembeli_id = Auth::id();
-
         $pesananCounts = DB::table('pesanan')
-            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
-            ->where('pembeli.id', $pembeli_id)
-            ->select('status_pesanan', DB::raw('count(*) as jumlah'))
+            ->where('pembeli_id', $pembeli_id)
+            ->select('status_pesanan', DB::raw('COUNT(*) as jumlah'))
             ->groupBy('status_pesanan')
             ->pluck('jumlah', 'status_pesanan');
-
         $subKeranjang = DB::table('keranjang_pesanan as kp')
-            ->select('kp.pesanan_id', 'kp.keranjang_id')
-            ->groupBy('kp.pesanan_id', 'kp.keranjang_id');
-
+            ->select('kp.pesanan_id', 'kp.keranjang_id', 'kp.harga_satuan')
+            ->groupBy('kp.pesanan_id', 'kp.keranjang_id', 'kp.harga_satuan');
         $pesanan = DB::table('pesanan')
             ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
             ->joinSub($subKeranjang, 'sub_kp', function ($join) {
@@ -444,21 +449,22 @@ class TransaksiController extends Controller
                 'pesanan.status_pesanan',
                 'produk.id as produk_id',
                 'produk.nama_produk',
-                'produk.harga',
                 'produk.gambar',
                 'penjual.name as nama_penjual',
                 'keranjang.amount as jumlah_produk',
+                'sub_kp.harga_satuan as harga', // ✅ ambil dari keranjang_pesanan
                 'review.bintang',
                 'review.review_text'
             )
             ->get()
             ->groupBy('status_pesanan')
             ->map(function ($grouped) {
-                    return $grouped->groupBy('kode_pesanan');
-                });
+                return $grouped->groupBy('kode_pesanan');
+            });
 
         return view('pembeli.riwayat_transaksi.index', compact('pesanan', 'pesananCounts'));
     }
+
     // Function untuk menyelesaikan pesanan di Role Pembeli
     public function selesaikanPesanan($id)
     {
@@ -472,15 +478,30 @@ class TransaksiController extends Controller
     public function checkoutPesanan()
     {
         $dataPesanan = DB::table('pesanan')
-            ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
-            ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
-            ->join('keranjang_pesanan as kp', 'kp.pesanan_id', '=', 'pesanan.id')
-            ->join('keranjang', 'keranjang.id', '=', 'kp.keranjang_id')
-            ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
-            ->select('pembeli.name as nama_pembeli', 'pembeli.nohp', 'pesanan.total_harga', 'pesanan.kode_pesanan', 'alamat.*', 'keranjang.amount', 'produk.nama_produk', 'produk.harga', 'produk.gambar', 'produk.id as pesanan_id')
-            ->where('pesanan.status_pesanan', 'Belum Dibayar')
-            ->where('pesanan.pembeli_id', auth()->id())
-            ->get();
+        ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
+        ->join('users as pembeli', 'pembeli.id', '=', 'pesanan.pembeli_id')
+        ->join('keranjang_pesanan as kp', 'kp.pesanan_id', '=', 'pesanan.id')
+        ->join('keranjang', 'keranjang.id', '=', 'kp.keranjang_id')
+        ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+        ->select(
+            'pembeli.name as nama_pembeli',
+            'pembeli.nohp',
+            'pesanan.id as pesanan_id',
+            'pesanan.total_harga',
+            'pesanan.kode_pesanan',
+            'alamat.*',
+            'keranjang.amount',
+            'produk.nama_produk',
+            'produk.gambar',
+            'produk.id as produk_id',
+            'kp.jumlah',
+            'kp.harga_satuan',
+            'kp.subtotal'
+        )
+        ->where('pesanan.status_pesanan', 'Belum Dibayar')
+        ->where('pesanan.pembeli_id', auth()->id())
+        ->get();
+
 
         return view('pembeli.checkout.index', compact('dataPesanan'));
     }
@@ -497,7 +518,8 @@ class TransaksiController extends Controller
         // Set your Merchant Server Key
         \Midtrans\Config::$serverKey = config('midtrans.server_key');
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = true;
+        // \Midtrans\Config::$isProduction = true;
+        \Midtrans\Config::$isProduction = false;
         // Set sanitization on (default)
         \Midtrans\Config::$isSanitized = true;
         // Set 3DS transaction for credit card to true
@@ -534,11 +556,15 @@ class TransaksiController extends Controller
     {
         $pembeli_id = Auth::id();
 
-        $alamat = DB::table('alamat')->join('users', 'users.id', '=', 'alamat.user_id')->where('users.id', $pembeli_id)->where('alamat.is_utama', 1)->value('alamat.id');
+        $alamat = DB::table('alamat')
+            ->join('users', 'users.id', '=', 'alamat.user_id')
+            ->where('users.id', $pembeli_id)
+            ->where('alamat.is_utama', 1)
+            ->value('alamat.id');
 
         $keranjangIds = $request->keranjang_id;
 
-        $request -> validate([
+        $request->validate([
             'kode_transaksi' => 'required|string',
             'total_harga' => 'required|int',
         ]);
@@ -555,24 +581,43 @@ class TransaksiController extends Controller
             ]);
 
             $dataKeranjangPesanan = [];
-            foreach ($keranjangIds as $keranjangId) {
+
+            $keranjangItems = DB::table('keranjang')
+                ->join('produk', 'produk.id', '=', 'keranjang.produk_id')
+                ->leftJoin('promos', 'promos.id', '=', 'produk.promo_id')
+                ->whereIn('keranjang.id', $keranjangIds)
+                ->select('keranjang.id as keranjang_id', 'keranjang.amount', 'produk.harga', 'promos.diskon_persen')
+                ->get();
+
+            foreach ($keranjangItems as $item) {
+                $diskon = $item->diskon_persen ?? 0;
+                $hargaSetelahDiskon = $item->harga - ($item->harga * $diskon / 100);
+                $subtotal = $item->amount * $hargaSetelahDiskon;
+
                 $dataKeranjangPesanan[] = [
                     'pesanan_id' => $pesanan_id,
-                    'keranjang_id' => $keranjangId,
+                    'keranjang_id' => $item->keranjang_id,
+                    'jumlah' => $item->amount,
+                    'harga_satuan' => $hargaSetelahDiskon,
+                    'subtotal' => $subtotal,
                 ];
             }
 
             DB::table('keranjang_pesanan')->insert($dataKeranjangPesanan);
 
             DB::commit();
-
             return response()->json(['success' => true]);
 
-        } catch (\exception $e){
+        } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['success' => false, 'message' => 'Gagal menyimpan data.', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan data.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
+
     // Function untuk melakukan pembayaran pesanan di Role Pembeli
     public function payment(Request $request, $kode)
     {
