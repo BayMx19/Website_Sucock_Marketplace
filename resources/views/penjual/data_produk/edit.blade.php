@@ -48,15 +48,15 @@
                                                                                         </span>
                                                                                         <div class="input append-small-btn">
                                                                                             <button type="button" class="btn btn-primary"
-                                                                                                onclick="document.getElementById('foto_produk').click();">
+                                                                                                onclick="document.getElementById('gambar').click();">
                                                                                                 <i class="fa-solid fa-upload"></i> Cari Foto
                                                                                             </button>
-                                                                                            <input type="file" id="foto_produk" name="foto_produk"
+                                                                                            <input type="file" id="gambar" name="gambar"
                                                                                                 accept="image/*" style="display: none;"
-                                                                                                onchange="document.getElementById('produk').value = this.files[0] ? this.files[0].name : '{{ $produk->foto_produk }}'">
+                                                                                                onchange="document.getElementById('produk').value = this.files[0] ? this.files[0].name : '{{ $produk->gambar }}'">
                                                                                         </div>
                                                                                         <input type="text" id="produk" placeholder="Silahkan Upload Foto"
-                                                                                            readonly class="form-control" value="{{ $produk->foto_produk }}">
+                                                                                            readonly class="form-control" value="{{ $produk->gambar }}">
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
