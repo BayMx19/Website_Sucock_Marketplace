@@ -145,22 +145,32 @@
                                                                                     placeholder="Masukkan Role Anda"
                                                                                     value="{{$profilPenjual->role}}" readonly>
                                                                             </div>
-                                                                            <div class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
+                                                                            <div class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms position-relative">
                                                                                 <span class="input-group-addon">
                                                                                     <i class="fa-solid fa-lock" style="color: #ffffff;"></i>
                                                                                     Password Baru
                                                                                 </span>
                                                                                 <input type="password" id="password" name="password" class="form-control"
                                                                                     placeholder="Kosongkan jika tidak ingin mengganti password">
+                                                                                <span class="toggle-password" 
+                                                                                    onclick="togglePassword('password')" 
+                                                                                    style="position: absolute; right: 25px; bottom: 15px; z-index:9999; cursor: pointer;">
+                                                                                    <i class="fas fa-eye"></i>
+                                                                                </span>
                                                                             </div>
 
-                                                                            <div class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms">
+                                                                            <div class="input-group mg-b-pro-edt mg-l-pro-edt ts-forms position-relative">
                                                                                 <span class="input-group-addon">
                                                                                     <i class="fa-solid fa-lock" style="color: #ffffff;"></i>
                                                                                     Konfirmasi Password Baru
                                                                                 </span>
                                                                                 <input type="password" id="password_confirmation" name="password_confirmation" class="form-control"
                                                                                     placeholder="Ulangi password baru">
+                                                                                <span class="toggle-password" 
+                                                                                    onclick="togglePassword('password_confirmation')" 
+                                                                                    style="position: absolute; right: 25px; bottom: 15px; z-index:9999; cursor: pointer;">
+                                                                                    <i class="fas fa-eye"></i>
+                                                                                </span>
                                                                             </div>
 
                                                                             <div
@@ -344,4 +354,11 @@
             </div>
         </div>
     </div>
+    <script>
+    function togglePassword(id) {
+        const input = document.getElementById(id);
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        }
+    </script>
     @endsection

@@ -26,13 +26,23 @@
                                     <input type="email" class="form-control" id="email" name="email" placeholder="Email Pengguna"
                                         required>
                                 </div>
-                                <div class="col-md-12 form-group p_star mt-3">
+                                <div class="col-md-12 form-group p_star mt-3 position-relative">
                                     <input type="password" class="form-control" id="password" name="password"
                                         placeholder="Password" required>
+                                    <span class="toggle-password" 
+                                        onclick="togglePassword()" 
+                                        style="position: absolute; right: 25px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
                                 </div>
-                                <div class="col-md-12 form-group p_star mt-3">
+                                <div class="col-md-12 form-group p_star mt-3 position-relative">
                                     <input type="password" class="form-control" id="password_confirmation"
                                         name="password_confirmation" placeholder="Konfirmasi Password" required>
+                                    <span class="toggle-password" 
+                                        onclick="togglePasswordConfirm()" 
+                                        style="position: absolute; right: 25px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
                                 </div>
                                 <input type="hidden" name="role" value="Penjual">
                                 <div class="col-md-12 form-group">
@@ -227,5 +237,16 @@
         @endforeach
     @endif
 @endif
-
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+    }
+    function togglePasswordConfirm() {
+        const passwordInput = document.getElementById('password_confirmation');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+    }
+</script>
 @endsection

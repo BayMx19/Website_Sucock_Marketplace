@@ -28,9 +28,18 @@
                                     <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
                                         placeholder="Masukkan Email Anda">
                                 </div>
-                                <div class="col-md-12 form-group p_star mt-3">
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        id="password" name="password" placeholder="Masukkan Password Anda">
+                                <div class="col-md-12 form-group p_star mt-3 position-relative">
+                                    <input type="password" 
+                                        class="form-control @error('password') is-invalid @enderror"
+                                        id="password" 
+                                        name="password" 
+                                        placeholder="Masukkan Password Anda">
+
+                                    <span class="toggle-password" 
+                                        onclick="togglePassword()" 
+                                        style="position: absolute; right: 25px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
                                 </div>
                                 <div class="col-md-12 form-group p_star mt-3 d-flex justify-content-between align-items-center">
                                     <div class="form-check">
@@ -103,4 +112,12 @@
         });
     </script>
 @endif
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+    }
+</script>
+
 @endsection

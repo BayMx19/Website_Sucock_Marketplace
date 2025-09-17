@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="popular-caption">
-                        <h3><a href="/produk/detail/{{ $produk->id }}">{{ $produk->nama_produk }}</a></h3>
+                        <h4 style="font-weight: bold;">{{ $produk->nama_produk }}</h4>
 
                         @if($produk->diskon_persen)
                             <p style="display: flex; justify-content: center; align-items: center; gap: 8px; margin: 0;">

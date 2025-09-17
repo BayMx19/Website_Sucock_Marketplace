@@ -55,14 +55,32 @@
                                                     <label><h2>Foto Profil</h2></label>
                                                     <input type="file" name="foto_profil" class="single-input">
                                                 </div>
-                                                <div class="col-12 mt-10 mb-10">
+                                                <div class="col-12 mt-10 mb-10 position-relative">
                                                     <label><h2>Password Baru</h2></label>
-                                                    <input type="password" name="password" class="single-input" placeholder="Kosongkan jika tidak ingin mengganti">
+                                                    <input type="password" 
+                                                        name="password" 
+                                                        id="password"
+                                                        class="single-input" 
+                                                        placeholder="Kosongkan jika tidak ingin mengganti">
+                                                    <span class="toggle-password" 
+                                                        onclick="togglePassword('password')" 
+                                                        style="position: absolute; right: 25px; bottom: 8px; cursor: pointer;">
+                                                        <i class="fas fa-eye"></i>
+                                                    </span>
                                                 </div>
 
-                                                <div class="col-12 mt-10 mb-10">
+                                                <div class="col-12 mt-10 mb-10 position-relative">
                                                     <label><h2>Konfirmasi Password Baru</h2></label>
-                                                    <input type="password" name="password_confirmation" class="single-input" placeholder="Ulangi password baru">
+                                                    <input type="password" 
+                                                        name="password_confirmation" 
+                                                        id="password_confirmation"
+                                                        class="single-input" 
+                                                        placeholder="Ulangi password baru">
+                                                    <span class="toggle-password" 
+                                                        onclick="togglePassword('password_confirmation')" 
+                                                        style="position: absolute; right: 25px; bottom: 8px; cursor: pointer;">
+                                                        <i class="fas fa-eye"></i>
+                                                    </span>
                                                 </div>
 
                                                 <div class="col-12 mt-4">
@@ -81,4 +99,12 @@
         </div>
     </section>
 </main>
+<script>
+    function togglePassword(id) {
+        const input = document.getElementById(id);
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+    }
+</script>
+
 @endsection
