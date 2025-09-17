@@ -20,6 +20,8 @@ use App\Http\Controllers\PromoController;
 use App\Http\Middleware\CheckAlamatLengkap;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -177,3 +179,19 @@ Route::middleware(['auth', 'role:Pembeli', 'cek.alamat.lengkap'])->group(functio
 
 
 
+Route::get('/clear-optimize', function() {
+    try {
+        Artisan::call('optimize:clear');
+        return "✅ Cache dan optimasi berhasil dibersihkan!";
+    } catch (\Exception $e) {
+        return "❌ Terjadi error: " . $e->getMessage();
+    }
+});
+Route::get('/clear-log', function () {
+    try {
+        File::put(storage_path('logs/laravel.log'), '');
+        return "✅ File laravel.log berhasil dikosongkan!";
+    } catch (\Exception $e) {
+        return "❌ Terjadi error: " . $e->getMessage();
+    }
+});
